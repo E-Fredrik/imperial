@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('room_number')->unique();
             $table->integer('price');
-            $table->integer('length');
-            $table->integer('width');
+            $table->float('length');
+            $table->float('width');
             $table->string('type');
             $table->integer('floor');
             $table->string('status')->default('available');
