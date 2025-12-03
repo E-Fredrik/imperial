@@ -22,6 +22,10 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('rooms', RoomController::class);
     Route::resource('info', InfoController::class);
+
+    // reliable POST-based delete (uses primitive id) to avoid binding/method-spoof issues
+    Route::post('info/{id}/delete', [InfoController::class, 'destroyById'])
+        ->name('info.deleteById');
 });
 
 require __DIR__.'/auth.php';
