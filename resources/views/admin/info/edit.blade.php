@@ -10,12 +10,28 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
                     @php
-                        // get primitive id (route param fallback) and compute input values
+                        // safe primitive id for route generation
                         $infoId = optional($information)->getKey() ?? request()->route('info');
+
+                        // title: prefer old input then model
                         $titleValue = old('title', $information->title ?? '');
-                        // prefer old('content') when present (raw HTML from the request),
-                        // otherwise try to produce Trix HTML from the saved rich-text relation.
-                        $contentValue = old('content') ?? (method_exists($information, 'getRichText') || is_object($information->content) ? ($information->content?->toTrixHtml() ?? '') : ($information->content ?? ''));
+
+                        // content: prefer old raw HTML then model content converted to Trix HTML if available,
+                        // otherwise fallback to raw model string.
+                        $oldContent = old('content');
+                        if (!is_null($oldContent)) {
+                            $contentValue = $oldContent;
+                        } else {
+                            $contentValue = '';
+                            if (isset($information)) {
+                                // handle Tonysm or plain string content
+                                if (is_object($information->content) && method_exists($information->content, 'toTrixHtml')) {
+                                    $contentValue = $information->content->toTrixHtml() ?? '';
+                                } else {
+                                    $contentValue = $information->content ?? '';
+                                }
+                            }
+                        }
                     @endphp
 
                     <form method="POST" action="{{ $infoId ? route('admin.info.update', ['info' => $infoId]) : url()->current() }}">
@@ -32,7 +48,7 @@
 
                             <div>
                                 <x-input-label for="content" :value="__('Content')" />
-                                {{-- Trix component expects HTML string; pass computed $contentValue --}}
+                                {{-- Trix input component: pass computed HTML value --}}
                                 <x-trix-input id="content" name="content" :value="$contentValue" autocomplete="off" />
                                 <x-input-error :messages="$errors->get('content')" class="mt-2" />
                             </div>

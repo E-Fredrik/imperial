@@ -7,6 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\Information;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
 
 class InfoController extends Controller
 {
@@ -36,11 +39,22 @@ class InfoController extends Controller
             'title'   => ['required','string','max:191'],
             'content' => ['nullable', 'string'],
         ]);
-        
-        Information::create([
+
+        // Debug: log incoming payload
+        Log::info('InfoController@store payload', $request->only('title','content'));
+
+        // create then explicitly save rich text so HasRichText trait runs correctly
+        $information = Information::create([
             'title' => $data['title'],
-            'content' => $data['content'] ?? '',
         ]);
+
+        if (method_exists($information, 'setRichText')) {
+            // Tonysm API: set rich text field
+            $information->setRichText('content', $data['content'] ?? '');
+        } else {
+            $information->content = $data['content'] ?? '';
+        }
+        $information->save();
 
         return redirect()->route('admin.info.index')->with('success','Information created.');
     }
@@ -54,16 +68,25 @@ class InfoController extends Controller
         return view('admin.info.edit', ['information' => $info]);
     }
 
-    public function update(Request $request, Information $information) : RedirectResponse {
+    // Ensure the parameter name matches the route param `{info}` so route-model binding works.
+    public function update(Request $request, Information $info) : RedirectResponse {
         $data = $request->validate([
             'title'   => ['required','string','max:191'],
             'content' => ['nullable', 'string'],
         ]);
 
-        $information->update([
-            'title' => $data['title'],
-            'content' => $data['content'] ?? '',
-        ]);
+        // Debug: log incoming payload
+        Log::info('InfoController@update payload', $request->only('title','content'));
+
+        // Persist on the bound model ($info) so we update instead of creating.
+        $info->title = $data['title'];
+        if (method_exists($info, 'setRichText')) {
+            // Tonysm: store rich text via API
+            $info->setRichText('content', $data['content'] ?? '');
+        } else {
+            $info->content = $data['content'] ?? '';
+        }
+        $info->save();
 
         return redirect()->route('admin.info.index')->with('success','Information updated.');
     }
@@ -71,8 +94,8 @@ class InfoController extends Controller
     /**
      * Remove the specified information (resource route expects destroy).
      */
-    public function destroy(Information $information) : RedirectResponse {
-        $information->delete();
-        return redirect()->route('admin.info.index')->with('success','Information deleted.');
+    public function destroy(Information $information) : RedirectResponse
+    {
+       
     }
 }

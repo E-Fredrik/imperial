@@ -33,7 +33,6 @@
                         </div>
 
                         <div class="mt-6 flex items-center gap-3">
-                            {{-- Filled primary button visible on white card --}}
                             <button type="submit"
                                     class="inline-flex items-center px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold rounded shadow">
                                 Create
