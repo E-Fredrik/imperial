@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Tonysm\RichTextLaravel\Models\Traits\HasRichText;
 
 /**
  * Class Information
@@ -22,7 +23,12 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Information extends Model
 {
+	use HasRichText;
 	protected $table = 'informations';
+
+	protected $richTextAttributes = [
+        'content',
+    ];
 
 	protected $fillable = [
 		'title',

@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\RoomController;
+use App\Http\Controllers\Admin\InfoController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -15,6 +17,15 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
+    Route::resource('rooms', RoomController::class);
+    Route::resource('info', InfoController::class);
+
+    // reliable POST-based delete (uses primitive id) to avoid binding/method-spoof issues
+    Route::post('info/{id}/delete', [InfoController::class, 'destroyById'])
+        ->name('info.deleteById');
 });
 
 require __DIR__.'/auth.php';
