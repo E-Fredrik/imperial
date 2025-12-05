@@ -4,7 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\InfoController;
-
+use App\Http\Controllers\Admin\RoomFacilityController;
 Route::get('/', function () {
     return view('home');
 })->name('home');
@@ -22,9 +22,7 @@ Route::middleware('auth')->group(function () {
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('rooms', RoomController::class);
     Route::resource('info', InfoController::class);
-
-    Route::post('info/{id}/delete', [InfoController::class, 'destroyById'])
-        ->name('info.deleteById');
+    Route::resource('roomfac', RoomFacilityController::class);
 });
 
 require __DIR__.'/auth.php';

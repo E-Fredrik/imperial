@@ -9,7 +9,7 @@
         <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6">
-                    <form method="POST" action="{{ route('admin.rooms.store') }}">
+                    <form method="POST" action="{{ route('admin.rooms.store') }}" enctype="multipart/form-data">
                         @csrf
 
                         <div class="grid grid-cols-1 gap-4">
@@ -75,6 +75,13 @@
                                 <textarea id="description" name="description" rows="4"
                                           class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700">{{ old('description') }}</textarea>
                                 <x-input-error :messages="$errors->get('description')" class="mt-2" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="images" :value="__('Images')" />
+                                <input id="images" name="images[]" type="file" multiple accept="image/*" class="mt-1 block w-full" />
+                                <x-input-error :messages="$errors->get('images')" class="mt-2" />
+                                <x-input-error :messages="$errors->get('images.*')" class="mt-2" />
                             </div>
                         </div>
 

@@ -60,8 +60,9 @@
                                                    style="background-color:#4f46e5; border:1px solid #4338ca; color:#ffffff;">
                                                     Edit
                                                 </a>
-                                                <form action="{{ route('admin.info.deleteById', ['id' => $information->getKey()]) }}" method="POST" onsubmit="return confirm('Are you sure?');" class="inline">
+                                                <form action="{{ route('admin.info.destroy', $information) }}" method="POST" onsubmit="return confirm('Are you sure?');" class="inline">
                                                     @csrf
+                                                    @method('DELETE')
                                                     <button type="submit" class="inline-block px-3 py-1 rounded bg-rose-600 hover:bg-rose-700 text-white text-sm">
                                                         Delete
                                                     </button>

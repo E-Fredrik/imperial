@@ -7,6 +7,11 @@ use Illuminate\Support\Facades\Schema;
 return new class extends Migration {
     public function up()
     {
+        Schema::dropIfExists('rich_texts');
+    }
+
+    public function down()
+    {
         Schema::create('rich_texts', function (Blueprint $table) {
             $table->id();
             $table->morphs('record');
@@ -16,10 +21,5 @@ return new class extends Migration {
 
             $table->unique(['field', 'record_type', 'record_id']);
         });
-    }
-
-    public function down()
-    {
-        Schema::dropIfExists('rich_texts');
     }
 };

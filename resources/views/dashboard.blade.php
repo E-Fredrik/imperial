@@ -26,6 +26,12 @@
                                 Manage Information
                             </a>
                         </div>
+                        <div class="mt-4">
+                            <a href="{{ route('admin.roomfac.index') }}"
+                               class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-800 rounded-md text-sm font-medium hover:opacity-90">
+                                Manage Room Facilities
+                            </a>
+                        </div>
 
                     @endif
                 </div>
