@@ -6,8 +6,8 @@ use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\InfoController;
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('home');
+})->name('home');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -23,7 +23,6 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('rooms', RoomController::class);
     Route::resource('info', InfoController::class);
 
-    // reliable POST-based delete (uses primitive id) to avoid binding/method-spoof issues
     Route::post('info/{id}/delete', [InfoController::class, 'destroyById'])
         ->name('info.deleteById');
 });
