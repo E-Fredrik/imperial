@@ -37,12 +37,10 @@ class RoomFacilityImagesSeeder extends Seeder
             return;
         }
 
-        // map facilities by normalized name for quick lookup
         $facilities = RoomFacility::all()->keyBy(function (RoomFacility $f) {
             return $this->normalize($f->name);
         });
 
-        // index files by normalized basename (without extension)
         $filesMap = [];
         foreach ($files as $file) {
             $base = pathinfo($file->getFilename(), PATHINFO_FILENAME);
@@ -53,7 +51,7 @@ class RoomFacilityImagesSeeder extends Seeder
         $explicit = [
             'toilet' => 'Kamar Mandi Dalam',
             'waterheater' => 'Water Heater',
-            'water-heater' => 'Water Heater', // tolerant variations
+            'water-heater' => 'Water Heater',
             'water_heater' => 'Water Heater',
         ];
 
