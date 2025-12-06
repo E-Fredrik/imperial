@@ -32,6 +32,25 @@
                                 Manage Room Facilities
                             </a>
                         </div>
+                        <div class="mt-4">
+                            <a href="{{ route('admin.kostfac.index') }}"
+                               class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-800 rounded-md text-sm font-medium hover:opacity-90">
+                                Manage Kost Facilities
+                            </a>
+                        </div>
+                        <div class="mt-4">
+                            <a href="{{ route('admin.bookings.index') }}"
+                               class="inline-flex items-center px-4 py-2 bg-blue-700 hover:bg-blue-600 text-white rounded-md text-sm font-medium">
+                                Manage Bookings
+                            </a>
+                        </div>
+
+                        {{-- <div class="mt-4">
+                            <a href="{{ route('admin.payments.index') }}"
+                               class="inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-md text-sm font-medium">
+                                Manage Payments
+                            </a>
+                        </div> --}}
 
                     @endif
                 </div>

@@ -10,6 +10,7 @@ use Database\Seeders\RoomFacilitySeeder;
 use Database\Seeders\UserSeeder;
 use Database\Seeders\RoomImagesSeeder;
 use Database\Seeders\RoomFacilityImagesSeeder;
+use Database\Seeders\InformationSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -25,7 +26,8 @@ class DatabaseSeeder extends Seeder
             RoomSeeder::class,
             RoomFacilitySeeder::class,
             RoomImagesSeeder::class,
-            RoomFacilityImagesSeeder::class
+            RoomFacilityImagesSeeder::class,
+            InformationSeeder::class
         ]);
     }
 }

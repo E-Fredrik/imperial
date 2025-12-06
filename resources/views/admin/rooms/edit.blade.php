@@ -89,50 +89,72 @@
                                 <div id="new-images-preview" class="mt-2 flex flex-wrap"></div>
                             </div>
 
-                            @foreach($room->images as $image)
-                                @php
-                                    // prefer public/ if file exists there (seeders wrote to public/images/...)
-                                    $publicCandidate = public_path($image->image_path ?? '');
-                                    if (!empty($image->image_path) && file_exists($publicCandidate)) {
-                                        $imgUrl = asset($image->image_path);
-                                    } else {
-                                        // fallback to storage (storage/app/public/...), keep compatibility
-                                        $imgUrl = asset('storage/' . ltrim($image->image_path ?? '', '/'));
-                                    }
-                                @endphp
+                            @php
+                                // Pre-select previously saved facilities or keep old input on validation errors
+                                $selectedFacilities = old('facilities', $room->rooms_facilities->pluck('facility_id')->toArray());
+                            @endphp
 
-                                <div class="relative">
-                                    <img
-                                        id="thumb-{{ $image->id }}"
-                                        data-image-id="{{ $image->id }}"
-                                        data-original-src="{{ $imgUrl }}"
-                                        src="{{ $imgUrl }}"
-                                        alt=""
-                                        class="w-32 h-24 object-cover rounded border"
-                                        title="Click Replace to choose a new file"
-                                    />
-
-                                    <!-- single file input (has id and name so label triggers it, no JS required) -->
-                                    <input
-                                        id="replace-{{ $image->id }}"
-                                        type="file"
-                                        name="replace_images[{{ $image->id }}]"
-                                        accept="image/*"
-                                        class="sr-only"
-                                        data-image-id="{{ $image->id }}"
-                                    />
-
-                                    <!-- Controls: use label (native behaviour) instead of anchor/button -->
-                                    <div class="mt-2 text-center space-x-2">
-                                        <label for="replace-{{ $image->id }}"
-                                               class="inline-flex items-center px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white text-sm rounded cursor-pointer">
-                                            Replace
+                            <div>
+                                <x-input-label :value="__('Facilities')" />
+                                <div class="mt-2 grid grid-cols-2 gap-2">
+                                    @foreach($facilities as $facility)
+                                        <label class="inline-flex items-center space-x-2">
+                                            <input type="checkbox"
+                                                   name="facilities[]"
+                                                   value="{{ $facility->id }}"
+                                                   {{ in_array($facility->id, $selectedFacilities) ? 'checked' : '' }}
+                                                   class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" />
+                                            <span class="text-sm text-gray-700 dark:text-white pl-4">{{ $facility->name }}</span>
                                         </label>
-
-                                        <span id="status-{{ $image->id }}" class="text-xs text-gray-600 block mt-1"></span>
-                                    </div>
+                                    @endforeach
                                 </div>
-                            @endforeach
+                                <x-input-error :messages="$errors->get('facilities')" class="mt-2" />
+                                <x-input-error :messages="$errors->get('facilities.*')" class="mt-2" />
+                            </div>
+
+                        @foreach($room->rooms_images as $ri)
+                            @php
+                                // get the attached Image model via pivot model RoomsImage
+                                $image = $ri->image;
+                                $path = $image->image_path ?? '';
+                                $publicCandidate = public_path($path);
+                                if ($path !== '' && file_exists($publicCandidate)) {
+                                    $imgUrl = asset($path);
+                                } else {
+                                    $imgUrl = asset('storage/' . ltrim($path, '/'));
+                                }
+                            @endphp
+
+                            <div class="relative">
+                                <img
+                                    id="thumb-{{ $image->id }}"
+                                    data-image-id="{{ $image->id }}"
+                                    data-original-src="{{ $imgUrl }}"
+                                    src="{{ $imgUrl }}"
+                                    alt=""
+                                    class="w-32 h-24 object-cover rounded border"
+                                    title="Click Replace to choose a new file"
+                                />
+
+                                <!-- single file input (has id and name so label triggers it, no JS required) -->
+                                <input
+                                    id="replace-{{ $image->id }}"
+                                    type="file"
+                                    name="replace_images[{{ $image->id }}]"
+                                    accept="image/*"
+                                    class="sr-only"
+                                    data-image-id="{{ $image->id }}"
+                                />
+
+                                <div class="mt-2 text-center space-x-2">
+                                    <label for="replace-{{ $image->id }}"
+                                           class="inline-flex items-center px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white text-sm rounded cursor-pointer">
+                                        Replace
+                                    </label>
+                                    <span id="status-{{ $image->id }}" class="text-xs text-gray-600 block mt-1"></span>
+                                </div>
+                            </div>
+                        @endforeach
                         </div>
 
                         <div class="mt-6 flex items-center gap-3">

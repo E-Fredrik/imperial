@@ -61,10 +61,8 @@ class Room extends Model
 		return $this->hasMany(RoomsFacility::class);
 	}
 
-	public function images()
+	public function rooms_images()
 	{
-		return $this->belongsToMany(Image::class, 'rooms_images')
-					->withPivot('id')
-					->withTimestamps();
+		return $this->hasMany(RoomsImage::class, 'room_id');
 	}
 }

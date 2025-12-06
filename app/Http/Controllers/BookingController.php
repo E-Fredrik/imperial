@@ -1,0 +1,120 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
+use App\Models\Booking;
+use App\Models\Room;
+use App\Models\Payment;
+use Illuminate\Support\Facades\Auth;
+
+class BookingController extends Controller
+{
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
+    // show current user's bookings (admin users are redirected to admin payments)
+    public function index(): View|RedirectResponse
+    {
+        $user = Auth::user();
+        if (($user->role ?? '') === 'admin') {
+            return redirect()->route('admin.payments.index');
+        }
+
+        $bookings = Booking::where('user_id', $user->id)
+            ->with('room','payments')
+            ->orderByDesc('created_at')
+            ->paginate(15);
+
+        return view('bookings.index', compact('bookings'));
+    }
+
+    // show create form (available rooms only)
+    public function create(): View
+    {
+        $rooms = Room::where('status', 'available')->orderBy('room_number')->get();
+        return view('bookings.create', compact('rooms'));
+    }
+
+    // store booking + initial pending payment
+    public function store(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'room_id' => ['required','exists:rooms,id'],
+            'move_in_date' => ['required','date'],
+        ]);
+
+        $room = Room::findOrFail($data['room_id']);
+
+        // double-check availability
+        if ($room->status !== 'available') {
+            return back()->withErrors(['room_id' => 'Room is not available'])->withInput();
+        }
+
+        // monthly_rent follows the room price (no admin-supplied rent)
+        $monthly = (int) $room->price;
+
+        // create booking (pending)
+        $booking = Booking::create([
+            'user_id' => Auth::id(),
+            'room_id' => $room->id,
+            'move_in_date' => $data['move_in_date'],
+            'monthly_rent' => $monthly,
+            'status' => 'pending',
+        ]);
+
+        // mark room as pending so others can't book
+        $room->update(['status' => 'pending']);
+
+        // create initial payment record for the first month (pending)
+        Payment::create([
+            'booking_id' => $booking->id,
+            'amount' => $monthly,
+            'payment_for_month' => date('Y-m', strtotime($data['move_in_date'])),
+            'monthly_rent' => $monthly,
+            'late_fee' => 0,
+            'paid_at' => null,
+            'status' => 'pending',
+        ]);
+
+        return redirect()->route('bookings.index')->with('success','Booking created and payment pending.');
+    }
+
+    // show booking details (owner or admin)
+    public function show(Booking $booking): View
+    {
+        $user = Auth::user();
+        if ($booking->user_id !== $user->id && ($user->role ?? '') !== 'admin') {
+            abort(403);
+        }
+        $booking->load('room','payments','user');
+        return view('bookings.show', compact('booking'));
+    }
+
+    // cancel booking if pending or declined
+    public function destroy(Booking $booking): RedirectResponse
+    {
+        $user = Auth::user();
+        if ($booking->user_id !== $user->id && ($user->role ?? '') !== 'admin') {
+            abort(403);
+        }
+
+        if (! in_array($booking->status, ['pending','declined'])) {
+            return back()->withErrors(['booking' => 'Cannot cancel a confirmed booking.']);
+        }
+
+        $room = $booking->room;
+        if ($room && in_array($room->status, ['pending','available'])) {
+            $room->update(['status' => 'available']);
+        }
+
+        $booking->payments()->delete();
+        $booking->delete();
+
+        return redirect()->route('bookings.index')->with('success', 'Booking cancelled.');
+    }
+}

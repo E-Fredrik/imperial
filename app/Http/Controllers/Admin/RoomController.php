@@ -8,6 +8,8 @@ use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 use App\Models\Room;
 use App\Models\Image;
+use App\Models\RoomsImage;
+use App\Models\RoomFacility; // added
 use Illuminate\Support\Facades\Storage;
 
 class RoomController extends Controller
@@ -32,7 +34,9 @@ class RoomController extends Controller
 
     public function create(): View
     {
-        return view('admin.rooms.create');
+        // load facilities so the create view can render checkboxes
+        $facilities = RoomFacility::orderBy('name')->get();
+        return view('admin.rooms.create', compact('facilities'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -47,6 +51,8 @@ class RoomController extends Controller
             'status'        => ['nullable','in:available,booked,unavailable'],
             'description'   => ['nullable','string'],
             'images.*'      => ['nullable','image','max:2048'],
+            'facilities'    => ['nullable','array'],
+            'facilities.*'  => ['integer','exists:room_facilities,id'],
         ]);
 
         $room = Room::create($data);
@@ -63,16 +69,26 @@ class RoomController extends Controller
                 $filename = $hash . '.' . $file->getClientOriginalExtension();
                 $path = 'rooms/' . $filename;
 
-                // store only if the file doesn't already exist on disk
                 if (!Storage::disk('public')->exists($path)) {
                     Storage::disk('public')->put($path, $contents);
                 }
 
-                // reuse existing Image row if present, otherwise create
                 $image = Image::firstOrCreate(['image_path' => $path]);
 
-                // attach via pivot, avoid duplicates
-                $room->images()->syncWithoutDetaching($image->id);
+                // attach via rooms_images pivot relation (avoid duplicates)
+                $room->rooms_images()->firstOrCreate(
+                    ['image_id' => $image->id],
+                    ['created_at' => now(), 'updated_at' => now()]
+                );
+            }
+        }
+
+        // persist selected facilities (rooms_facilities pivot)
+        if ($request->filled('facilities')) {
+            // remove any existing pivot rows (should be none for a fresh room)
+            $room->rooms_facilities()->delete();
+            foreach ($request->input('facilities', []) as $fid) {
+                $room->rooms_facilities()->create(['facility_id' => $fid]);
             }
         }
 
@@ -86,7 +102,9 @@ class RoomController extends Controller
 
     public function edit(Room $room): View
     {
-        return view('admin.rooms.edit', compact('room'));
+        // provide all facilities so edit can render checkboxes and mark current ones
+        $facilities = RoomFacility::orderBy('name')->get();
+        return view('admin.rooms.edit', compact('room','facilities'));
     }
 
     public function update(Request $request, Room $room): RedirectResponse
@@ -102,6 +120,8 @@ class RoomController extends Controller
             'description'   => ['nullable','string'],
             'images.*'      => ['nullable','image','max:2048'],
             'replace_images.*' => ['nullable','image','max:2048'],
+            'facilities'    => ['nullable','array'],
+            'facilities.*'  => ['integer','exists:room_facilities,id'],
         ]);
 
         $room->update($data);
@@ -124,7 +144,7 @@ class RoomController extends Controller
 
                 $image = Image::firstOrCreate(['image_path' => $path]);
 
-                $room->images()->syncWithoutDetaching($image->id);
+                $room->rooms_images()->firstOrCreate(['image_id' => $image->id]);
             }
         }
 
@@ -148,11 +168,11 @@ class RoomController extends Controller
                 // create or reuse image row for new file
                 $newImage = Image::firstOrCreate(['image_path' => $newPath]);
 
-                // attach new image to room if not already attached
-                $room->images()->syncWithoutDetaching($newImage->id);
+                // attach new pivot row
+                $room->rooms_images()->firstOrCreate(['image_id' => $newImage->id]);
 
-                // detach old pivot link
-                $room->images()->detach($oldImageId);
+                // detach old pivot link via pivot rows
+                $room->rooms_images()->where('image_id', $oldImageId)->delete();
 
                 // remove old image row + file if no other rooms reference it
                 $oldImage = Image::find($oldImageId);
@@ -165,16 +185,23 @@ class RoomController extends Controller
             }
         }
 
+        // sync room facilities: delete existing pivot rows and recreate from selection
+        $selected = $request->input('facilities', []);
+        // remove all existing pivots for this room
+        $room->rooms_facilities()->delete();
+        foreach ($selected as $fid) {
+            $room->rooms_facilities()->create(['facility_id' => $fid]);
+        }
         return redirect()->route('admin.rooms.index')->with('success','Room updated.');
     }
 
     public function destroy(Room $room): RedirectResponse
     {
         // collect images before deleting the room pivot
-        $images = $room->images()->get();
+        $images = $room->rooms_images()->with('image')->get()->pluck('image')->filter();
 
-        // remove pivot links
-        $room->images()->detach();
+        // remove pivot links (delete pivot rows)
+        $room->rooms_images()->delete();
 
         // delete the room
         $room->delete();

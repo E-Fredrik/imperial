@@ -83,6 +83,32 @@
                                 <x-input-error :messages="$errors->get('images')" class="mt-2" />
                                 <x-input-error :messages="$errors->get('images.*')" class="mt-2" />
                             </div>
+
+                            @php
+                                $selectedFacilities = old('facilities',
+                                    isset($room)
+                                        ? $room->rooms_facilities->pluck('facility_id')->toArray()
+                                        : []
+                                );
+                            @endphp
+
+                            <div>
+                                <x-input-label :value="__('Facilities')" />
+                                <div class="mt-2 grid grid-cols-2 gap-2">
+                                    @foreach($facilities as $facility)
+                                        <label class="inline-flex items-center space-x-2">
+                                            <input type="checkbox"
+                                                   name="facilities[]"
+                                                   value="{{ $facility->id }}"
+                                                   {{ in_array($facility->id, $selectedFacilities) ? 'checked' : '' }}
+                                                   class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" />
+                                            <span class="text-sm">{{ $facility->name }}</span>
+                                        </label>
+                                    @endforeach
+                                </div>
+                                <x-input-error :messages="$errors->get('facilities')" class="mt-2" />
+                                <x-input-error :messages="$errors->get('facilities.*')" class="mt-2" />
+                            </div>
                         </div>
 
                         <div class="mt-6 flex items-center gap-3">
