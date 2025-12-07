@@ -15,11 +15,11 @@
                         <a href="{{ route('home') }}" class="nav-link text-white fw-bold" style="font-size: 1.1rem; {{ request()->routeIs('home') ? 'border-bottom: 2px solid white; padding-bottom: 5px;' : '' }}">HOME</a>
                     </li>
                     <li class="nav-item">
-                        <a href="" class="nav-link text-white fw-bold" style="font-size: 1.1rem; {{ request()->routeIs('rooms') ? 'border-bottom: 2px solid white; padding-bottom: 5px;' : '' }}">ROOM</a>
+                        <a href="{{ route('rooms') }}" class="nav-link text-white fw-bold" style="font-size: 1.1rem; {{ request()->routeIs('rooms') ? 'border-bottom: 2px solid white; padding-bottom: 5px;' : '' }}">ROOM</a>
                     </li>
                     <li class="nav-item">
                         @auth
-                            <a href="{{ route('profile.edit') }}" class="nav-link text-white fw-bold" style="font-size: 1.1rem; {{ request()->routeIs('profile.*') ? 'border-bottom: 2px solid white; padding-bottom: 5px;' : '' }}">PROFILE</a>
+                            <a href="/profile" class="nav-link text-white fw-bold" style="font-size: 1.1rem; {{ request()->is('profile*') ? 'border-bottom: 2px solid white; padding-bottom: 5px;' : '' }}">PROFILE</a>
                         @else
                             <a href="{{ route('login') }}" class="nav-link text-white fw-bold" style="font-size: 1.1rem;">PROFILE</a>
                         @endauth

@@ -19,8 +19,8 @@
                     <span class="badge-tag">High Satisfaction Rate</span>
                 </div>
                 <div>
-                    <a href="" class="btn-explore">Explore Rooms →</a>
-                    <a href="" class="btn-learn">Learn More</a>
+                    <a href="{{ route('rooms') }}" class="btn-explore">Explore Rooms →</a>
+                    <a href="#" class="btn-learn">Learn More</a>
                 </div>
             </div>
             <div class="col-lg-6">

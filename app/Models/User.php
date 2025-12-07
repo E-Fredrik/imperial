@@ -11,7 +11,6 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Support\Facades\Hash;
 
 /**
  * Class User
@@ -85,22 +84,13 @@ class User extends Authenticatable
         $this->attributes['last_name'] = isset($parts[1]) ? implode(' ', array_slice($parts, 1)) : null;
     }
 
-    /**
-     * Auto-hash password when set.
-     */
-    public function setPasswordAttribute(?string $value): void
-    {
-        if (empty($value)) {
-            $this->attributes['password'] = null;
-            return;
-        }
-
-        // If value is already a hash (Hash::needsRehash returns false), keep it.
-        $this->attributes['password'] = Hash::needsRehash($value) ? Hash::make($value) : $value;
-    }
-
     public function bookings()
     {
         return $this->hasMany(Booking::class);
+    }
+
+    public function currentBooking()
+    {
+        return $this->hasOne(Booking::class)->where('status', 'booked')->latest();
     }
 }

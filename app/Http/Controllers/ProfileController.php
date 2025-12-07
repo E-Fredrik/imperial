@@ -14,14 +14,8 @@ class ProfileController extends Controller
     /**
      * Display the user's profile form.
      */
-    public function edit(Request $request): View|RedirectResponse
+    public function edit(Request $request): View
     {
-        // If guest, show a prompt asking them to login or register.
-        // Authenticated users get the existing profile edit screen.
-        if (! $request->user()) {
-            return view('auth.prompt-login');
-        }
-
         return view('profile.edit', [
             'user' => $request->user(),
         ]);

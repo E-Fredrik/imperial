@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\InfoController;
 use App\Http\Controllers\Admin\RoomFacilityController;
@@ -13,15 +14,32 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\ImageController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
-    
+
+Route::get('/rooms', function () {
+    $rooms = \App\Models\Room::where('status', 'available')
+        ->with('images')
+        ->orderBy('room_number')
+        ->get();
+    return view('room', compact('rooms'));
+})->name('rooms');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+    // Profile display route
+    Route::get('/profile', function () {
+        $user = Auth::user();
+        return view('profile', compact('user'));
+    })->name('profile');
+    
+    // Profile edit routes (from Breeze)
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    
+    // Booking routes
     Route::resource('bookings', BookingController::class)->only(['index','create','store','show','destroy']);
 });
 
@@ -37,7 +55,5 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 
     Route::resource('payments', PaymentController::class);
 });
-
-Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
 
 require __DIR__.'/auth.php';

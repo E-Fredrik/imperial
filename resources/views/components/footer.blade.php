@@ -9,7 +9,7 @@
                 </p>
             </div>
 
-            <!-- Quick Links -->
+             <!-- Quick Links -->
             <div class="col-md-3 mb-4 mb-md-0">
                 <h5 class="mb-3" style="font-size: 1.1rem; font-weight: 600;">Quick Links</h5>
                 <ul class="list-unstyled">
@@ -17,20 +17,20 @@
                         <a href="{{ route('home') }}" style="color: #999; text-decoration: none; font-size: 0.95rem; transition: color 0.3s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#999'">Home</a>
                     </li>
                     <li class="mb-2">
-                        <a href="" style="color: #999; text-decoration: none; font-size: 0.95rem; transition: color 0.3s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#999'">Rooms</a>
+                        <a href="{{ route('rooms') }}" style="color: #999; text-decoration: none; font-size: 0.95rem; transition: color 0.3s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#999'">Rooms</a>
                     </li>
                     <li class="mb-2">
-                        <a href="" style="color: #999; text-decoration: none; font-size: 0.95rem; transition: color 0.3s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#999'">Profile</a>
+                        @auth
+                            <a href="{{ route('profile.edit') }}" style="color: #999; text-decoration: none; font-size: 0.95rem; transition: color 0.3s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#999'">Profile</a>
+                        @else
+                            <a href="{{ route('login') }}" style="color: #999; text-decoration: none; font-size: 0.95rem; transition: color 0.3s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#999'">Login</a>
+                        @endauth
                     </li>
                 </ul>
             </div>
 
             <!-- Contacts -->
             <div class="col-md-4 mb-4 mb-md-0">
-                <h5 class="mb-3" style="font-size: 1.1rem; font-weight: 600;">Contacts</h5>
-                <ul class="list-unstyled">
-                    <li class="mb-2" style="color: #999; font-size: 0.95rem;">+62 000000</li>
-                    <li class="mb-2" style="color: #999; font-size: 0.95rem;">lorem@ipsum</li>
                 </ul>
             </div>
         </div>
