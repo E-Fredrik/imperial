@@ -65,6 +65,43 @@
          </div>
      </div>
  </section>
+
+<!-- available rooms cards (keeps page black background) -->
+<section class="py-6" style="background:black;">
+    <div class="container">
+        <h3 style="color:#FAEBD7; margin-bottom:1rem;">Available Rooms</h3>
+
+        @php
+            $roomChunks = ($rooms ?? collect())->chunk(3);
+        @endphp
+
+        @if(($rooms ?? collect())->isNotEmpty())
+            <div id="roomsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000">
+                <div class="carousel-inner">
+                    @foreach($roomChunks as $si => $chunk)
+                        <div class="carousel-item {{ $si === 0 ? 'active' : '' }}">
+                            <div class="row gy-4">
+                                @foreach($chunk as $room)
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <x-room-card :room="$room" />
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+
+                <div class="carousel-indicators mt-3">
+                    @foreach($roomChunks as $i => $c)
+                        <button type="button" data-bs-target="#roomsCarousel" data-bs-slide-to="{{ $i }}" class="{{ $i === 0 ? 'active' : '' }}" aria-label="Slide {{ $i+1 }}"></button>
+                    @endforeach
+                </div>
+            </div>
+        @else
+            <div class="text-muted" style="color:#cfc6bc;">No rooms available at the moment.</div>
+        @endif
+     </div>
+ </section>
 @endsection
 @push('scripts')
 <!-- Bootstrap bundle for carousel (includes Popper) -->
