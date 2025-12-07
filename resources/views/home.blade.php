@@ -42,7 +42,7 @@
                     @endphp
 
                     @if($slides->isNotEmpty())
-                        <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel">
+                        <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="1500">
                             <div class="carousel-inner">
                                 @foreach($slides as $i => $url)
                                     <div class="carousel-item {{ $i === 0 ? 'active' : '' }}">

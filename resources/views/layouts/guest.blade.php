@@ -23,9 +23,9 @@
     <main style="min-height:calc(100vh - 80px); display:flex; align-items:center; justify-content:center; padding:3rem 1rem;">
         <div style="width:100%; max-width:520px;">
             <div style="text-align:center; margin-bottom:1.25rem;">
-                <a href="{{ route('home') }}">
+                {{-- <a href="{{ route('home') }}">
                     <img src="{{ asset('images/imperial-kost-logo.png') }}" alt="{{ config('app.name', 'Imperial') }} Logo" style="height:72px; display:inline-block;">
-                </a>
+                </a> --}}
             </div>
 
             <div style="background:#0a0a0a; padding:2rem; border-radius:12px; color:#FAEBD7; box-shadow:0 8px 30px rgba(0,0,0,0.6);">
