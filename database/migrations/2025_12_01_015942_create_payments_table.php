@@ -18,7 +18,8 @@ return new class extends Migration
             $table->string('payment_for_month');
             $table->integer('monthly_rent');
             $table->integer('late_fee')->default(0);
-            $table->date('paid_at');
+            $table->string('proof')->nullable();
+            $table->date('paid_at')->nullable();
             $table->string('status')->default('pending');
             $table->timestamps();
         });

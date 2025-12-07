@@ -9,10 +9,11 @@ use App\Http\Controllers\Admin\KostFacilityController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\Admin\AdminBookingController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Admin\ImageController;
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+Route::get('/', [HomeController::class, 'index'])->name('home');
+    
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -31,10 +32,11 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('roomfac', RoomFacilityController::class);
     Route::resource('kostfac', KostFacilityController::class);
     Route::resource('bookings', AdminBookingController::class);
+    Route::resource('images', ImageController::class);
+    Route::post('images/{image}/toggle-featured', [ImageController::class, 'toggleFeatured'])->name('images.toggleFeatured');
+    Route::post('bookings/{booking}/decline', [AdminBookingController::class, 'decline'])->name('bookings.decline');
 
-    // // admin payments
-    // Route::get('payments', [PaymentController::class,'index'])->name('payments.index');
-    // Route::post('payments/{payment}', [PaymentController::class,'update'])->name('payments.update');
+    Route::resource('payments', PaymentController::class);
 });
 
 require __DIR__.'/auth.php';

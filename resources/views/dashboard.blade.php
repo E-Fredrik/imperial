@@ -45,12 +45,19 @@
                             </a>
                         </div>
 
-                        {{-- <div class="mt-4">
+                        <div class="mt-4">
                             <a href="{{ route('admin.payments.index') }}"
                                class="inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-md text-sm font-medium">
                                 Manage Payments
                             </a>
-                        </div> --}}
+                        </div>
+
+                        <div class="mt-4">
+                            <a href="{{ route('admin.images.index') }}"
+                               class="inline-flex items-center px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-md text-sm font-medium">
+                                Manage Images
+                            </a>
+                        </div>
 
                     @endif
                 </div>

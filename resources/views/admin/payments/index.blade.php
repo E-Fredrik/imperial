@@ -1,35 +1,113 @@
 <x-app-layout>
-    <x-slot name="header"><h2>{{ __('Payments') }}</h2></x-slot>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+            {{ __('Payments') }}
+        </h2>
+    </x-slot>
 
-    <div class="p-6 max-w-5xl mx-auto">
-        @foreach($payments as $payment)
-            <div class="p-4 mb-3 bg-white dark:bg-gray-800 rounded shadow">
-                <div class="flex justify-between items-start">
-                    <div>
-                        <div class="text-sm"><strong>Booking #{{ $payment->booking_id }}</strong> — Room: {{ $payment->booking->room->room_number ?? '-' }}</div>
-                        <div class="text-xs text-gray-500">User: {{ $payment->booking->user->first_name ?? '' }} {{ $payment->booking->user->last_name ?? '' }}</div>
-                        <div class="mt-2">Amount: {{ $payment->amount }} — Status: <span class="font-medium">{{ $payment->status }}</span></div>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 text-gray-900 dark:text-gray-100">
+                    @if(session('success'))
+                        <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    {{-- <div class="mb-4">
+                        <a href="{{ route('admin.bookings.index') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-800 rounded-md text-sm font-medium hover:opacity-90">
+                            Manage Bookings
+                        </a>
+                    </div> --}}
+
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+                            <thead class="bg-gray-50 dark:bg-gray-700">
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-200">ID</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-200">Booking</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-200">User</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-200">Room</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-200">Month</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-200">Amount</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-200">Status</th>
+                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-200">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white dark:bg-transparent divide-y divide-gray-200 dark:divide-gray-700">
+                                @forelse($payments as $payment)
+                                    <tr class="odd:bg-white even:bg-gray-50 dark:even:bg-gray-800">
+                                        <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{{ $payment->id }}</td>
+
+                                        <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
+                                            <a href="{{ route('admin.bookings.show', $payment->booking_id) }}" class="text-blue-600 hover:underline">
+                                                #{{ $payment->booking_id }}
+                                            </a>
+                                        </td>
+
+                                        <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
+                                            {{ optional($payment->booking->user)->first_name ?? '-' }}
+                                            {{ optional($payment->booking->user)->last_name ?? '' }}<br />
+                                            <span class="text-xs text-gray-500 dark:text-gray-400">{{ optional($payment->booking->user)->email ?? '' }}</span>
+                                        </td>
+
+                                        <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
+                                            {{ optional($payment->booking->room)->room_number ?? '-' }}
+                                        </td>
+
+                                        <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
+                                            {{ $payment->payment_for_month }}
+                                        </td>
+
+                                        <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
+                                            {{ number_format($payment->amount) }}
+                                        </td>
+
+                                        <td class="px-4 py-3 text-sm">
+                                            <span class="inline-flex items-center px-2 py-1 rounded text-xs
+                                                @if($payment->status === 'accepted') bg-green-100 text-green-800
+                                                @elseif($payment->status === 'pending') bg-yellow-100 text-yellow-800
+                                                @elseif($payment->status === 'declined') bg-rose-100 text-rose-800
+                                                @else bg-gray-100 text-gray-800 @endif">
+                                                {{ $payment->status }}
+                                            </span>
+                                        </td>
+
+                                        <td class="px-4 py-3 text-sm">
+                                            <div class="flex items-center gap-2">
+                                                <a href="{{ route('admin.bookings.show', $payment->booking_id) }}" class="inline-flex px-3 py-1 bg-blue-600 text-white rounded text-sm">View Booking</a>
+
+                                                <form method="POST" action="{{ route('admin.payments.update', $payment) }}">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <input type="hidden" name="action" value="accept" />
+                                                    <button type="submit" class="inline-flex px-3 py-1 bg-green-600 hover:bg-green-500 text-white rounded text-sm">Accept</button>
+                                                </form>
+
+                                                <form method="POST" action="{{ route('admin.payments.update', $payment) }}" onsubmit="return confirm('Decline this payment?');">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <input type="hidden" name="action" value="decline" />
+                                                    <button type="submit" class="inline-flex px-3 py-1 bg-rose-600 hover:bg-rose-500 text-white rounded text-sm">Decline</button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="8" class="px-4 py-6 text-center text-gray-600 dark:text-gray-400">No payments found.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
                     </div>
 
-                    <div class="flex items-center space-x-2">
-                        <form method="POST" action="{{ route('admin.payments.update', $payment) }}">
-                            @csrf
-                            <input type="hidden" name="action" value="accept" />
-                            <button type="submit" class="px-3 py-1 bg-green-600 text-white rounded">Accept</button>
-                        </form>
-
-                        <form method="POST" action="{{ route('admin.payments.update', $payment) }}">
-                            @csrf
-                            <input type="hidden" name="action" value="decline" />
-                            <button type="submit" class="px-3 py-1 bg-rose-600 text-white rounded">Decline</button>
-                        </form>
+                    <div class="mt-4">
+                        {{ $payments->links() }}
                     </div>
                 </div>
             </div>
-        @endforeach
-
-        <div class="mt-4">
-            {{ $payments->links() }}
         </div>
     </div>
 </x-app-layout>

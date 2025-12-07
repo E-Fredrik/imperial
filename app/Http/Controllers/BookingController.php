@@ -9,6 +9,8 @@ use App\Models\Booking;
 use App\Models\Room;
 use App\Models\Payment;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class BookingController extends Controller
 {
@@ -46,6 +48,7 @@ class BookingController extends Controller
         $data = $request->validate([
             'room_id' => ['required','exists:rooms,id'],
             'move_in_date' => ['required','date'],
+            'proof' => ['nullable','file','image','max:4096'],
         ]);
 
         $room = Room::findOrFail($data['room_id']);
@@ -70,6 +73,18 @@ class BookingController extends Controller
         // mark room as pending so others can't book
         $room->update(['status' => 'pending']);
 
+        // handle optional proof upload
+        $proofPath = null;
+        if ($request->hasFile('proof') && $request->file('proof')->isValid()) {
+            $file = $request->file('proof');
+            $contents = file_get_contents($file->getRealPath());
+            $hash = sha1($contents . Str::random(6));
+            $filename = $hash . '.' . $file->getClientOriginalExtension();
+            $path = 'payments/' . $filename;
+            Storage::disk('public')->put($path, $contents);
+            $proofPath = $path;
+        }
+
         // create initial payment record for the first month (pending)
         Payment::create([
             'booking_id' => $booking->id,
@@ -77,7 +92,7 @@ class BookingController extends Controller
             'payment_for_month' => date('Y-m', strtotime($data['move_in_date'])),
             'monthly_rent' => $monthly,
             'late_fee' => 0,
-            'paid_at' => null,
+            'proof' => $proofPath,
             'status' => 'pending',
         ]);
 

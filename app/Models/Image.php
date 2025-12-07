@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property int $id
  * @property string $image_path
  * @property string|null $description
+ * @property bool $is_featured
  * @property Carbon|null $created_at
  * @property Carbon|null $updated_at
  * 
@@ -30,7 +31,8 @@ class Image extends Model
 
 	protected $fillable = [
 		'image_path',
-		'description'
+		'description',
+		'is_featured',
 	];
 
 	public function facilities_images()

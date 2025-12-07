@@ -29,28 +29,29 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Payment extends Model
 {
-	protected $table = 'payments';
+    protected $table = 'payments';
 
-	protected $casts = [
-		'booking_id' => 'int',
-		'amount' => 'int',
-		'monthly_rent' => 'int',
-		'late_fee' => 'int',
-		'paid_at' => 'datetime'
-	];
+    protected $casts = [
+        'booking_id' => 'int',
+        'amount' => 'int',
+        'monthly_rent' => 'int',
+        'late_fee' => 'int',
+        'paid_at' => 'datetime'
+    ];
 
-	protected $fillable = [
-		'booking_id',
-		'amount',
-		'payment_for_month',
-		'monthly_rent',
-		'late_fee',
-		'paid_at',
-		'status'
-	];
+    protected $fillable = [
+        'booking_id',
+        'amount',
+        'payment_for_month',
+        'monthly_rent',
+        'late_fee',
+        'paid_at',
+		'proof',
+        'status'
+    ];
 
-	public function booking()
-	{
-		return $this->belongsTo(Booking::class);
-	}
+    public function booking()
+    {
+        return $this->belongsTo(Booking::class);
+    }
 }

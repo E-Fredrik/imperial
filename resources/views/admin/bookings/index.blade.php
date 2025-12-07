@@ -33,6 +33,7 @@
                                     <th class="py-2 px-4 border-b text-sm font-medium">Room</th>
                                     <th class="py-2 px-4 border-b text-sm font-medium">Move-in</th>
                                     <th class="py-2 px-4 border-b text-sm font-medium">Rent</th>
+                                    <th class="py-2 px-4 border-b text-sm font-medium">Proof</th>
                                     <th class="py-2 px-4 border-b text-sm font-medium">Payments</th>
                                     <th class="py-2 px-4 border-b text-sm font-medium">Status</th>
                                     <th class="py-2 px-4 border-b text-sm font-medium">Actions</th>
@@ -53,6 +54,24 @@
                                         <td class="py-2 px-4 border-b text-sm">{{ optional($booking->move_in_date)->format('Y-m-d') ?? '-' }}</td>
                                         <td class="py-2 px-4 border-b text-sm">{{ $booking->monthly_rent }}</td>
                                         <td class="py-2 px-4 border-b text-sm">
+                                            @php
+                                                $p = $booking->payments->last();
+                                                $proofPath = $p->proof ?? '';
+                                                if ($proofPath !== '' && file_exists(public_path($proofPath))) {
+                                                    $proofUrl = asset($proofPath);
+                                                } elseif ($proofPath) {
+                                                    $proofUrl = asset('storage/' . ltrim($proofPath, '/'));
+                                                } else {
+                                                    $proofUrl = null;
+                                                }
+                                            @endphp
+                                            @if($proofUrl)
+                                                <a href="{{ $proofUrl }}" target="_blank" class="text-blue-600 hover:underline text-sm">View</a>
+                                            @else
+                                                <span class="text-xs text-gray-500">—</span>
+                                            @endif
+                                        </td>
+                                        <td class="py-2 px-4 border-b text-sm">
                                             @foreach($booking->payments as $p)
                                                 <div class="mb-1">
                                                     <span class="text-sm font-medium">{{ $p->amount }}</span>
@@ -69,11 +88,12 @@
                                             <div class="flex items-center gap-2">
                                                 <a href="{{ route('admin.bookings.show', $booking) }}" class="inline-flex px-2 py-1 bg-blue-600 text-white rounded text-sm">View</a>
 
-                                                <form action="{{ route('admin.bookings.destroy', $booking) }}" method="POST" onsubmit="return confirm('Are you sure?');">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="inline-flex px-2 py-1 bg-rose-600 text-white rounded text-sm">Delete</button>
-                                                </form>
+                                                @if($booking->status === 'pending')
+                                                    <form action="{{ route('admin.bookings.decline', $booking) }}" method="POST" onsubmit="return confirm('Decline this booking and the latest payment?');">
+                                                        @csrf
+                                                        <button type="submit" class="inline-flex px-2 py-1 bg-rose-600 text-white rounded text-sm">Decline</button>
+                                                    </form>
+                                                @endif
                                             </div>
                                         </td>
                                     </tr>
