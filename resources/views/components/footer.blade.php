@@ -3,7 +3,7 @@
         <div class="row">
             <!-- Logo and Description -->
             <div class="col-md-5 mb-4 mb-md-0">
-                <img src="{{ asset('images/logo.png') }}" alt="Imperial F7 Logo" style="height: 50px; margin-bottom: 1rem;">
+                <img src="{{ asset('images/imperial-kost-logo.png') }}" alt="Imperial F7 Logo" style="height: 50px; margin-bottom: 1rem;">
                 <p style="color: #999; font-size: 0.9rem; max-width: 350px; line-height: 1.6;">
                     Premium boarding house with modern amenities and seamless booking experience.
                 </p>
@@ -38,7 +38,7 @@
         <!-- Copyright -->
         <hr style="border-color: #333; margin: 2.5rem 0 1.5rem 0;">
         <div class="text-center">
-            <p style="color: #666; font-size: 0.85rem; margin: 0;">© 2024 ImperialKost. All rights reserved.</p>
+            <p style="color: #666; font-size: 0.85rem; margin: 0;">&copy; 2024 ImperialKost. All rights reserved.</p>
         </div>
     </div>
 </footer>

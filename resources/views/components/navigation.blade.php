@@ -2,7 +2,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #000; padding: 1.5rem 0;">
         <div class="container">
             <a class="navbar-brand" href="{{ route('home') }}">
-                <img src="{{ asset('images/logo.png') }}" alt="Imperial F7 Logo" style="height: 50px;">
+                <img src="{{ asset('images/imperial-kost-logo.png') }}" alt="Imperial F7 Logo" style="height: 50px;">
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -18,7 +18,11 @@
                         <a href="" class="nav-link text-white fw-bold" style="font-size: 1.1rem; {{ request()->routeIs('rooms') ? 'border-bottom: 2px solid white; padding-bottom: 5px;' : '' }}">ROOM</a>
                     </li>
                     <li class="nav-item">
-                        <a href="" class="nav-link text-white fw-bold" style="font-size: 1.1rem; {{ request()->routeIs('profile.*') ? 'border-bottom: 2px solid white; padding-bottom: 5px;' : '' }}">PROFILE</a>
+                        @auth
+                            <a href="{{ route('profile.edit') }}" class="nav-link text-white fw-bold" style="font-size: 1.1rem; {{ request()->routeIs('profile.*') ? 'border-bottom: 2px solid white; padding-bottom: 5px;' : '' }}">PROFILE</a>
+                        @else
+                            <a href="{{ route('login') }}" class="nav-link text-white fw-bold" style="font-size: 1.1rem;">PROFILE</a>
+                        @endauth
                     </li>
                 </ul>
             </div>
