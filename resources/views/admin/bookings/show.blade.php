@@ -156,6 +156,7 @@
                                                 @if($payment->status !== 'accepted')
                                                     <form method="POST" action="{{ route('admin.payments.update', $payment) }}">
                                                         @csrf
+                                                        @method('PUT')
                                                         <input type="hidden" name="action" value="accept" />
                                                         <button type="submit" class="inline-flex px-3 py-1 bg-green-600 hover:bg-green-500 text-white rounded text-sm">Accept</button>
                                                     </form>
@@ -164,6 +165,7 @@
                                                 @if($payment->status !== 'declined')
                                                     <form method="POST" action="{{ route('admin.payments.update', $payment) }}" onsubmit="return confirm('Decline this payment?');">
                                                         @csrf
+                                                        @method('PUT')
                                                         <input type="hidden" name="action" value="decline" />
                                                         <button type="submit" class="inline-flex px-3 py-1 bg-rose-600 hover:bg-rose-500 text-white rounded text-sm">Decline</button>
                                                     </form>

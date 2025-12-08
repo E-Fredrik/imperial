@@ -170,6 +170,7 @@
                                                 <?php if($payment->status !== 'accepted'): ?>
                                                     <form method="POST" action="<?php echo e(route('admin.payments.update', $payment)); ?>">
                                                         <?php echo csrf_field(); ?>
+                                                        <?php echo method_field('PUT'); ?>
                                                         <input type="hidden" name="action" value="accept" />
                                                         <button type="submit" class="inline-flex px-3 py-1 bg-green-600 hover:bg-green-500 text-white rounded text-sm">Accept</button>
                                                     </form>
@@ -178,6 +179,7 @@
                                                 <?php if($payment->status !== 'declined'): ?>
                                                     <form method="POST" action="<?php echo e(route('admin.payments.update', $payment)); ?>" onsubmit="return confirm('Decline this payment?');">
                                                         <?php echo csrf_field(); ?>
+                                                        <?php echo method_field('PUT'); ?>
                                                         <input type="hidden" name="action" value="decline" />
                                                         <button type="submit" class="inline-flex px-3 py-1 bg-rose-600 hover:bg-rose-500 text-white rounded text-sm">Decline</button>
                                                     </form>
