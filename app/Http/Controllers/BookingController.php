@@ -27,12 +27,7 @@ class BookingController extends Controller
             return redirect()->route('admin.payments.index');
         }
 
-        $bookings = Booking::where('user_id', $user->id)
-            ->with('room','payments')
-            ->orderByDesc('created_at')
-            ->paginate(15);
-
-        return view('bookings.index', compact('bookings'));
+        return redirect()->route('profile');
     }
 
     // show create form (available rooms only)

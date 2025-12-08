@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('phone_number')->nullable();
             $table->string('status')->default('active');
             $table->string('role')->default('user');
+            $table->string('id_card')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

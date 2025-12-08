@@ -4,15 +4,15 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
 use App\Models\Room;
-use Illuminate\Support\Facades\DB;
+use App\Models\Booking;
 
 class RoomSeeder extends Seeder
 {
     public function run(): void
     {
-        // Clear existing rooms
-        DB::table('rooms')->truncate();
-        
+        Booking::query()->delete();
+        Room::query()->delete();
+
         // Floor 1 - 7 rooms (A-G)
         $floor1Rooms = [
             ['room_number' => 'A', 'floor' => 1, 'type' => 'Single', 'status' => 'available'],

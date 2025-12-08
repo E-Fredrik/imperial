@@ -47,7 +47,10 @@
                   <div class="flex items-center justify-between mt-2">
                     <form method="POST" action="{{ route('admin.images.toggleFeatured', $img) }}">
                       @csrf
-                      <button type="submit" class="inline-flex items-center px-2 py-1 text-xs rounded {{ $img->is_featured ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800' }}">
+                      <button type="submit"
+                        class="{{ $img->is_featured
+                          ? 'inline-flex items-center px-3 py-1.5 text-sm rounded bg-yellow-500 text-white shadow-sm border border-yellow-600 hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-300'
+                          : 'inline-flex items-center px-2 py-1 text-xs rounded bg-gray-100 text-gray-800 hover:bg-gray-200 focus:outline-none focus:ring-1 focus:ring-gray-200' }}">
                         {{ $img->is_featured ? 'Featured' : 'Feature' }}
                       </button>
                     </form>

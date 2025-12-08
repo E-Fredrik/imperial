@@ -8,17 +8,31 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\Payment;
 
 class ProfileController extends Controller
 {
     /**
      * Display the user's profile form.
      */
-    public function edit(Request $request): View
+    public function edit(Request $request): View|RedirectResponse
     {
-        return view('profile.edit', [
-            'user' => $request->user(),
-        ]);
+        $user = $request->user();
+        
+        if (! $user) {
+            return redirect()->route('login');
+        }
+
+        // Load payments made by this user via the booking relation
+        $transactions = Payment::with(['booking.room'])
+            ->whereHas('booking', function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+            })
+            ->orderByDesc('paid_at')
+            ->orderByDesc('created_at')
+            ->get();
+
+        return view('profile', compact('user', 'transactions'));
     }
 
     /**

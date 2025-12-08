@@ -51,6 +51,7 @@ class AdminBookingController extends Controller
             'room_id'      => ['required','exists:rooms,id'],
             'move_in_date' => ['required','date'],
             'proof' => ['nullable','file','image','max:4096'],
+            'id_card' => ['nullable','file','image','max:4096'], // new
         ]);
 
         $room = Room::findOrFail($data['room_id']);
@@ -79,6 +80,22 @@ class AdminBookingController extends Controller
             $path = 'payments/' . $filename;
             Storage::disk('public')->put($path, $contents);
             $proofPath = $path;
+        }
+
+        // handle optional id_card upload (save path on the selected user)
+        if ($request->hasFile('id_card') && $request->file('id_card')->isValid()) {
+            $file = $request->file('id_card');
+            $contents = file_get_contents($file->getRealPath());
+            $hash = sha1($contents . Str::random(6));
+            $filename = $hash . '.' . $file->getClientOriginalExtension();
+            $idPath = 'id_cards/' . $filename;
+            Storage::disk('public')->put($idPath, $contents);
+
+            // update the user's id_card field
+            $user = User::find($data['user_id']);
+            if ($user) {
+                $user->update(['id_card' => $idPath]);
+            }
         }
 
         Payment::create([

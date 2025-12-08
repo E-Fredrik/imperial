@@ -48,6 +48,13 @@
             </div>
 
             <div class="mt-4">
+                <x-input-label for="id_card" :value="__('ID Card (photo)')" />
+                <input id="id_card" name="id_card" type="file" accept="image/*" class="mt-1 block w-full" />
+                <x-input-error :messages="$errors->get('id_card')" class="mt-2" />
+                <p class="text-xs text-gray-500 mt-1">PNG/JPG up to 4MB. Attach the user's ID card photo (optional).</p>
+            </div>
+
+            <div class="mt-4">
                 <x-input-label :value="__('Monthly Rent')" />
                 <div class="mt-1">
                     <input id="monthly_rent_display" type="text" readonly class="block w-full rounded-md border-gray-300 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-2" value="" />

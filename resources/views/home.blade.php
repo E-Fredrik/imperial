@@ -46,7 +46,7 @@
                             <div class="carousel-inner">
                                 @foreach($slides as $i => $url)
                                     <div class="carousel-item {{ $i === 0 ? 'active' : '' }}">
-                                        <img src="{{ $url }}" class="d-block w-100" alt="Slide {{ $i+1 }}" style="border-radius:30px; height:400px; object-fit:cover;">
+                                        <img src="{{ $url }}" class="d-block w-100" alt="Slide {{ $i+1 }}" style="border-radius:5px; height:400px; object-fit:cover;">
                                     </div>
                                 @endforeach
                             </div>
@@ -76,7 +76,7 @@
         @endphp
 
         @if(($rooms ?? collect())->isNotEmpty())
-            <div id="roomsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="2000">
+            <div id="roomsCarousel" class="carousel slide pb-4" data-bs-ride="carousel" data-bs-interval="2000">
                 <div class="carousel-inner">
                     @foreach($roomChunks as $si => $chunk)
                         <div class="carousel-item {{ $si === 0 ? 'active' : '' }}">

@@ -56,7 +56,8 @@ class User extends Authenticatable
         'phone_number',
         'status',
         'role',
-        'remember_token'
+        'remember_token',
+        'id_card'
     ];
 
     /**

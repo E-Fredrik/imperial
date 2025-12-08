@@ -7,8 +7,17 @@
 @section('content')
     <section class="profile-section">
         <div class="container">
+            <div class="text-end mb-3">
+                <form method="POST" action="{{ route('logout') }}">
+                    @csrf
+                    <button type="submit" style="background:#FAEBD7; color:#000; border-radius:8px; padding:0.45rem 0.75rem; border:none; font-weight:600;">
+                        Log out
+                    </button>
+                </form>
+            </div>
+                
             <div class="profile-card">
-                <div class="profile-header">
+                <div class="profile-header" style="display:flex; align-items:center; gap:1rem;">
                     <div class="profile-info">
                         <div class="profile-avatar">
                             {{ strtoupper(substr($user->name ?? 'U', 0, 1)) }}
@@ -18,6 +27,7 @@
                             <p class="profile-email">{{ $user->email ?? 'johndoe@gmail.com' }}</p>
                         </div>
                     </div>
+
                     @if($user->currentBooking ?? null)
                     <div class="room-badge">
                         <h6><i class="bi bi-geo-alt-fill"></i>Current Room</h6>
@@ -36,29 +46,34 @@
 
             <div class="transaction-card">
                 <h3>Transaction History</h3>
-                @php
-                    $transactions = [
-                        ['date' => '02 - 10 - 2025', 'amount' => 'Rp 1.850.000'],
-                        ['date' => '02 - 09 - 2025', 'amount' => 'Rp 1.850.000'],
-                        ['date' => '02 - 08 - 2025', 'amount' => 'Rp 1.850.000'],
-                    ];
-                @endphp
-                @forelse($transactions as $transaction)
-                    <div class="transaction-item">
-                        <div>
-                            <div class="transaction-date">{{ $transaction['date'] }}</div>
-                            <div class="transaction-amount">
-                                <i class="bi bi-receipt"></i>
-                                {{ $transaction['amount'] }}
+                @if(!empty($transactions) && $transactions->isNotEmpty())
+                    @foreach($transactions as $payment)
+                        @php
+                            $date = $payment->paid_at ? $payment->paid_at->format('d - m - Y') : optional($payment->created_at)->format('d - m - Y');
+                            $amount = 'Rp ' . number_format($payment->amount, 0, ',', '.');
+                        @endphp
+                        <div class="transaction-item">
+                            <div>
+                                <div class="transaction-date">{{ $date }}</div>
+                                <div class="transaction-amount">
+                                    <i class="bi bi-receipt"></i>
+                                    {{ $amount }}
+                                </div>
+                                <div class="text-xs text-muted mt-1">
+                                    Booking: #{{ $payment->booking_id }}
+                                    @if(optional($payment->booking)->room)
+                                        — Room {{ optional($payment->booking->room)->room_number }}
+                                    @endif
+                                </div>
                             </div>
+                            <button class="transaction-info-btn" type="button" onclick="window.location.href='{{ route('bookings.show', $payment->booking_id) }}'">
+                                <i class="bi bi-info-lg"></i>
+                            </button>
                         </div>
-                        <button class="transaction-info-btn">
-                            <i class="bi bi-info-lg"></i>
-                        </button>
-                    </div>
-                @empty
+                    @endforeach
+                @else
                     <p>No transactions yet.</p>
-                @endforelse
+                @endif
             </div>
         </div>
     </section>

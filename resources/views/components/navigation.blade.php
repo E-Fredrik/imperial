@@ -19,7 +19,11 @@
                     </li>
                     <li class="nav-item">
                         @auth
-                            <a href="/profile" class="nav-link text-white fw-bold" style="font-size: 1.1rem; {{ request()->is('profile*') ? 'border-bottom: 2px solid white; padding-bottom: 5px;' : '' }}">PROFILE</a>
+                            @if((auth()->user()->role ?? '') === 'admin')
+                                <a href="{{ route('dashboard') }}" class="nav-link text-white fw-bold" style="font-size: 1.1rem; {{ request()->routeIs('dashboard') ? 'border-bottom: 2px solid white; padding-bottom: 5px;' : '' }}">PROFILE</a>
+                            @else
+                                <a href="{{ route('profile') }}" class="nav-link text-white fw-bold" style="font-size: 1.1rem; {{ request()->routeIs('profile') || request()->is('profile*') ? 'border-bottom: 2px solid white; padding-bottom: 5px;' : '' }}">PROFILE</a>
+                            @endif
                         @else
                             <a href="{{ route('login') }}" class="nav-link text-white fw-bold" style="font-size: 1.1rem;">PROFILE</a>
                         @endauth
