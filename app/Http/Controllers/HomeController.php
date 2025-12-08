@@ -9,12 +9,13 @@ use App\Models\Room;
 class HomeController extends Controller
 {
     public function index() {
+        // Get featured images
         $featured = Image::where('is_featured', true)
             ->orderByDesc('created_at')
             ->get();
 
-        $rooms = Room::where('status', 'available')
-            ->with('images')
+        // Get ALL rooms (not just available)
+        $rooms = Room::with(['images', 'rooms_facilities.room_facility'])
             ->orderBy('room_number')
             ->get();
 

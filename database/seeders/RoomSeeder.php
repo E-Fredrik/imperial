@@ -2,108 +2,48 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\Room;
+use Illuminate\Support\Facades\DB;
 
 class RoomSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        $rooms = [
-            [
-                'room_number' => 'A',
-                'price' => 1850000,
-                'length' => 4,
-                'width' => 3,
-                'type' => 'single',
-                'floor' => 1,
-                'status' => 'available',
-            ],
-            [
-                'room_number' => 'B',
-                'price' => 1850000,
-                'length' => 4,
-                'width' => 3,
-                'type' => 'single',
-                'floor' => 1,
-                'status' => 'available',
-            ],
-            [
-                'room_number' => 'C',
-                'price' => 4500000,
-                'length' => 5,
-                'width' => 4,
-                'type' => 'double',
-                'floor' => 2,
-                'status' => 'available',
-            ],
-            [
-                'room_number' => 'D',
-                'price' => 4500000,
-                'length' => 5,
-                'width' => 4,
-                'type' => 'double',
-                'floor' => 2,
-                'status' => 'available',
-            ],
-            [
-                'room_number' => 'E',
-                'price' => 8000000,
-                'length' => 6,
-                'width' => 5,
-                'type' => 'suite',
-                'floor' => 3,
-                'status' => 'available',
-            ],
-            [
-                'room_number' => 'F',
-                'price' => 8000000,
-                'length' => 6,
-                'width' => 5,
-                'type' => 'suite',
-                'floor' => 3,
-                'status' => 'available',
-            ],
-            [
-                'room_number' => 'G',
-                'price' => 12000000,
-                'length' => 8,
-                'width' => 6,
-                'type' => 'presidential',
-                'floor' => 4,
-                'status' => 'available',
-            ],
-            [
-                'room_number' => 'H',
-                'price' => 12000000,
-                'length' => 8,
-                'width' => 6,
-                'type' => 'presidential',
-                'floor' => 4,
-                'status' => 'available',
-            ],
-            [
-                'room_number' => 'I',
-                'price' => 6000000,
-                'length' => 5.5,
-                'width' => 4.5,
-                'type' => 'deluxe',
-                'floor' => 2,
-                'status' => 'available',
-            ],
+        // Clear existing rooms
+        DB::table('rooms')->truncate();
+        
+        // Floor 1 - 7 rooms (A-G)
+        $floor1Rooms = [
+            ['room_number' => 'A', 'floor' => 1, 'type' => 'Single', 'status' => 'available'],
+            ['room_number' => 'B', 'floor' => 1, 'type' => 'Single', 'status' => 'available'],
+            ['room_number' => 'C', 'floor' => 1, 'type' => 'Single', 'status' => 'booked'],
+            ['room_number' => 'D', 'floor' => 1, 'type' => 'Single', 'status' => 'available'],
+            ['room_number' => 'E', 'floor' => 1, 'type' => 'Single', 'status' => 'available'],
+            ['room_number' => 'F', 'floor' => 1, 'type' => 'Single', 'status' => 'available'],
+            ['room_number' => 'G', 'floor' => 1, 'type' => 'Single', 'status' => 'available'],
         ];
-
-        foreach ($rooms as $data) {
-            Room::updateOrCreate(
-                ['room_number' => $data['room_number']],
-                $data
-            );
+        
+        // Floor 2 - 2 rooms (H-I)
+        $floor2Rooms = [
+            ['room_number' => 'H', 'floor' => 2, 'type' => 'Single', 'status' => 'available'],
+            ['room_number' => 'I', 'floor' => 2, 'type' => 'Single', 'status' => 'available'],
+        ];
+        
+        $allRooms = array_merge($floor1Rooms, $floor2Rooms);
+        
+        foreach ($allRooms as $room) {
+            Room::create([
+                'room_number' => $room['room_number'],
+                'floor' => $room['floor'],
+                'type' => $room['type'],
+                'length' => 3.0,
+                'width' => 2.5,
+                'price' => 1850000,
+                'status' => $room['status'],
+            ]);
         }
+        
+        $this->command->info('✓ Created ' . count($allRooms) . ' rooms');
     }
 }
