@@ -19,7 +19,11 @@
                     </li>
                     <li class="nav-item">
                         <?php if(auth()->guard()->check()): ?>
-                            <a href="/profile" class="nav-link text-white fw-bold" style="font-size: 1.1rem; <?php echo e(request()->is('profile*') ? 'border-bottom: 2px solid white; padding-bottom: 5px;' : ''); ?>">PROFILE</a>
+                            <?php if((auth()->user()->role ?? '') === 'admin'): ?>
+                                <a href="<?php echo e(route('dashboard')); ?>" class="nav-link text-white fw-bold" style="font-size: 1.1rem; <?php echo e(request()->routeIs('dashboard') ? 'border-bottom: 2px solid white; padding-bottom: 5px;' : ''); ?>">PROFILE</a>
+                            <?php else: ?>
+                                <a href="<?php echo e(route('profile')); ?>" class="nav-link text-white fw-bold" style="font-size: 1.1rem; <?php echo e(request()->routeIs('profile') || request()->is('profile*') ? 'border-bottom: 2px solid white; padding-bottom: 5px;' : ''); ?>">PROFILE</a>
+                            <?php endif; ?>
                         <?php else: ?>
                             <a href="<?php echo e(route('login')); ?>" class="nav-link text-white fw-bold" style="font-size: 1.1rem;">PROFILE</a>
                         <?php endif; ?>

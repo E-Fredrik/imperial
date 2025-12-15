@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+<html lang="<?php echo e(str_replace('_', '-', app()->getLocale())); ?>">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="<?php echo e(csrf_token()); ?>">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title><?php echo e(config('app.name', 'Laravel')); ?></title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -19,27 +19,29 @@
     <link rel="stylesheet" type="text/css" href="https://unpkg.com/trix@2.0.8/dist/trix.css">
 
     <!-- App CSS (Vite) -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <?php echo app('Illuminate\Foundation\Vite')(['resources/css/app.css', 'resources/js/app.js']); ?>
 
     <!-- Admin theme (served from public/css) -->
-    <link href="{{ asset('css/admin-theme.css') }}" rel="stylesheet">
+    <link href="<?php echo e(asset('css/admin-theme.css')); ?>" rel="stylesheet">
 </head>
 <body class="app-root">
     <div class="min-h-screen app-bg">
-        @include('layouts.navigation')
+        <?php echo $__env->make('layouts.navigation', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 
         <!-- Page Heading -->
-        @isset($header)
+        <?php if(isset($header)): ?>
             <header class="app-header shadow-sm">
                 <div class="container max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8">
-                    {{ $header }}
+                    <?php echo e($header); ?>
+
                 </div>
             </header>
-        @endisset
+        <?php endif; ?>
 
         <!-- Page Content -->
         <main class="container my-5">
-            {{ $slot }}
+            <?php echo e($slot); ?>
+
         </main>
     </div>
 
@@ -52,3 +54,4 @@
     <script type="text/javascript" src="https://unpkg.com/trix@2.0.8/dist/trix.umd.min.js"></script>
 </body>
 </html>
+<?php /**PATH D:\Github\imperial\resources\views/layouts/app.blade.php ENDPATH**/ ?>

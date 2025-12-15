@@ -27,23 +27,44 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Image extends Model
 {
-	protected $table = 'images';
+    protected $table = 'images';
 
-	protected $fillable = [
-		'image_path',
-		'description',
-		'is_featured',
-	];
+    protected $fillable = [
+        'image_path',
+        'description',
+        'is_featured',
+    ];
 
-	public function facilities_images()
-	{
-		return $this->hasMany(FacilitiesImage::class);
-	}
+    // append computed public URL so it's included in JSON/arrays
+    protected $appends = ['public_url'];
 
-	public function rooms()
-	{
-		return $this->belongsToMany(Room::class, 'rooms_images')
-					->withPivot('id')
-					->withTimestamps();
-	}
+    public function facilities_images()
+    {
+        return $this->hasMany(FacilitiesImage::class);
+    }
+
+    public function rooms()
+    {
+        return $this->belongsToMany(Room::class, 'rooms_images')
+                    ->withPivot('id')
+                    ->withTimestamps();
+    }
+
+    // returns an absolute URL to use in views/JS
+    public function getPublicUrlAttribute()
+    {
+        $path = $this->image_path ?? '';
+
+        if ($path === '') {
+            return '';
+        }
+
+        $publicCandidate = public_path($path);
+
+        if (file_exists($publicCandidate)) {
+            return asset($path);
+        }
+
+        return asset('storage/' . ltrim($path, '/'));
+    }
 }

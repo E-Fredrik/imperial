@@ -27,13 +27,13 @@ class RoomFacilityImagesSeeder extends Seeder
         $dir = public_path('images/roomFac');
 
         if (! File::exists($dir) || ! File::isDirectory($dir)) {
-            $this->command->warn("Directory not found: {$dir}. Place images in public/images/roomFac and run the seeder.");
+            $this->command->warn("Directory not found: {$dir}. Skipping room facility images seeding.");
             return;
         }
 
         $files = File::files($dir);
         if (empty($files)) {
-            $this->command->warn("No files found in {$dir}.");
+            $this->command->warn("No files found in {$dir}. Skipping room facility images seeding.");
             return;
         }
 

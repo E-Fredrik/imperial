@@ -9,27 +9,11 @@
         $imgUrl = asset('images/rooms/default.jpg');
     }
     
-    // Determine border and overlay color based on status
-    $borderColor = match($room->status) {
-        'available' => '#4ade80',
-        'booked' => '#ef4444',
-        'unavailable' => '#64748b',
-        default => '#666'
-    };
-    
-    $overlayColor = match($room->status) {
-        'available' => 'transparent',
-        'booked' => 'rgba(239, 68, 68, 0.15)',
-        'unavailable' => 'rgba(100, 116, 139, 0.15)',
-        default => 'transparent'
-    };
+    // Use gray/white border for all rooms
+    $borderColor = '#d1d5db';
 @endphp
 
 <div class="room-card" data-room-id="{{ $room->id }}" onclick="openRoomModal({{ $room->id }})" style="background:#FAEBD7; color:#000; border-radius:12px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.25); cursor:pointer; transition: all 0.3s ease; border: 3px solid {{ $borderColor }}; position: relative;">
-    
-    @if($room->status !== 'available')
-        <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: {{ $overlayColor }}; z-index: 1; pointer-events: none;"></div>
-    @endif
     
     <div style="height:200px; overflow:hidden; position: relative;">
         <img src="{{ $imgUrl }}" alt="Room {{ $room->room_number }}" style="width:100%; height:100%; object-fit:cover; display:block; transition: transform 0.3s ease;">

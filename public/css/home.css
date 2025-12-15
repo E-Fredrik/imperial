@@ -1,10 +1,11 @@
 .hero-section{
-    background-color: black;
-    color: white;
+    background: linear-gradient(180deg, #000000 0%, #050505 35%, #0b0b0b 70%, #0f0f0f 100%);
+    color: #FAEBD7;
     min-height: 80vh;
     display: flex;
     align-items: center;
     padding: 60px 0;
+    background-attachment: fixed;
 }
 .hero-title{
     font-size: 3.5rem;
@@ -55,19 +56,15 @@
     color: antiquewhite;
 }
 .hero-image{
-    background-color: transparent;
+    background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
     border-radius: 15px;
     height: 400px;
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
-}
-.hero-image img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    /* border-radius: 10px; */
+    box-shadow: 0 12px 36px rgba(0,0,0,0.7);
+    border: 1px solid rgba(255,255,255,0.03);
 }
 @media(max-width: 992px){
     .hero-section{
@@ -96,4 +93,11 @@
     .btn-learn{
         margin-left: 0.5rem;
     }
+}
+.rooms-section {
+    background: linear-gradient(180deg, #000000 0%, #050505 35%, #0b0b0b 70%, #0f0f0f 100%);
+    color: #FAEBD7;
+    min-height: 100vh;
+    padding: 80px 0;
+    background-attachment: fixed;
 }

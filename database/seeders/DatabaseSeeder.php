@@ -26,7 +26,7 @@ class DatabaseSeeder extends Seeder
             RoomSeeder::class,
             RoomFacilitySeeder::class,
             RoomImagesSeeder::class,
-            RoomFacilityImagesSeeder::class,
+            // RoomFacilityImagesSeeder::class, // Disabled: requires images in public/images/roomFac
             InformationSeeder::class
         ]);
     }
