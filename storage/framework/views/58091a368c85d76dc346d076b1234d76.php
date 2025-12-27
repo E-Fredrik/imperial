@@ -30,9 +30,14 @@ unset($__defined_vars, $__key, $__value); ?>
 
 <?php
     $imgPath = optional($room->images->first())->image_path ?? null;
+    
     if ($imgPath) {
         $publicCandidate = public_path($imgPath);
-        $imgUrl = file_exists($publicCandidate) ? asset($imgPath) : asset('storage/' . ltrim($imgPath, '/'));
+        if (file_exists($publicCandidate)) {
+            $imgUrl = asset($imgPath);
+        } else {
+            $imgUrl = asset('storage/' . ltrim($imgPath, '/'));
+        }
     } else {
         $imgUrl = asset('images/rooms/default.jpg');
     }
@@ -72,20 +77,18 @@ unset($__defined_vars, $__key, $__value); ?>
             </div>
         <?php endif; ?>
     </div>
+    
+    <div style="padding:1.5rem;">
+        <h3 style="font-size:1.5rem; font-weight:700; margin-bottom:0.5rem; color:#000;">Room <?php echo e($room->room_number); ?></h3>
+        <p style="color:#555; margin-bottom:1rem; font-size:0.9rem;"><?php echo e($room->type); ?> • Floor <?php echo e($room->floor); ?></p>
+        <p style="color:#000; font-size:1.25rem; font-weight:700; margin-bottom:1rem;">Rp <?php echo e(number_format($room->price, 0, ',', '.')); ?><span style="font-size:0.9rem; font-weight:400;">/month</span></p>
+        
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="padding:0.4rem 1rem; background:#333; color:#fff; border-radius:20px; font-size:0.85rem; font-weight:600;">
+                <?php echo e(ucfirst($room->status)); ?>
 
-    <div style="padding:1.2rem; position: relative; z-index: 1;">
-        <h5 style="margin:0 0 .5rem 0; font-weight:700; font-size:1.3rem;">Room <?php echo e($room->room_number); ?></h5>
-        <div style="font-size:.95rem; margin-bottom:.4rem; color:#666;"><?php echo e($room->type); ?> • <?php echo e($room->length); ?>x<?php echo e($room->width); ?>m • Floor <?php echo e($room->floor); ?></div>
-        <div style="font-size:1.1rem; margin-bottom:.8rem; font-weight:600;">Rp <?php echo e(number_format($room->price, 0, ',', '.')); ?>/month</div>
-
-        <div style="display:flex; gap:.5rem; align-items:center;">
-            <?php if($room->status === 'available'): ?>
-                <span style="font-size:.9rem; color:#0a7a00; font-weight:600; background:#d4edda; padding:4px 12px; border-radius:12px;">Available</span>
-            <?php elseif($room->status === 'booked'): ?>
-                <span style="font-size:.9rem; color:#7a0000; font-weight:600; background:#f8d7da; padding:4px 12px; border-radius:12px;">Occupied</span>
-            <?php else: ?>
-                <span style="font-size:.9rem; color:#475569; font-weight:600; background:#e2e8f0; padding:4px 12px; border-radius:12px;"><?php echo e(ucfirst($room->status)); ?></span>
-            <?php endif; ?>
+            </span>
+            <span style="color:#555; font-size:0.9rem;"><?php echo e($room->length); ?>x<?php echo e($room->width); ?>m</span>
         </div>
     </div>
 </div>

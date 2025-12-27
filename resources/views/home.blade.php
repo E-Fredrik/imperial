@@ -2,6 +2,8 @@
 @section('title', 'Home')
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/home.css') }}">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+<link rel="stylesheet" href="{{ asset('css/room.css') }}">
 @endpush
 @section('content')
 <section class="hero-section">
@@ -19,8 +21,12 @@
                     <span class="badge-tag">High Satisfaction Rate</span>
                 </div>
                 <div>
-                    <a href="{{ route('rooms') }}" class="btn-explore">Explore Rooms →</a>
-                    <a href="#" class="btn-learn">Learn More</a>
+                    <a href="{{ route('rooms') }}" class="btn-explore btn-primary btn-lg me-2">Explore Rooms</a>
+                    @guest
+                        <a href="{{ route('login') }}" class="btn-learn">Book Now</a>
+                    @else
+                        <a href="{{ route('bookings.create') }}" class="btn-learn">Book Now</a>
+                    @endguest
                 </div>
             </div>
             <div class="col-lg-6">
@@ -61,12 +67,11 @@
                         <div class="w-100 h-100 d-flex align-items-center justify-content-center text-gray-400">No featured image</div>
                     @endif
                 </div>
-             </div>
-         </div>
-     </div>
- </section>
+            </div>
+        </div>
+    </div>
+</section>
 
-<!-- available rooms cards (keeps page black background) -->
 <section class="py-6" style="background:black;">
     <div class="container">
         <h3 style="color:#FAEBD7; margin-bottom:1rem;">Available Rooms</h3>
@@ -98,13 +103,34 @@
                 </div>
             </div>
         @else
-            <div class="text-muted" style="color:#cfc6bc;">No rooms available at the moment.</div>
+            <p style="color:#999;">No rooms available at the moment.</p>
         @endif
-     </div>
- </section>
+    </div>
+</section>
+
+{{-- Render modals directly in the page, not using push --}}
+@if(($rooms ?? collect())->isNotEmpty())
+    @foreach($rooms as $room)
+        <x-room-modal :room="$room" />
+    @endforeach
+@endif
 @endsection
+
 @push('scripts')
-<!-- Bootstrap bundle for carousel (includes Popper) -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Ensure modals are hidden on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Initializing modals...');
+        const modals = document.querySelectorAll('.room-modal');
+        console.log('Found modals:', modals.length);
+        
+        modals.forEach(modal => {
+            modal.classList.remove('active');
+            modal.style.display = 'none';
+            console.log('Hidden modal:', modal.id);
+        });
+        document.body.style.overflow = 'auto';
+    });
+</script>
 @endpush
 
