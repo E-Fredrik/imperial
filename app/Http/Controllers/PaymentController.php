@@ -51,8 +51,8 @@ class PaymentController extends Controller
             return redirect()->route('profile')->with('info', 'This payment has already been completed.');
         }
 
-        // Check if payment has expired
-        if ($payment->isExpired()) {
+        // Check if payment has expired (only for first payment with 24h window)
+        if ($payment->expires_at && $payment->isExpired()) {
             Log::info('Payment has expired', ['payment_id' => $payment->id]);
             $this->handleExpiredPayment($payment);
             return redirect()->route('profile')->with('error', 'This payment has expired. Please contact support if you have any questions.');
@@ -261,10 +261,16 @@ class PaymentController extends Controller
     {
         try {
             // Parse current payment month
-            $currentMonth = Carbon::createFromFormat('Y-m', $currentPayment->payment_for_month);
-            $nextMonth = $currentMonth->copy()->addMonth();
+            $currentPaymentMonth = Carbon::createFromFormat('Y-m', $currentPayment->payment_for_month);
             
-            $nextMonthString = $nextMonth->format('Y-m');
+            // Next payment is for the next month
+            $nextPaymentMonth = $currentPaymentMonth->copy()->addMonth();
+            $nextMonthString = $nextPaymentMonth->format('Y-m');
+
+            Log::info('Generating next payment', [
+                'current_payment_month' => $currentPayment->payment_for_month,
+                'next_payment_month' => $nextMonthString,
+            ]);
 
             // Check if next payment already exists
             $existingPayment = Payment::where('booking_id', $booking->id)
@@ -279,18 +285,22 @@ class PaymentController extends Controller
                 return;
             }
 
-            // Calculate late fee (if payment is made after the 5th of the month)
+            // Calculate late fee based on whether we're past the 1st of the payment month
             $lateFee = 0;
             $today = now();
-            if ($today->day > 5) {
+            $firstDayOfPaymentMonth = $nextPaymentMonth->copy()->startOfMonth();
+            
+            // Only add late fee if today is after the 1st of the payment month
+            if ($today->greaterThan($firstDayOfPaymentMonth)) {
                 $lateFee = (int) ($booking->monthly_rent * 0.1); // 10% late fee
-                Log::info('Late fee applied', [
-                    'day' => $today->day,
+                Log::info('Late fee applied for payment generated after due date', [
+                    'today' => $today->format('Y-m-d'),
+                    'payment_month_start' => $firstDayOfPaymentMonth->format('Y-m-d'),
                     'late_fee' => $lateFee,
                 ]);
             }
 
-            // Create next payment
+            // Create next payment (no expiration for recurring payments)
             $nextPayment = Payment::create([
                 'booking_id' => $booking->id,
                 'amount' => $booking->monthly_rent + $lateFee,
@@ -298,6 +308,7 @@ class PaymentController extends Controller
                 'monthly_rent' => $booking->monthly_rent,
                 'late_fee' => $lateFee,
                 'status' => 'pending',
+                'expires_at' => null, // No 24h expiration for recurring payments
             ]);
 
             Log::info('Next month payment generated', [
@@ -305,12 +316,14 @@ class PaymentController extends Controller
                 'booking_id' => $booking->id,
                 'month' => $nextMonthString,
                 'amount' => $nextPayment->amount,
+                'late_fee' => $lateFee,
             ]);
 
         } catch (\Exception $e) {
             Log::error('Failed to generate next month payment', [
                 'booking_id' => $booking->id,
                 'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
             ]);
         }
     }
@@ -330,14 +343,13 @@ class PaymentController extends Controller
             return;
         }
 
-        // Check if this is the first payment for the booking
-        $paymentsCount = Payment::where('booking_id', $booking->id)->count();
+        // Check if this is the first payment for the booking (has 24h expiration)
         $acceptedPayments = Payment::where('booking_id', $booking->id)
             ->where('status', 'accepted')
             ->count();
 
-        if ($acceptedPayments === 0) {
-            // No payments have been made, cancel the booking
+        if ($acceptedPayments === 0 && $payment->expires_at) {
+            // First payment expired (only first payment has expires_at), cancel the booking
             Log::info('First payment expired, canceling booking', [
                 'booking_id' => $booking->id,
             ]);
@@ -351,8 +363,8 @@ class PaymentController extends Controller
                 ]);
             }
         } else {
-            // Subsequent payment expired, keep booking but mark payment as declined
-            Log::info('Subsequent payment expired', [
+            // Subsequent payment expired (no expires_at), keep booking active
+            Log::info('Subsequent payment declined', [
                 'booking_id' => $booking->id,
                 'payment_id' => $payment->id,
             ]);

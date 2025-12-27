@@ -21,23 +21,28 @@ class HandleExpiredPayments extends Command
      *
      * @var string
      */
-    protected $description = 'Handle expired payments and update room statuses';
+    protected $description = 'Handle expired payments (first payments with 24h window only)';
 
     /**
      * Execute the console command.
      */
     public function handle(): int
     {
-        $this->info('Checking for expired payments...');
+        $this->info('Checking for expired first payments (with 24h window)...');
 
-        $expiredPayments = Payment::expired()->with('booking.room')->get();
+        // Only get payments that have an expires_at set (first payments only)
+        $expiredPayments = Payment::where('status', 'pending')
+            ->whereNotNull('expires_at')
+            ->where('expires_at', '<', now())
+            ->with('booking.room')
+            ->get();
 
         if ($expiredPayments->isEmpty()) {
-            $this->info('No expired payments found.');
+            $this->info('No expired first payments found.');
             return Command::SUCCESS;
         }
 
-        $this->info("Found {$expiredPayments->count()} expired payment(s).");
+        $this->info("Found {$expiredPayments->count()} expired first payment(s).");
 
         foreach ($expiredPayments as $payment) {
             $this->info("Processing payment #{$payment->id}...");
@@ -51,7 +56,7 @@ class HandleExpiredPayments extends Command
                 continue;
             }
 
-            // Check if this is the first payment
+            // Check if this is truly the first payment (should be, since it has expires_at)
             $acceptedPayments = Payment::where('booking_id', $booking->id)
                 ->where('status', 'accepted')
                 ->count();
@@ -67,10 +72,11 @@ class HandleExpiredPayments extends Command
                     $this->info("  Room #{$booking->room->room_number} is now available");
                 }
             } else {
-                $this->info("  Subsequent payment expired for booking #{$booking->id}");
+                // This shouldn't happen (recurring payments don't have expires_at)
+                $this->warn("  Unexpected: Payment with expires_at but has accepted payments");
             }
 
-            Log::info('Expired payment processed by scheduler', [
+            Log::info('Expired first payment processed by scheduler', [
                 'payment_id' => $payment->id,
                 'booking_id' => $booking->id,
             ]);

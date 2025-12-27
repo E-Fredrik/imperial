@@ -11,6 +11,7 @@ use App\Models\Payment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class BookingController extends Controller
 {
@@ -81,18 +82,30 @@ class BookingController extends Controller
             $user->update(['id_card' => $idPath]);
         }
 
-        // create initial payment record for the first month (pending - will be paid via Midtrans)
+        // Determine the payment month based on move-in date
+        $moveInDate = Carbon::parse($data['move_in_date']);
+        $paymentForMonth = $moveInDate->format('Y-m');
+
+        // Calculate late fee if move-in is after the 1st of the month
+        $lateFee = 0;
+        if ($moveInDate->day > 1) {
+            $lateFee = (int) ($monthly * 0.1); // 10% late fee
+        }
+
+        // Create initial payment record for the first month (pending - will be paid via Midtrans)
+        // First payment has 24h expiration
         $payment = Payment::create([
             'booking_id' => $booking->id,
-            'amount' => $monthly,
-            'payment_for_month' => date('Y-m', strtotime($data['move_in_date'])),
+            'amount' => $monthly + $lateFee,
+            'payment_for_month' => $paymentForMonth,
             'monthly_rent' => $monthly,
-            'late_fee' => 0,
+            'late_fee' => $lateFee,
             'status' => 'pending',
+            'expires_at' => now()->addHours(24), // Only first payment has expiration
         ]);
 
         // Redirect to payment page
-        return redirect()->route('payment.show', $payment)->with('success', 'Booking created! Please complete payment to confirm.');
+        return redirect()->route('payment.show', $payment)->with('success', 'Booking created! Please complete payment within 24 hours to confirm.');
     }
 
     // show booking details (owner or admin)

@@ -123,7 +123,7 @@
             <h2 style="margin-bottom: 1rem;">
                 <i class="bi bi-calendar-check"></i> Upcoming Payments
             </h2>
-            <p style="color: #999;">View and manage your future payment schedule</p>
+            <p style="color: #999;">View and manage your future payment schedule. Payments are due on the 1st of each month.</p>
 
             @if($currentBooking)
                 <div style="margin-top: 1rem; padding: 1rem; background: #1a1a1a; border-radius: 8px;">
@@ -154,15 +154,21 @@
             <div class="payment-timeline">
                 @foreach($upcomingPayments as $payment)
                     @php
-                        $paymentDate = \Carbon\Carbon::createFromFormat('Y-m', $payment->payment_for_month)->startOfMonth();
-                        $daysUntilDue = now()->diffInDays($paymentDate, false);
+                        // Payment is for this specific month
+                        $paymentMonth = \Carbon\Carbon::createFromFormat('Y-m', $payment->payment_for_month);
+                        // Due date is the 1st of the payment month
+                        $dueDate = $paymentMonth->copy()->startOfMonth();
+                        $today = now()->startOfDay();
+                        
+                        // Calculate days until the 1st of the payment month
+                        $daysUntilDue = $today->diffInDays($dueDate, false);
                         $isOverdue = $daysUntilDue < 0;
                         $isDueSoon = $daysUntilDue >= 0 && $daysUntilDue <= 10;
                         $isDueLater = $daysUntilDue > 10;
                         
                         if ($isOverdue) {
                             $dueBadgeClass = 'due-urgent';
-                            $dueBadgeText = 'Overdue';
+                            $dueBadgeText = 'Overdue by ' . abs($daysUntilDue) . ' days';
                             $timelineClass = 'due-soon';
                         } elseif ($isDueSoon) {
                             $dueBadgeClass = 'due-soon';
@@ -178,8 +184,11 @@
                     <div class="timeline-item {{ $timelineClass }}">
                         <div class="payment-info">
                             <div>
-                                <div class="payment-month">{{ $paymentDate->format('F Y') }}</div>
+                                <div class="payment-month">{{ $paymentMonth->format('F Y') }}</div>
                                 <span class="due-badge {{ $dueBadgeClass }}">{{ $dueBadgeText }}</span>
+                                <div style="color: #999; font-size: 0.875rem; margin-top: 0.5rem;">
+                                    <i class="bi bi-calendar"></i> Due: {{ $dueDate->format('F 1, Y') }}
+                                </div>
                             </div>
                             <div class="payment-amount">
                                 Rp {{ number_format($payment->amount, 0, ',', '.') }}
@@ -203,7 +212,7 @@
 
                             @if($payment->late_fee > 0)
                             <div class="detail-item">
-                                <span class="detail-label">Late Fee</span>
+                                <span class="detail-label">Late Fee (10%)</span>
                                 <span class="detail-value" style="color: #f87171;">
                                     Rp {{ number_format($payment->late_fee, 0, ',', '.') }}
                                 </span>
@@ -219,9 +228,9 @@
 
                             @if($payment->expires_at)
                             <div class="detail-item">
-                                <span class="detail-label">Payment Window Expires</span>
-                                <span class="detail-value" style="font-size: 0.875rem;">
-                                    {{ $payment->expires_at->format('d M Y, H:i') }}
+                                <span class="detail-label">Payment Window (24h)</span>
+                                <span class="detail-value" style="font-size: 0.875rem; color: #f87171;">
+                                    Expires: {{ $payment->expires_at->format('M d, H:i') }}
                                 </span>
                             </div>
                             @endif
@@ -247,14 +256,14 @@
                             <div style="margin-top: 1rem; padding: 0.75rem; background: #3a1a1a; border-left: 3px solid #f87171; border-radius: 4px;">
                                 <i class="bi bi-exclamation-triangle" style="color: #f87171;"></i>
                                 <span style="color: #fca5a5; font-size: 0.875rem; margin-left: 0.5rem;">
-                                    This payment is overdue. Please complete it as soon as possible to avoid additional fees.
+                                    This payment is overdue. A 10% late fee has been applied. Please complete it as soon as possible.
                                 </span>
                             </div>
                         @elseif($isDueSoon)
                             <div style="margin-top: 1rem; padding: 0.75rem; background: #1a1a0a; border-left: 3px solid #fbbf24; border-radius: 4px;">
                                 <i class="bi bi-clock" style="color: #fbbf24;"></i>
                                 <span style="color: #fbbf24; font-size: 0.875rem; margin-left: 0.5rem;">
-                                    Payment due soon. Complete before {{ $paymentDate->format('d M Y') }} to avoid late fees.
+                                    Payment due soon. Complete before {{ $dueDate->format('F 1, Y') }} to avoid late fees.
                                 </span>
                             </div>
                         @endif

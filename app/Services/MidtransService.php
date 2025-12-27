@@ -103,17 +103,38 @@ class MidtransService
                 'callbacks' => [
                     'finish' => url('/payment/finish/callback?order_id=' . $orderId),
                 ],
-                'expiry' => [
+            ];
+
+            // Check if this is the first payment (no accepted payments yet)
+            $isFirstPayment = \App\Models\Payment::where('booking_id', $booking->id)
+                ->where('status', 'accepted')
+                ->count() === 0;
+
+            // Only set expiry for first payment
+            if ($isFirstPayment) {
+                $params['expiry'] = [
                     'unit' => 'hours',
                     'duration' => 24,
-                ],
-            ];
+                ];
+                
+                // Set expires_at on payment record
+                if (!$payment->expires_at) {
+                    $payment->update(['expires_at' => now()->addHours(24)]);
+                }
+            } else {
+                // Remove expires_at for recurring payments
+                if ($payment->expires_at) {
+                    $payment->update(['expires_at' => null]);
+                }
+            }
 
             Log::info('Snap Token Request Parameters', [
                 'order_id' => $orderId,
                 'amount' => $amount,
                 'customer_email' => $user->email,
                 'callback_url' => $params['callbacks']['finish'],
+                'is_first_payment' => $isFirstPayment,
+                'has_expiry' => isset($params['expiry']),
             ]);
 
             $ch = curl_init();
@@ -185,16 +206,14 @@ class MidtransService
                 throw new \Exception('Midtrans did not return a payment token');
             }
 
-            // Store order_id and expiry time
-            $payment->update([
-                'midtrans_order_id' => $orderId,
-                'expires_at' => now()->addHours(24),
-            ]);
+            // Store order_id
+            $payment->update(['midtrans_order_id' => $orderId]);
 
             Log::info('✓ Snap Token Created Successfully', [
                 'order_id' => $orderId,
                 'token_preview' => substr($responseData['token'], 0, 20) . '...',
-                'expires_at' => $payment->expires_at,
+                'is_first_payment' => $isFirstPayment,
+                'expires_at' => $payment->expires_at ? $payment->expires_at->format('Y-m-d H:i:s') : 'No expiration',
             ]);
 
             return $responseData['token'];
