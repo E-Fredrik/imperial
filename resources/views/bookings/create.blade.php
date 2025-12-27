@@ -27,9 +27,9 @@
                             <label for="room_id" class="form-label" style="color:#cfc6bc;">Room</label>
                             <select id="room_id" name="room_id" required class="form-select" style="background:#111; color:#FAEBD7; border:1px solid #2b2b2b;">
                                 <option value="">{{ __('Choose a room') }}</option>
-                                @foreach($rooms as $r)
-                                    <option value="{{ $r->id }}" data-price="{{ $r->price }}" {{ ((int) old('room_id', request()->get('room_id')) === $r->id) ? 'selected' : '' }}>
-                                        {{ $r->room_number }} — {{ $r->type }} — Rp {{ number_format($r->price,0,',','.') }}
+                                @foreach($rooms as $room)
+                                    <option value="{{ $room->id }}" data-price="{{ $room->price }}" {{ old('room_id', request('room_id')) == $room->id ? 'selected' : '' }}>
+                                        Room {{ $room->room_number }} — {{ $room->type }} — Rp {{ number_format($room->price, 0, ',', '.') }}/month
                                     </option>
                                 @endforeach
                             </select>
@@ -45,16 +45,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="proof" class="form-label" style="color:#cfc6bc;">Proof of Payment</label>
-                            <input id="proof" name="proof" type="file" accept="image/*"
-                                   class="form-control"
-                                   style="background:#000; color:#FAEBD7; border:1px solid #2b2b2b; border-radius:6px; padding:.375rem .75rem;" required />
-                            <x-input-error :messages="$errors->get('proof')" class="mt-2" />
-                            <div class="form-text" style="color:#999;">PNG/JPG up to 4MB. You may attach proof now or later.</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="id_card" class="form-label" style="color:#cfc6bc;">ID Card (photo)</label>
+                            <label for="id_card" class="form-label" style="color:#cfc6bc;">ID Card (photo) - Optional</label>
                             <input id="id_card" name="id_card" type="file" accept="image/*"
                                    class="form-control"
                                    style="background:#000; color:#FAEBD7; border:1px solid #2b2b2b; border-radius:6px; padding:.375rem .75rem;" />
@@ -62,9 +53,15 @@
                             <div class="form-text" style="color:#999;">Please attach a clear photo of your ID (PNG/JPG up to 4MB).</div>
                         </div>
 
+                        <div class="mb-3 p-3" style="background:#1a1a1a; border-radius:8px;">
+                            <p style="color:#999; font-size:0.9rem; margin:0;">
+                                <i class="bi bi-info-circle"></i> After submitting, you'll be redirected to complete payment via Midtrans secure payment gateway.
+                            </p>
+                        </div>
+
                         <div class="d-flex gap-2 mt-3">
                             <button type="submit" class="btn" style="background:#FAEBD7; color:#000; font-weight:600; border-radius:8px; padding:.5rem 1rem;">
-                                {{ __('Book') }}
+                                {{ __('Proceed to Payment') }}
                             </button>
 
                             <a href="{{ route('rooms') }}" class="btn btn-secondary" style="background:#333; color:#cfc6bc; border:none; padding:.45rem .9rem;">

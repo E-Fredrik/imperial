@@ -7,12 +7,13 @@ use App\Http\Controllers\Admin\RoomController;
 use App\Http\Controllers\Admin\InfoController;
 use App\Http\Controllers\Admin\RoomFacilityController;
 use App\Http\Controllers\Admin\KostFacilityController;
-use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\Admin\AdminBookingController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\ImageController;
 use App\Http\Controllers\RoomDisplayController;
+use App\Http\Controllers\PaymentController;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/rooms', [RoomDisplayController::class, 'index'])->name('rooms');
@@ -20,6 +21,9 @@ Route::get('/rooms', [RoomDisplayController::class, 'index'])->name('rooms');
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+// Midtrans webhook (no auth required)
+Route::post('/payment/webhook', [PaymentController::class, 'webhook'])->name('payment.webhook');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile');
@@ -29,6 +33,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     
     Route::resource('bookings', BookingController::class)->only(['index','create','store','show','destroy']);
+    
+    // User payment routes - FIXED: Changed to GET for finish route
+    Route::get('/payment/{payment}', [PaymentController::class, 'show'])->name('payment.show');
+    Route::get('/payment/finish/callback', [PaymentController::class, 'finish'])->name('payment.finish');
+    Route::get('/payments/upcoming', [PaymentController::class, 'upcoming'])->name('payments.upcoming');
 });
 
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
@@ -40,7 +49,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
     Route::resource('images', ImageController::class);
     Route::post('images/{image}/toggle-featured', [ImageController::class, 'toggleFeatured'])->name('images.toggleFeatured');
     Route::post('bookings/{booking}/decline', [AdminBookingController::class, 'decline'])->name('bookings.decline');
-    Route::resource('payments', PaymentController::class);
+    Route::resource('payments', AdminPaymentController::class);
 });
 
 require __DIR__.'/auth.php';

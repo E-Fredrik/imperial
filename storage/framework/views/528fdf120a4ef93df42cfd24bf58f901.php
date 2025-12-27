@@ -1,4 +1,3 @@
-
 <?php $__env->startSection('title', 'Book a room'); ?>
 <link rel="stylesheet" href="<?php echo e(asset('css/booking.css')); ?>">
 
@@ -27,10 +26,9 @@
                             <label for="room_id" class="form-label" style="color:#cfc6bc;">Room</label>
                             <select id="room_id" name="room_id" required class="form-select" style="background:#111; color:#FAEBD7; border:1px solid #2b2b2b;">
                                 <option value=""><?php echo e(__('Choose a room')); ?></option>
-                                <?php $__currentLoopData = $rooms; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $r): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <option value="<?php echo e($r->id); ?>" data-price="<?php echo e($r->price); ?>" <?php echo e(((int) old('room_id', request()->get('room_id')) === $r->id) ? 'selected' : ''); ?>>
-                                        <?php echo e($r->room_number); ?> — <?php echo e($r->type); ?> — Rp <?php echo e(number_format($r->price,0,',','.')); ?>
-
+                                <?php $__currentLoopData = $rooms; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $room): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                                    <option value="<?php echo e($room->id); ?>" data-price="<?php echo e($room->price); ?>" <?php echo e(old('room_id', request('room_id')) == $room->id ? 'selected' : ''); ?>>
+                                        Room <?php echo e($room->room_number); ?> — <?php echo e($room->type); ?> — Rp <?php echo e(number_format($room->price, 0, ',', '.')); ?>/month
                                     </option>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </select>
@@ -84,35 +82,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="proof" class="form-label" style="color:#cfc6bc;">Proof of Payment</label>
-                            <input id="proof" name="proof" type="file" accept="image/*"
-                                   class="form-control"
-                                   style="background:#000; color:#FAEBD7; border:1px solid #2b2b2b; border-radius:6px; padding:.375rem .75rem;" required />
-                            <?php if (isset($component)) { $__componentOriginalf94ed9c5393ef72725d159fe01139746 = $component; } ?>
-<?php if (isset($attributes)) { $__attributesOriginalf94ed9c5393ef72725d159fe01139746 = $attributes; } ?>
-<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.input-error','data' => ['messages' => $errors->get('proof'),'class' => 'mt-2']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
-<?php $component->withName('input-error'); ?>
-<?php if ($component->shouldRender()): ?>
-<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
-<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
-<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
-<?php endif; ?>
-<?php $component->withAttributes(['messages' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($errors->get('proof')),'class' => 'mt-2']); ?>
-<?php echo $__env->renderComponent(); ?>
-<?php endif; ?>
-<?php if (isset($__attributesOriginalf94ed9c5393ef72725d159fe01139746)): ?>
-<?php $attributes = $__attributesOriginalf94ed9c5393ef72725d159fe01139746; ?>
-<?php unset($__attributesOriginalf94ed9c5393ef72725d159fe01139746); ?>
-<?php endif; ?>
-<?php if (isset($__componentOriginalf94ed9c5393ef72725d159fe01139746)): ?>
-<?php $component = $__componentOriginalf94ed9c5393ef72725d159fe01139746; ?>
-<?php unset($__componentOriginalf94ed9c5393ef72725d159fe01139746); ?>
-<?php endif; ?>
-                            <div class="form-text" style="color:#999;">PNG/JPG up to 4MB. You may attach proof now or later.</div>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="id_card" class="form-label" style="color:#cfc6bc;">ID Card (photo)</label>
+                            <label for="id_card" class="form-label" style="color:#cfc6bc;">ID Card (photo) - Optional</label>
                             <input id="id_card" name="id_card" type="file" accept="image/*"
                                    class="form-control"
                                    style="background:#000; color:#FAEBD7; border:1px solid #2b2b2b; border-radius:6px; padding:.375rem .75rem;" />
@@ -139,9 +109,15 @@
                             <div class="form-text" style="color:#999;">Please attach a clear photo of your ID (PNG/JPG up to 4MB).</div>
                         </div>
 
+                        <div class="mb-3 p-3" style="background:#1a1a1a; border-radius:8px;">
+                            <p style="color:#999; font-size:0.9rem; margin:0;">
+                                <i class="bi bi-info-circle"></i> After submitting, you'll be redirected to complete payment via Midtrans secure payment gateway.
+                            </p>
+                        </div>
+
                         <div class="d-flex gap-2 mt-3">
                             <button type="submit" class="btn" style="background:#FAEBD7; color:#000; font-weight:600; border-radius:8px; padding:.5rem 1rem;">
-                                <?php echo e(__('Book')); ?>
+                                <?php echo e(__('Proceed to Payment')); ?>
 
                             </button>
 

@@ -21,6 +21,10 @@ return new class extends Migration
             $table->string('proof')->nullable();
             $table->date('paid_at')->nullable();
             $table->string('status')->default('pending');
+            $table->string('midtrans_order_id')->nullable();
+            $table->string('payment_type')->nullable();
+            $table->json('midtrans_response')->nullable();
+            $table->timestamp('expires_at')->nullable();
             $table->timestamps();
         });
     }
