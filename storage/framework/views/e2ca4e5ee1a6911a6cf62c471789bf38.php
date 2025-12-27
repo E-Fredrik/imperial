@@ -8,7 +8,7 @@
 <section class="hero-section">
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-lg-6">
+            <div class="col-lg-6 col-md-12">
                 <h1 class="hero-title">Your Premium Boarding Experience</h1>
                 <p class="hero-description">
                     Discover comfort and convenience with our modern boarding house. Interactive room 
@@ -28,7 +28,7 @@
                     <?php endif; ?>
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-6 col-md-12">
                 <div class="hero-image">
                     <?php
                         $slides = collect();
@@ -51,7 +51,7 @@
                             <div class="carousel-inner">
                                 <?php $__currentLoopData = $slides; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $url): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                                     <div class="carousel-item <?php echo e($i === 0 ? 'active' : ''); ?>">
-                                        <img src="<?php echo e($url); ?>" class="d-block w-100" alt="Slide <?php echo e($i+1); ?>" style="border-radius:5px; height:400px; object-fit:cover;">
+                                        <img src="<?php echo e($url); ?>" class="d-block w-100" alt="Slide <?php echo e($i+1); ?>" style="border-radius:5px; height:100%; width:100%; object-fit:cover;">
                                     </div>
                                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                             </div>
@@ -73,20 +73,22 @@
 
 <section class="py-6" style="background:black;">
     <div class="container">
-        <h3 style="color:#FAEBD7; margin-bottom:1rem;">Available Rooms</h3>
+        <h3 style="color:#FAEBD7; margin-bottom:1.5rem; text-align:center;">Available Rooms</h3>
 
         <?php
             $roomChunks = ($rooms ?? collect())->chunk(3);
+            // $roomChunks used for desktop (3-per-slide). Mobile will render one room per slide.
         ?>
 
         <?php if(($rooms ?? collect())->isNotEmpty()): ?>
-            <div id="roomsCarousel" class="carousel slide pb-4" data-bs-ride="carousel" data-bs-interval="2000">
+            
+            <div id="roomsCarouselDesktop" class="carousel slide d-none d-lg-block pb-4" data-bs-ride="carousel" data-bs-interval="4000">
                 <div class="carousel-inner">
                     <?php $__currentLoopData = $roomChunks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $si => $chunk): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <div class="carousel-item <?php echo e($si === 0 ? 'active' : ''); ?>">
-                            <div class="row gy-4">
+                            <div class="row gy-4 justify-content-center">
                                 <?php $__currentLoopData = $chunk; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $room): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="col-12 col-sm-6 col-lg-4">
                                         <?php if (isset($component)) { $__componentOriginalb853c2f561e9cced24d4b94c482a0b71 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalb853c2f561e9cced24d4b94c482a0b71 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.room-card','data' => ['room' => $room]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -113,15 +115,53 @@
                         </div>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
-
                 <div class="carousel-indicators mt-3">
                     <?php $__currentLoopData = $roomChunks; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $c): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                        <button type="button" data-bs-target="#roomsCarousel" data-bs-slide-to="<?php echo e($i); ?>" class="<?php echo e($i === 0 ? 'active' : ''); ?>" aria-label="Slide <?php echo e($i+1); ?>"></button>
+                        <button type="button" data-bs-target="#roomsCarouselDesktop" data-bs-slide-to="<?php echo e($i); ?>" class="<?php echo e($i === 0 ? 'active' : ''); ?>" aria-label="Slide <?php echo e($i+1); ?>"></button>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </div>
+            </div>
+
+            
+            <div id="roomsCarouselMobile" class="carousel slide d-lg-none pb-4" data-bs-ride="carousel" data-bs-interval="3000">
+                <div class="carousel-inner">
+                    <?php $__currentLoopData = $rooms; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $index => $room): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <div class="carousel-item <?php echo e($index === 0 ? 'active' : ''); ?>">
+                            <div class="row gy-4 justify-content-center">
+                                <div class="col-12 col-sm-10 col-md-8">
+                                    <?php if (isset($component)) { $__componentOriginalb853c2f561e9cced24d4b94c482a0b71 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginalb853c2f561e9cced24d4b94c482a0b71 = $attributes; } ?>
+<?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.room-card','data' => ['room' => $room]] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('room-card'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\Illuminate\View\AnonymousComponent::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes(['room' => \Illuminate\View\Compilers\BladeCompiler::sanitizeComponentAttribute($room)]); ?>
+<?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginalb853c2f561e9cced24d4b94c482a0b71)): ?>
+<?php $attributes = $__attributesOriginalb853c2f561e9cced24d4b94c482a0b71; ?>
+<?php unset($__attributesOriginalb853c2f561e9cced24d4b94c482a0b71); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginalb853c2f561e9cced24d4b94c482a0b71)): ?>
+<?php $component = $__componentOriginalb853c2f561e9cced24d4b94c482a0b71; ?>
+<?php unset($__componentOriginalb853c2f561e9cced24d4b94c482a0b71); ?>
+<?php endif; ?>
+                                </div>
+                            </div>
+                        </div>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </div>
+                <div class="carousel-indicators mt-3">
+                    <?php $__currentLoopData = $rooms; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $i => $r): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <button type="button" data-bs-target="#roomsCarouselMobile" data-bs-slide-to="<?php echo e($i); ?>" class="<?php echo e($i === 0 ? 'active' : ''); ?>" aria-label="Slide <?php echo e($i+1); ?>"></button>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
             </div>
         <?php else: ?>
-            <p style="color:#999;">No rooms available at the moment.</p>
+            <p style="color:#999; text-align:center;">No rooms available at the moment.</p>
         <?php endif; ?>
     </div>
 </section>

@@ -6,19 +6,22 @@
     align-items: center;
     padding: 60px 0;
 }
+
 .hero-title{
     font-size: 3.5rem;
     font-weight: 700;
     line-height: 1.2;
     margin-bottom: 1.5rem;
 }
+
 .hero-description{
     font-size: 1rem;
     color: white;
     margin-bottom: 2rem;
     max-width: 500px;
 }
-.bade-tag{
+
+.badge-tag{
     display: inline-block;
     background-color: #333;
     color: white;
@@ -29,6 +32,7 @@
     margin-bottom: 1rem;
     border: 1px solid #555;
 }
+
 .btn-explore{
     background-color: antiquewhite;
     color: black;
@@ -39,9 +43,11 @@
     display: inline-block;
     transition: all 0.3s ease;
 }
+
 .btn-explore:hover{
     color: whitesmoke;
 }
+
 .btn-learn{
     color: white;
     padding: 0.8rem 2rem;
@@ -51,9 +57,11 @@
     margin-left: 1rem;
     transition: all 0.3s ease;
 }
+
 .btn-learn:hover{
     color: antiquewhite;
 }
+
 .hero-image{
     background-color: transparent;
     border-radius: 15px;
@@ -62,38 +70,233 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    overflow: hidden;
 }
+
 .hero-image img{
     width: 100%;
     height: 100%;
     object-fit: cover;
-    /* border-radius: 10px; */
 }
-@media(max-width: 992px){
+
+.hero-image .carousel{
+    width: 100%;
+    height: 100%;
+}
+
+.hero-image .carousel-inner,
+.hero-image .carousel-item{
+    width: 100%;
+    height: 100%;
+}
+
+/* Tablet screens (768px - 991px) */
+@media(max-width: 991px){
     .hero-section{
-        padding: 60px 0;
+        padding: 40px 0;
     }
+    
     .hero-title{
-        font-size: 2.5rem;
+        font-size: 2.8rem;
     }
+    
+    .hero-description{
+        font-size: 0.95rem;
+    }
+    
     .hero-image{
         margin-top: 3rem;
         height: 350px;
     }
-}
-@media(max-width: 768px){
-    .hero-title{
-        font-size: 2.5rem;
+    
+    .btn-explore, .btn-learn{
+        padding: 0.75rem 1.75rem;
+        font-size: 0.95rem;
     }
+}
+
+/* Mobile landscape and small tablets (576px - 767px) */
+@media(max-width: 767px){
+    .hero-section{
+        min-height: auto;
+        padding: 30px 0;
+    }
+    
+    .hero-title{
+        font-size: 2.2rem;
+        text-align: center;
+    }
+    
+    .hero-description{
+        font-size: 0.9rem;
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
     .hero-image{
         margin-top: 2rem;
         height: 300px;
     }
+    
     .btn-explore, .btn-learn{
-        padding: 0.75rem 1.5rem;
+        padding: 0.7rem 1.5rem;
         font-size: 0.9rem;
     }
+    
+    .badge-tag{
+        font-size: 0.75rem;
+        padding: 0.3rem 0.8rem;
+        margin-right: 0.3rem;
+        display: inline-block;
+    }
+    
+    .mb-4{
+        text-align: center;
+    }
+}
+
+/* Button alignment fix for 580px - 773px */
+@media(min-width: 580px) and (max-width: 773px){
+    .hero-section .btn-explore,
+    .hero-section .btn-learn{
+        display: inline-block;
+        margin: 0.5rem 0.5rem;
+        padding: 0.7rem 1.5rem;
+    }
+    
+    .hero-section > div > div > div:last-child{
+        text-align: center;
+    }
+}
+
+/* Small mobile devices (up to 575px) */
+@media(max-width: 575px){
+    .hero-section{
+        padding: 20px 0;
+    }
+    
+    .hero-title{
+        font-size: 1.8rem;
+        line-height: 1.3;
+        margin-bottom: 1rem;
+    }
+    
+    .hero-description{
+        font-size: 0.85rem;
+        margin-bottom: 1.5rem;
+        max-width: 100%;
+    }
+    
+    .hero-image{
+        height: 250px;
+        border-radius: 10px;
+    }
+    
+    .btn-explore, .btn-learn{
+        width: 100%;
+        max-width: none;
+        padding: 0.7rem 1rem;
+        font-size: 0.85rem;
+        border-radius: 8px;
+        margin: 0.5rem 0;
+        text-align: center;
+    }
+    
     .btn-learn{
-        margin-left: 0.5rem;
+        margin-left: 0;
+    }
+    
+    .badge-tag{
+        font-size: 0.7rem;
+        padding: 0.25rem 0.6rem;
+        margin-bottom: 0.5rem;
+    }
+}
+
+/* Extra small devices (up to 375px) */
+@media(max-width: 375px){
+    .hero-title{
+        font-size: 1.5rem;
+    }
+    
+    .hero-description{
+        font-size: 0.8rem;
+    }
+    
+    .hero-image{
+        height: 220px;
+    }
+    
+    .btn-explore, .btn-learn{
+        padding: 0.6rem 0.8rem;
+        font-size: 0.8rem;
+    }
+    
+    .badge-tag{
+        font-size: 0.65rem;
+        padding: 0.2rem 0.5rem;
+    }
+}
+
+/* Horizontal scrolling for room cards on mobile/tablet */
+@media(max-width: 991px){
+    #roomsCarousel .carousel-inner{
+        display: flex !important;
+        overflow-x: auto !important;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+    }
+    
+    #roomsCarousel .carousel-item{
+        flex: 0 0 100% !important;
+        scroll-snap-align: start;
+    }
+    
+    #roomsCarousel .carousel-item .row{
+        flex-wrap: nowrap !important;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+        gap: 1rem;
+        padding: 0 1rem;
+    }
+    
+    #roomsCarousel .carousel-item .row > div{
+        flex: 0 0 85% !important;
+        max-width: 85% !important;
+        scroll-snap-align: center;
+    }
+    
+    /* Hide carousel controls on mobile */
+    #roomsCarousel .carousel-control-prev,
+    #roomsCarousel .carousel-control-next{
+        display: none;
+    }
+    
+    /* Style scrollbar */
+    #roomsCarousel .carousel-inner::-webkit-scrollbar,
+    #roomsCarousel .carousel-item .row::-webkit-scrollbar{
+        height: 6px;
+    }
+    
+    #roomsCarousel .carousel-inner::-webkit-scrollbar-track,
+    #roomsCarousel .carousel-item .row::-webkit-scrollbar-track{
+        background: #1a1a1a;
+        border-radius: 10px;
+    }
+    
+    #roomsCarousel .carousel-inner::-webkit-scrollbar-thumb,
+    #roomsCarousel .carousel-item .row::-webkit-scrollbar-thumb{
+        background: #4ade80;
+        border-radius: 10px;
+    }
+}
+
+@media(max-width: 576px){
+    #roomsCarousel .carousel-item .row > div{
+        flex: 0 0 90% !important;
+        max-width: 90% !important;
     }
 }

@@ -9,7 +9,7 @@
 <section class="hero-section">
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-lg-6">
+            <div class="col-lg-6 col-md-12">
                 <h1 class="hero-title">Your Premium Boarding Experience</h1>
                 <p class="hero-description">
                     Discover comfort and convenience with our modern boarding house. Interactive room 
@@ -29,7 +29,7 @@
                     @endguest
                 </div>
             </div>
-            <div class="col-lg-6">
+            <div class="col-lg-6 col-md-12">
                 <div class="hero-image">
                     @php
                         $slides = collect();
@@ -52,7 +52,7 @@
                             <div class="carousel-inner">
                                 @foreach($slides as $i => $url)
                                     <div class="carousel-item {{ $i === 0 ? 'active' : '' }}">
-                                        <img src="{{ $url }}" class="d-block w-100" alt="Slide {{ $i+1 }}" style="border-radius:5px; height:400px; object-fit:cover;">
+                                        <img src="{{ $url }}" class="d-block w-100" alt="Slide {{ $i+1 }}" style="border-radius:5px; height:100%; width:100%; object-fit:cover;">
                                     </div>
                                 @endforeach
                             </div>
@@ -74,20 +74,22 @@
 
 <section class="py-6" style="background:black;">
     <div class="container">
-        <h3 style="color:#FAEBD7; margin-bottom:1rem;">Available Rooms</h3>
+        <h3 style="color:#FAEBD7; margin-bottom:1.5rem; text-align:center;">Available Rooms</h3>
 
         @php
             $roomChunks = ($rooms ?? collect())->chunk(3);
+            // $roomChunks used for desktop (3-per-slide). Mobile will render one room per slide.
         @endphp
 
         @if(($rooms ?? collect())->isNotEmpty())
-            <div id="roomsCarousel" class="carousel slide pb-4" data-bs-ride="carousel" data-bs-interval="2000">
+            {{-- Desktop carousel: 3 cards per slide (visible on lg and up) --}}
+            <div id="roomsCarouselDesktop" class="carousel slide d-none d-lg-block pb-4" data-bs-ride="carousel" data-bs-interval="4000">
                 <div class="carousel-inner">
                     @foreach($roomChunks as $si => $chunk)
                         <div class="carousel-item {{ $si === 0 ? 'active' : '' }}">
-                            <div class="row gy-4">
+                            <div class="row gy-4 justify-content-center">
                                 @foreach($chunk as $room)
-                                    <div class="col-12 col-md-6 col-lg-4">
+                                    <div class="col-12 col-sm-6 col-lg-4">
                                         <x-room-card :room="$room" />
                                     </div>
                                 @endforeach
@@ -95,15 +97,34 @@
                         </div>
                     @endforeach
                 </div>
-
                 <div class="carousel-indicators mt-3">
                     @foreach($roomChunks as $i => $c)
-                        <button type="button" data-bs-target="#roomsCarousel" data-bs-slide-to="{{ $i }}" class="{{ $i === 0 ? 'active' : '' }}" aria-label="Slide {{ $i+1 }}"></button>
+                        <button type="button" data-bs-target="#roomsCarouselDesktop" data-bs-slide-to="{{ $i }}" class="{{ $i === 0 ? 'active' : '' }}" aria-label="Slide {{ $i+1 }}"></button>
+                    @endforeach
+                </div>
+            </div>
+
+            {{-- Mobile carousel: single card per slide (visible under lg) --}}
+            <div id="roomsCarouselMobile" class="carousel slide d-lg-none pb-4" data-bs-ride="carousel" data-bs-interval="3000">
+                <div class="carousel-inner">
+                    @foreach($rooms as $index => $room)
+                        <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                            <div class="row gy-4 justify-content-center">
+                                <div class="col-12 col-sm-10 col-md-8">
+                                    <x-room-card :room="$room" />
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                <div class="carousel-indicators mt-3">
+                    @foreach($rooms as $i => $r)
+                        <button type="button" data-bs-target="#roomsCarouselMobile" data-bs-slide-to="{{ $i }}" class="{{ $i === 0 ? 'active' : '' }}" aria-label="Slide {{ $i+1 }}"></button>
                     @endforeach
                 </div>
             </div>
         @else
-            <p style="color:#999;">No rooms available at the moment.</p>
+            <p style="color:#999; text-align:center;">No rooms available at the moment.</p>
         @endif
     </div>
 </section>
