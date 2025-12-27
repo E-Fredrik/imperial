@@ -11,6 +11,7 @@ use App\Models\Payment;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class BookingController extends Controller
 {
@@ -43,7 +44,7 @@ class BookingController extends Controller
         $data = $request->validate([
             'room_id' => ['required','exists:rooms,id'],
             'move_in_date' => ['required','date'],
-            'proof' => ['nullable','file','image','max:4096'],
+            'id_card' => ['nullable','file','image','max:4096'],
         ]);
 
         $room = Room::findOrFail($data['room_id']);
@@ -68,30 +69,43 @@ class BookingController extends Controller
         // mark room as pending so others can't book
         $room->update(['status' => 'pending']);
 
-        // handle optional proof upload
-        $proofPath = null;
-        if ($request->hasFile('proof') && $request->file('proof')->isValid()) {
-            $file = $request->file('proof');
+        // Handle optional ID card upload
+        if ($request->hasFile('id_card') && $request->file('id_card')->isValid()) {
+            $file = $request->file('id_card');
             $contents = file_get_contents($file->getRealPath());
             $hash = sha1($contents . Str::random(6));
             $filename = $hash . '.' . $file->getClientOriginalExtension();
-            $path = 'payments/' . $filename;
-            Storage::disk('public')->put($path, $contents);
-            $proofPath = $path;
+            $idPath = 'id_cards/' . $filename;
+            Storage::disk('public')->put($idPath, $contents);
+
+            $user = Auth::user();
+            $user->update(['id_card' => $idPath]);
         }
 
-        // create initial payment record for the first month (pending)
-        Payment::create([
+        // Determine the payment month based on move-in date
+        $moveInDate = Carbon::parse($data['move_in_date']);
+        $paymentForMonth = $moveInDate->format('Y-m');
+
+        // Calculate late fee if move-in is after the 1st of the month
+        $lateFee = 0;
+        if ($moveInDate->day > 1) {
+            $lateFee = (int) ($monthly * 0.1); // 10% late fee
+        }
+
+        // Create initial payment record for the first month (pending - will be paid via Midtrans)
+        // First payment has 24h expiration
+        $payment = Payment::create([
             'booking_id' => $booking->id,
-            'amount' => $monthly,
-            'payment_for_month' => date('Y-m', strtotime($data['move_in_date'])),
+            'amount' => $monthly + $lateFee,
+            'payment_for_month' => $paymentForMonth,
             'monthly_rent' => $monthly,
-            'late_fee' => 0,
-            'proof' => $proofPath,
+            'late_fee' => $lateFee,
             'status' => 'pending',
+            'expires_at' => now()->addHours(24), // Only first payment has expiration
         ]);
 
-        return redirect()->route('bookings.index')->with('success','Booking created and payment pending.');
+        // Redirect to payment page
+        return redirect()->route('payment.show', $payment)->with('success', 'Booking created! Please complete payment within 24 hours to confirm.');
     }
 
     // show booking details (owner or admin)
@@ -125,6 +139,6 @@ class BookingController extends Controller
         $booking->payments()->delete();
         $booking->delete();
 
-        return redirect()->route('bookings.index')->with('success', 'Booking cancelled.');
+        return redirect()->route('profile')->with('success', 'Booking cancelled.');
     }
 }

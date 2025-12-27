@@ -16,7 +16,13 @@ class PaymentController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-        // optionally add admin role middleware if you have it
+        
+        $this->middleware(function ($request, $next) {
+            if (($request->user()->role ?? '') !== 'admin') {
+                abort(403);
+            }
+            return $next($request);
+        });
     }
 
     // list recent payments for admin review
@@ -26,7 +32,14 @@ class PaymentController extends Controller
         return view('admin.payments.index', compact('payments'));
     }
 
-    // admin accepts or declines a payment
+    // Show single payment details
+    public function show(Payment $payment): View
+    {
+        $payment->load('booking.user', 'booking.room');
+        return view('admin.payments.show', compact('payment'));
+    }
+
+    // Admin can manually update payment status if needed (e.g., for cash payments)
     public function update(Request $request, Payment $payment): RedirectResponse
     {
         $request->validate([

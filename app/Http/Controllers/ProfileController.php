@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use App\Models\Payment;
+use Carbon\Carbon;
 
 class ProfileController extends Controller
 {
@@ -23,7 +24,7 @@ class ProfileController extends Controller
             return redirect()->route('login');
         }
 
-        // Load payments made by this user via the booking relation
+        // Load all payments for transaction history
         $transactions = Payment::with(['booking.room'])
             ->whereHas('booking', function ($q) use ($user) {
                 $q->where('user_id', $user->id);
@@ -32,7 +33,24 @@ class ProfileController extends Controller
             ->orderByDesc('created_at')
             ->get();
 
-        return view('profile', compact('user', 'transactions'));
+        // Filter pending payments: only show those due within 10 days or overdue
+        $pendingPayments = $transactions->filter(function ($payment) {
+            if ($payment->status !== 'pending') {
+                return false;
+            }
+
+            // Parse the payment month
+            $paymentDate = Carbon::createFromFormat('Y-m', $payment->payment_for_month)->startOfMonth();
+            $daysUntilDue = now()->diffInDays($paymentDate, false);
+            
+            // Show if overdue (negative days) or due within 10 days
+            return $daysUntilDue <= 10;
+        });
+
+        // Count all pending payments for the badge
+        $totalPendingCount = $transactions->where('status', 'pending')->count();
+
+        return view('profile', compact('user', 'transactions', 'pendingPayments', 'totalPendingCount'));
     }
 
     /**

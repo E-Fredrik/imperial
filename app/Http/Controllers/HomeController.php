@@ -14,10 +14,13 @@ class HomeController extends Controller
             ->orderByDesc('created_at')
             ->get();
 
-        // Get ALL rooms (not just available)
-        $rooms = Room::with(['images', 'rooms_facilities.room_facility'])
-            ->orderBy('room_number')
-            ->get();
+        // Get ALL rooms with relationships
+        $rooms = Room::with([
+            'images', 
+            'rooms_facilities.room_facility'
+        ])
+        ->orderBy('room_number')
+        ->get();
 
         return view('home', compact('featured', 'rooms'));
     }
