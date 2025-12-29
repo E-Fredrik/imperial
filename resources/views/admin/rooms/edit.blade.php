@@ -1,120 +1,192 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Edit Room') }}
-        </h2>
-    </x-slot>
+<x-admin-layout>
+    <x-slot name="title">Edit Room</x-slot>
+    <x-slot name="header">Edit Room</x-slot>
+    <x-slot name="icon">bi-door-closed</x-slot>
 
-    <div class="py-6">
-        <div class="max-w-3xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6">
-                    <form method="POST" action="{{ route('admin.rooms.update', $room) }}" enctype="multipart/form-data">
-                        @csrf
-                        @method('PUT')
+    <div class="admin-card" style="max-width: 900px; margin: 0 auto;">
+        <div class="card-header">
+            <h3><i class="bi bi-door-closed me-2"></i>Edit Room</h3>
+            <a href="{{ route('admin.rooms.index') }}" class="btn-admin-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Rooms
+            </a>
+        </div>
 
-                        <div class="grid grid-cols-1 gap-4">
-                            <div>
-                                <x-input-label for="room_number" :value="__('Room number')" />
-                                <x-text-input id="room_number" name="room_number" type="text" class="mt-1 block w-full"
-                                    value="{{ old('room_number', $room->room_number) }}" required />
-                                <x-input-error :messages="$errors->get('room_number')" class="mt-2" />
+        @if ($errors->any())
+            <div class="alert-danger">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <strong>Please fix the following errors:</strong>
+                </div>
+                <ul style="margin: 0; padding-left: 1.5rem;">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <form action="{{ route('admin.rooms.update', $room) }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            @method('PUT')
+
+            <!-- Room Number -->
+            <div class="form-group">
+                <label for="room_number">
+                    <i class="bi bi-hash me-1"></i>Room Number
+                </label>
+                <input 
+                    type="text" 
+                    name="room_number" 
+                    id="room_number" 
+                    value="{{ old('room_number', $room->room_number) }}"
+                    required
+                    placeholder="e.g., A, B, C, 101, 102">
+            </div>
+
+            <div class="row g-3">
+                <!-- Price -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="price">
+                            <i class="bi bi-cash-coin me-1"></i>Monthly Price (Rp)
+                        </label>
+                        <div class="number-input-wrapper">
+                            <input 
+                                type="number" 
+                                name="price" 
+                                id="price" 
+                                value="{{ old('price', $room->price) }}"
+                                required
+                                placeholder="1850000">
+                            <div class="number-controls">
+                                <button type="button" onclick="document.getElementById('price').stepUp()">▲</button>
+                                <button type="button" onclick="document.getElementById('price').stepDown()">▼</button>
                             </div>
+                        </div>
+                    </div>
+                </div>
 
-                            <div class="grid grid-cols-2 gap-4">
-                                <div>
-                                    <x-input-label for="price" :value="__('Price')" />
-                                    <x-text-input id="price" name="price" type="number" step="0.01" class="mt-1 block w-full"
-                                        value="{{ old('price', $room->price) }}" />
-                                    <x-input-error :messages="$errors->get('price')" class="mt-2" />
-                                </div>
+                <!-- Type -->
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="type">
+                            <i class="bi bi-collection me-1"></i>Room Type
+                        </label>
+                        <input 
+                            type="text" 
+                            name="type" 
+                            id="type" 
+                            value="{{ old('type', $room->type) }}"
+                            required
+                            placeholder="e.g., Single, Double, Suite">
+                    </div>
+                </div>
+            </div>
 
-                                <div>
-                                    <x-input-label for="type" :value="__('Type')" />
-                                    <x-text-input id="type" name="type" type="text" class="mt-1 block w-full"
-                                        value="{{ old('type', $room->type) }}" />
-                                    <x-input-error :messages="$errors->get('type')" class="mt-2" />
-                                </div>
+            <div class="row g-3">
+                <!-- Length -->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="length">
+                            <i class="bi bi-arrows-expand me-1"></i>Length (m)
+                        </label>
+                        <div class="number-input-wrapper">
+                            <input 
+                                type="number" 
+                                step="0.01"
+                                name="length" 
+                                id="length" 
+                                value="{{ old('length', $room->length) }}"
+                                required
+                                placeholder="3">
+                            <div class="number-controls">
+                                <button type="button" onclick="document.getElementById('length').stepUp()">▲</button>
+                                <button type="button" onclick="document.getElementById('length').stepDown()">▼</button>
                             </div>
+                        </div>
+                    </div>
+                </div>
 
-                            <div class="grid grid-cols-3 gap-4">
-                                <div>
-                                    <x-input-label for="length" :value="__('Length')" />
-                                    <x-text-input id="length" name="length" type="number" class="mt-1 block w-full"
-                                        value="{{ old('length', $room->length) }}" />
-                                    <x-input-error :messages="$errors->get('length')" class="mt-2" />
-                                </div>
-
-                                <div>
-                                    <x-input-label for="width" :value="__('Width')" />
-                                    <x-text-input id="width" name="width" type="number" class="mt-1 block w-full"
-                                        value="{{ old('width', $room->width) }}" />
-                                    <x-input-error :messages="$errors->get('width')" class="mt-2" />
-                                </div>
-
-                                <div>
-                                    <x-input-label for="floor" :value="__('Floor')" />
-                                    <x-text-input id="floor" name="floor" type="number" class="mt-1 block w-full"
-                                        value="{{ old('floor', $room->floor) }}" />
-                                    <x-input-error :messages="$errors->get('floor')" class="mt-2" />
-                                </div>
+                <!-- Width -->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="width">
+                            <i class="bi bi-arrows-expand me-1"></i>Width (m)
+                        </label>
+                        <div class="number-input-wrapper">
+                            <input 
+                                type="number" 
+                                step="0.01"
+                                name="width" 
+                                id="width" 
+                                value="{{ old('width', $room->width) }}"
+                                required
+                                placeholder="2">
+                            <div class="number-controls">
+                                <button type="button" onclick="document.getElementById('width').stepUp()">▲</button>
+                                <button type="button" onclick="document.getElementById('width').stepDown()">▼</button>
                             </div>
+                        </div>
+                    </div>
+                </div>
 
-                            <div>
-                                <x-input-label for="status" :value="__('Status')" />
-                                <select id="status" name="status" class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700">
-                                    @php $s = old('status', $room->status ?? 'available'); @endphp
-                                    <option value="available" {{ $s === 'available' ? 'selected' : '' }}>available</option>
-                                    <option value="booked" {{ $s === 'booked' ? 'selected' : '' }}>booked</option>
-                                    <option value="unavailable" {{ $s === 'unavailable' ? 'selected' : '' }}>unavailable</option>
-                                </select>
-                                <x-input-error :messages="$errors->get('status')" class="mt-2" />
+                <!-- Floor -->
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label for="floor">
+                            <i class="bi bi-building me-1"></i>Floor
+                        </label>
+                        <div class="number-input-wrapper">
+                            <input 
+                                type="number" 
+                                name="floor" 
+                                id="floor" 
+                                value="{{ old('floor', $room->floor) }}"
+                                required
+                                placeholder="1">
+                            <div class="number-controls">
+                                <button type="button" onclick="document.getElementById('floor').stepUp()">▲</button>
+                                <button type="button" onclick="document.getElementById('floor').stepDown()">▼</button>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-                            <div>
-                                <x-input-label for="description" :value="__('Description')" />
-                                <textarea id="description" name="description" rows="4"
-                                          class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700">{{ old('description', $room->description) }}</textarea>
-                                <x-input-error :messages="$errors->get('description')" class="mt-2" />
-                            </div>
+            <!-- Status -->
+            <div class="form-group">
+                <label for="status">
+                    <i class="bi bi-toggle-on me-1"></i>Status
+                </label>
+                <select name="status" id="status" required>
+                    @php $s = old('status', $room->status ?? 'available'); @endphp
+                    <option value="available" {{ $s === 'available' ? 'selected' : '' }}>Available</option>
+                    <option value="booked" {{ $s === 'booked' ? 'selected' : '' }}>Booked</option>
+                    <option value="unavailable" {{ $s === 'unavailable' ? 'selected' : '' }}>Unavailable</option>
+                </select>
+            </div>
 
-                            <div>
-                                <x-input-label for="images" :value="__('Add Images (optional)')" />
-                                <input id="images" name="images[]" type="file" multiple accept="image/*" class="mt-1 block w-full" />
-                                <x-input-error :messages="$errors->get('images')" class="mt-2" />
-                                <x-input-error :messages="$errors->get('images.*')" class="mt-2" />
-                                <p class="text-sm text-gray-500 mt-1">Existing images are preserved. Uploading new files will add to the room.</p>
+            <!-- Description -->
+            <div class="form-group">
+                <label for="description">
+                    <i class="bi bi-card-text me-1"></i>Description
+                </label>
+                <textarea 
+                    name="description" 
+                    id="description" 
+                    rows="4"
+                    placeholder="Describe the room features and amenities...">{{ old('description', $room->description) }}</textarea>
+            </div>
 
-                                <!-- preview for newly selected images (client-side) -->
-                                <div id="new-images-preview" class="mt-2 flex flex-wrap"></div>
-                            </div>
-
-                            @php
-                                // Pre-select previously saved facilities or keep old input on validation errors
-                                $selectedFacilities = old('facilities', $room->rooms_facilities->pluck('facility_id')->toArray());
-                            @endphp
-
-                            <div>
-                                <x-input-label :value="__('Facilities')" />
-                                <div class="mt-2 grid grid-cols-2 gap-2">
-                                    @foreach($facilities as $facility)
-                                        <label class="inline-flex items-center space-x-2">
-                                            <input type="checkbox"
-                                                   name="facilities[]"
-                                                   value="{{ $facility->id }}"
-                                                   {{ in_array($facility->id, $selectedFacilities) ? 'checked' : '' }}
-                                                   class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500" />
-                                            <span class="text-sm text-gray-700 dark:text-white pl-4">{{ $facility->name }}</span>
-                                        </label>
-                                    @endforeach
-                                </div>
-                                <x-input-error :messages="$errors->get('facilities')" class="mt-2" />
-                                <x-input-error :messages="$errors->get('facilities.*')" class="mt-2" />
-                            </div>
-
+            <!-- Existing Images -->
+            @if($room->rooms_images->isNotEmpty())
+                <div class="form-group">
+                    <label>
+                        <i class="bi bi-images me-1"></i>Existing Images
+                    </label>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem;">
                         @foreach($room->rooms_images as $ri)
                             @php
-                                // get the attached Image model via pivot model RoomsImage
                                 $image = $ri->image;
                                 $path = $image->image_path ?? '';
                                 $publicCandidate = public_path($path);
@@ -124,51 +196,89 @@
                                     $imgUrl = asset('storage/' . ltrim($path, '/'));
                                 }
                             @endphp
-
-                            <div class="relative">
+                            <div style="position: relative; background: rgba(250, 235, 215, 0.05); border: 2px solid rgba(250, 235, 215, 0.15); border-radius: 10px; padding-top: 0.75rem; padding-right: 0.75rem; padding-left: 0.75rem;">
                                 <img
                                     id="thumb-{{ $image->id }}"
                                     data-image-id="{{ $image->id }}"
                                     data-original-src="{{ $imgUrl }}"
                                     src="{{ $imgUrl }}"
-                                    alt=""
-                                    class="w-32 h-24 object-cover rounded border"
-                                    title="Click Replace to choose a new file"
+                                    alt="Room image"
+                                    style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 0.8rem;"
                                 />
-
-                                <!-- single file input (has id and name so label triggers it, no JS required) -->
-                                <input
-                                    id="replace-{{ $image->id }}"
-                                    type="file"
-                                    name="replace_images[{{ $image->id }}]"
-                                    accept="image/*"
-                                    class="sr-only"
-                                    data-image-id="{{ $image->id }}"
-                                />
-
-                                <div class="mt-2 text-center space-x-2">
-                                    <label for="replace-{{ $image->id }}"
-                                           class="inline-flex items-center px-3 py-1 bg-blue-600 hover:bg-blue-500 text-white text-sm rounded cursor-pointer">
-                                        Replace
+                                <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                    <label for="replace-{{ $image->id }}" class="btn-admin-secondary" style="width: 100%; justify-content: center; font-size: 0.85rem; padding: 0.5rem;">
+                                        <i class="bi bi-upload me-1"></i> Replace
                                     </label>
-                                    <span id="status-{{ $image->id }}" class="text-xs text-gray-600 block mt-1"></span>
+                                    <input
+                                        id="replace-{{ $image->id }}"
+                                        type="file"
+                                        name="replace_images[{{ $image->id }}]"
+                                        accept="image/*"
+                                        style="display: none;"
+                                        class="replace-input"
+                                        data-image-id="{{ $image->id }}"
+                                    />
+                                    <span id="status-{{ $image->id }}" style="font-size: 0.75rem; color: #999; text-align: center;"></span>
                                 </div>
                             </div>
                         @endforeach
-                        </div>
+                    </div>
+                    <small style="display: block; margin-top: 0.5rem;">
+                        <i class="bi bi-info-circle me-1"></i>Click "Replace" to choose a new image for each slot
+                    </small>
+                </div>
+            @endif
 
-                        <div class="mt-6 flex items-center gap-3">
-                            <x-primary-button>{{ __('Update Room') }}</x-primary-button>
+            <!-- Add New Images -->
+            <div class="form-group">
+                <label for="images">
+                    <i class="bi bi-images me-1"></i>Add New Images (Optional)
+                </label>
+                <input 
+                    type="file" 
+                    name="images[]" 
+                    id="images" 
+                    multiple 
+                    accept="image/*">
+                <small>
+                    <i class="bi bi-info-circle me-1"></i>Upload additional images (PNG, JPG, JPEG)
+                </small>
+            </div>
 
-                            <a href="{{ route('admin.rooms.index') }}" class="inline-flex items-center px-3 py-2 bg-gray-200 dark:bg-gray-700 text-sm rounded-md">
-                                {{ __('Cancel') }}
-                            </a>
-                        </div>
-                    </form>
-
-                    <script src="{{ asset('JS/editRoom.js') }}"></script>
+            <!-- Facilities -->
+            <div class="form-group">
+                <label>
+                    <i class="bi bi-check2-square me-1"></i>Facilities
+                </label>
+                <div class="facilities-grid">
+                    @php
+                        $currentFacilities = old('facilities', $room->facilities ?? []);
+                        if (is_string($currentFacilities)) {
+                            $currentFacilities = json_decode($currentFacilities, true) ?? [];
+                        }
+                    @endphp
+                    <label class="facility-label">
+                        <input type="checkbox" name="facilities[]" value="Kamar Mandi Dalam" {{ in_array('Kamar Mandi Dalam', $currentFacilities) ? 'checked' : '' }}>
+                        <span>Kamar Mandi Dalam</span>
+                    </label>
+                    <label class="facility-label">
+                        <input type="checkbox" name="facilities[]" value="Water Heater" {{ in_array('Water Heater', $currentFacilities) ? 'checked' : '' }}>
+                        <span>Water Heater</span>
+                    </label>
                 </div>
             </div>
-        </div>
+
+            <!-- Action Buttons -->
+            <div class="form-actions">
+                <a href="{{ route('admin.rooms.index') }}" class="btn-admin-secondary">
+                    <i class="bi bi-x-circle"></i> Cancel
+                </a>
+                <button type="submit" class="btn-admin-primary">
+                    <i class="bi bi-check-circle"></i> Update Room
+                </button>
+            </div>
+        </form>
     </div>
-</x-app-layout>
+
+    <script src="{{ asset('JS/editRoom.js') }}"></script>
+</x-admin-layout>

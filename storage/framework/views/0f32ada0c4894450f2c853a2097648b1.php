@@ -165,7 +165,7 @@ unset($__defined_vars, $__key, $__value); ?>
     </div>
 </div>
 
-<?php if (! $__env->hasRenderedOnce('d53d3784-bb89-4595-96cf-462ff3f1cad0')): $__env->markAsRenderedOnce('d53d3784-bb89-4595-96cf-462ff3f1cad0'); ?>
+<?php if (! $__env->hasRenderedOnce('20712b4d-4637-4e78-87b2-56ff5b170e1a')): $__env->markAsRenderedOnce('20712b4d-4637-4e78-87b2-56ff5b170e1a'); ?>
 <?php $__env->startPush('scripts'); ?>
 <script>
 function openRoomModal(roomId) {
@@ -228,4 +228,4 @@ document.addEventListener('keydown', (e) => {
 });
 </script>
 <?php $__env->stopPush(); ?>
-<?php endif; ?><?php /**PATH C:\Uni\WebDev\Laravel\imperial\resources\views/components/room-modal.blade.php ENDPATH**/ ?>
+<?php endif; ?><?php /**PATH D:\Github\imperial\resources\views/components/room-modal.blade.php ENDPATH**/ ?>

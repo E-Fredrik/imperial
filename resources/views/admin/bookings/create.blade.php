@@ -1,73 +1,134 @@
-<x-app-layout>
-   <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Create Booking') }}
-        </h2>
-    </x-slot>
-    <div class="p-6 max-w-3xl mx-auto">
-        <form method="POST" action="{{ route('admin.bookings.store') }}" enctype="multipart/form-data">
+<x-admin-layout>
+    <x-slot name="title">Add New Booking</x-slot>
+    <x-slot name="header">Add New Booking</x-slot>
+    <x-slot name="icon">bi-calendar-check</x-slot>
+
+    <div class="admin-card" style="max-width: 900px; margin: 0 auto;">
+        <div class="card-header">
+            <h3><i class="bi bi-calendar-check me-2"></i>Create New Booking</h3>
+            <a href="{{ route('admin.bookings.index') }}" class="btn-admin-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Bookings
+            </a>
+        </div>
+
+        @if ($errors->any())
+            <div class="alert-danger">
+                <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
+                    <i class="bi bi-exclamation-triangle-fill"></i>
+                    <strong>Please fix the following errors:</strong>
+                </div>
+                <ul style="margin: 0; padding-left: 1.5rem;">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
+        <form action="{{ route('admin.bookings.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
 
-            <div>
-                <x-input-label for="user_id" :value="__('User')" />
-                <select id="user_id" name="user_id" required class="mt-1 block w-full">
-                    <option value="">{{ __('Select user') }}</option>
+            <!-- User Selection -->
+            <div class="form-group">
+                <label for="user_id">
+                    <i class="bi bi-person me-1"></i>User
+                </label>
+                <select id="user_id" name="user_id" required>
+                    <option value="">Select user</option>
                     @foreach($users as $user)
                         <option value="{{ $user->id }}" {{ old('user_id') == $user->id ? 'selected' : '' }}>
                             {{ $user->first_name }} {{ $user->last_name }} — {{ $user->email }}
                         </option>
                     @endforeach
                 </select>
-                <x-input-error :messages="$errors->get('user_id')" class="mt-2" />
             </div>
 
-            <div>
-                <x-input-label for="room_id" :value="__('Room')" />
-                <select id="room_id" name="room_id" required class="mt-1 block w-full">
-                    <option value="">{{ __('Choose a room') }}</option>
+            <!-- Room Selection -->
+            <div class="form-group">
+                <label for="room_id">
+                    <i class="bi bi-door-closed me-1"></i>Room
+                </label>
+                <select id="room_id" name="room_id" required>
+                    <option value="">Choose a room</option>
                     @foreach($rooms as $room)
-                        <option value="{{ $room->id }}" data-price="{{ $room->price }}">
-                            {{ $room->room_number }} — {{ $room->type }} — {{ $room->price }}
+                        <option value="{{ $room->id }}" data-price="{{ $room->price }}" {{ old('room_id') == $room->id ? 'selected' : '' }}>
+                            Room {{ $room->room_number }} — {{ $room->type }} — Rp {{ number_format($room->price, 0, ',', '.') }}
                         </option>
                     @endforeach
                 </select>
-                <x-input-error :messages="$errors->get('room_id')" class="mt-2" />
             </div>
 
-            <div class="mt-4">
-                <x-input-label for="move_in_date" :value="__('Move-in date')" />
-                <input id="move_in_date" name="move_in_date" type="date" required class="mt-1 block w-full" value="{{ old('move_in_date') }}" />
-                <x-input-error :messages="$errors->get('move_in_date')" class="mt-2" />
+            <!-- Move-in Date -->
+            <div class="form-group">
+                <label for="move_in_date">
+                    <i class="bi bi-calendar-event me-1"></i>Move-in Date
+                </label>
+                <input 
+                    type="date" 
+                    name="move_in_date" 
+                    id="move_in_date" 
+                    value="{{ old('move_in_date') }}"
+                    required
+                    min="{{ date('Y-m-d') }}">
             </div>
 
-            <div class="mt-4">
-                <x-input-label for="proof" :value="__('Proof of Payment (optional)')" />
-                <input id="proof" name="proof" type="file" accept="image/*" class="mt-1 block w-full" />
-                <x-input-error :messages="$errors->get('proof')" class="mt-2" />
-                <p class="text-xs text-gray-500 mt-1">PNG/JPG up to 4MB. Admin can attach proof when creating a booking.</p>
+            <!-- Proof of Payment -->
+            <div class="form-group">
+                <label for="proof">
+                    <i class="bi bi-image me-1"></i>Proof of Payment (Optional)
+                </label>
+                <input 
+                    type="file" 
+                    name="proof" 
+                    id="proof" 
+                    accept="image/*">
+                <small>
+                    <i class="bi bi-info-circle me-1"></i>PNG/JPG up to 4MB. Admin can attach proof when creating a booking.
+                </small>
             </div>
 
-            <div class="mt-4">
-                <x-input-label for="id_card" :value="__('ID Card (photo)')" />
-                <input id="id_card" name="id_card" type="file" accept="image/*" class="mt-1 block w-full" />
-                <x-input-error :messages="$errors->get('id_card')" class="mt-2" />
-                <p class="text-xs text-gray-500 mt-1">PNG/JPG up to 4MB. Attach the user's ID card photo (optional).</p>
+            <!-- ID Card -->
+            <div class="form-group">
+                <label for="id_card">
+                    <i class="bi bi-card-image me-1"></i>ID Card (Photo)
+                </label>
+                <input 
+                    type="file" 
+                    name="id_card" 
+                    id="id_card" 
+                    accept="image/*">
+                <small>
+                    <i class="bi bi-info-circle me-1"></i>PNG/JPG up to 4MB. Attach the user's ID card photo (optional).
+                </small>
             </div>
 
-            <div class="mt-4">
-                <x-input-label :value="__('Monthly Rent')" />
-                <div class="mt-1">
-                    <input id="monthly_rent_display" type="text" readonly class="block w-full rounded-md border-gray-300 bg-gray-100 dark:bg-gray-800 text-gray-900 dark:text-gray-100 p-2" value="" />
-                </div>
-                <p class="text-xs text-gray-500 mt-1">Monthly rent follows the selected room price and is not editable here.</p>
+            <!-- Monthly Rent (Display Only) -->
+            <div class="form-group">
+                <label for="monthly_rent_display">
+                    <i class="bi bi-cash-coin me-1"></i>Monthly Rent
+                </label>
+                <input 
+                    type="text" 
+                    id="monthly_rent_display" 
+                    readonly 
+                    placeholder="Select a room to see monthly rent"
+                    style="background-color: rgba(250, 235, 215, 0.03); cursor: not-allowed;">
+                <small>
+                    <i class="bi bi-info-circle me-1"></i>Monthly rent follows the selected room price and is not editable here.
+                </small>
             </div>
 
-
-            <div class="mt-6">
-                <x-primary-button>{{ __('Book') }}</x-primary-button>
+            <!-- Action Buttons -->
+            <div class="form-actions">
+                <a href="{{ route('admin.bookings.index') }}" class="btn-admin-secondary">
+                    <i class="bi bi-x-circle"></i> Cancel
+                </a>
+                <button type="submit" class="btn-admin-primary">
+                    <i class="bi bi-check-circle"></i> Create Booking
+                </button>
             </div>
         </form>
     </div>
 
     <script src="{{ asset('js/booking.js') }}"></script>
-</x-app-layout>
+</x-admin-layout>

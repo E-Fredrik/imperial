@@ -1,76 +1,119 @@
+/* Hero Section */
 .hero-section{
-    background-color: black;
+    background: linear-gradient(to bottom, #000000 0%, #1a1a1a 100%);
     color: white;
-    min-height: 80vh;
-    display: flex;
-    align-items: center;
-    padding: 60px 0;
+    padding: 100px 0;
+    position: relative;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 20% 50%, rgba(250, 235, 215, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(250, 235, 215, 0.08) 0%, transparent 50%);
+    pointer-events: none;
 }
 
 .hero-title{
     font-size: 3.5rem;
-    font-weight: 700;
-    line-height: 1.2;
+    font-weight: 800;
     margin-bottom: 1.5rem;
+    line-height: 1.2;
+    background: linear-gradient(135deg, #FAEBD7 0%, #fff 50%, #FAEBD7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
 }
 
 .hero-description{
-    font-size: 1rem;
-    color: white;
+    font-size: 1.2rem;
+    line-height: 1.8;
     margin-bottom: 2rem;
-    max-width: 500px;
+    color: rgba(250, 235, 215, 0.9);
 }
 
 .badge-tag{
     display: inline-block;
-    background-color: #333;
-    color: white;
-    padding: 0.4rem 1rem;
+    padding: 0.5rem 1rem;
+    background: rgba(250, 235, 215, 0.1);
+    border: 1px solid rgba(250, 235, 215, 0.2);
     border-radius: 20px;
-    font-size: 0.85rem;
     margin-right: 0.5rem;
-    margin-bottom: 1rem;
-    border: 1px solid #555;
-}
-
-.btn-explore{
-    background-color: antiquewhite;
-    color: black;
-    padding: 0.8rem 2rem;
-    border-radius: 30px;
-    font-weight: 600;
-    text-decoration: none;
-    display: inline-block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: #FAEBD7;
     transition: all 0.3s ease;
 }
 
+.badge-tag:hover {
+    background: rgba(250, 235, 215, 0.2);
+    border-color: rgba(250, 235, 215, 0.4);
+    transform: translateY(-2px);
+}
+
+.btn-explore{
+    padding: 1rem 2.5rem;
+    background: linear-gradient(135deg, #FAEBD7 0%, #f5f5dc 100%);
+    color: #000;
+    border: none;
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(250, 235, 215, 0.3);
+}
+
+.btn-explore::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn-explore:hover::before {
+    left: 100%;
+}
+
 .btn-explore:hover{
-    color: whitesmoke;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 25px rgba(250, 235, 215, 0.4);
 }
 
 .btn-learn{
-    color: white;
-    padding: 0.8rem 2rem;
-    font-weight: 500;
-    text-decoration: none;
-    display: inline-block;
-    margin-left: 1rem;
+    padding: 1rem 2.5rem;
+    background: transparent;
+    color: #FAEBD7;
+    border: 2px solid rgba(250, 235, 215, 0.3);
+    border-radius: 50px;
+    font-weight: 600;
+    font-size: 1.1rem;
     transition: all 0.3s ease;
 }
 
 .btn-learn:hover{
-    color: antiquewhite;
+    background: rgba(250, 235, 215, 0.1);
+    border-color: rgba(250, 235, 215, 0.5);
+    transform: translateY(-3px);
+    color: #FAEBD7;
 }
 
 .hero-image{
-    background-color: transparent;
-    border-radius: 15px;
-    height: 400px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    position: relative;
+    height: 500px;
+    border-radius: 20px;
     overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
 }
 
 .hero-image img{
@@ -80,223 +123,233 @@
 }
 
 .hero-image .carousel{
-    width: 100%;
     height: 100%;
 }
 
 .hero-image .carousel-inner,
 .hero-image .carousel-item{
+    height: 100%;
+}
+
+.hero-image .carousel-item img {
     width: 100%;
     height: 100%;
+    object-fit: cover;
+}
+
+/* Carousel indicators */
+.hero-image .carousel-indicators {
+    bottom: 20px;
+}
+
+.hero-image .carousel-indicators button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(250, 235, 215, 0.5);
+    border: none;
+    margin: 0 6px;
+}
+
+.hero-image .carousel-indicators button.active {
+    background-color: #FAEBD7;
+    width: 30px;
+    border-radius: 6px;
+}
+
+/* Available Rooms Section */
+.rooms-section-home {
+    background: linear-gradient(to bottom, #1a1a1a 0%, #000000 100%);
+    color: white;
+    padding: 80px 0 100px 0;
+    position: relative;
+    overflow: visible;
+}
+
+.rooms-section-home::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 30% 20%, rgba(250, 235, 215, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 70% 80%, rgba(250, 235, 215, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #FAEBD7;
+    position: relative;
+    z-index: 1;
+}
+
+.section-subtitle {
+    font-size: 1.1rem;
+    color: #999;
+    margin-bottom: 3rem;
+    position: relative;
+    z-index: 1;
+}
+
+/* Room Card Container - FIX CLIPPING */
+#roomsCarouselDesktop .carousel-inner,
+#roomsCarouselMobile .carousel-inner {
+    padding: 60px 20px 80px 20px !important;
+    overflow: visible !important;
+}
+
+#roomsCarouselDesktop .carousel-item,
+#roomsCarouselMobile .carousel-item {
+    overflow: visible !important;
+}
+
+/* Desktop: 3 cards per row with proper spacing */
+@media (min-width: 992px) {
+    #roomsCarouselDesktop .carousel-item > div {
+        display: grid !important;
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 2.5rem !important;
+        padding: 0 30px !important;
+    }
+}
+
+/* Room Card Enhancements */
+.room-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transform: translateY(0) scale(1);
+    margin: 0 !important;
+    width: 100% !important;
+}
+
+.room-card:hover {
+    transform: translateY(-15px) scale(1.05) !important;
+    box-shadow: 0 30px 80px rgba(250, 235, 215, 0.3), 0 0 0 2px rgba(250, 235, 215, 0.6) !important;
+    z-index: 10 !important;
+}
+
+/* Override room card hover colors */
+.room-card:hover h5,
+.room-card:hover p,
+.room-card:hover span,
+.room-card:hover div {
+    color: inherit;
+}
+
+.room-card:hover {
+    background: linear-gradient(135deg, #fff 0%, #FAEBD7 100%) !important;
+}
+
+/* Keep status badge visible on hover */
+.room-card:hover span[style*="background:#333"] {
+    background: #1a1a1a !important;
+    color: #FAEBD7 !important;
+}
+
+/* Ensure price stays visible */
+.room-card:hover p[style*="font-weight:700"] {
+    color: #2c3e50 !important;
+}
+
+/* Carousel Styling for Rooms */
+#roomsCarouselDesktop,
+#roomsCarouselMobile {
+    position: relative;
+    padding-bottom: 50px;
+    overflow: visible !important;
+}
+
+#roomsCarouselDesktop .carousel-indicators,
+#roomsCarouselMobile .carousel-indicators {
+    bottom: 20px;
+    margin-bottom: 0;
+    z-index: 1;
+}
+
+#roomsCarouselDesktop .carousel-indicators button,
+#roomsCarouselMobile .carousel-indicators button {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: rgba(250, 235, 215, 0.3);
+    border: none;
+    margin: 0 6px;
+    transition: all 0.3s ease;
+}
+
+#roomsCarouselDesktop .carousel-indicators button:hover,
+#roomsCarouselMobile .carousel-indicators button:hover {
+    background-color: rgba(250, 235, 215, 0.6);
+    transform: scale(1.2);
+}
+
+#roomsCarouselDesktop .carousel-indicators button.active,
+#roomsCarouselMobile .carousel-indicators button.active {
+    background-color: #FAEBD7;
+    width: 30px;
+    border-radius: 6px;
+}
+
+/* Empty state styling */
+.rooms-empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #666;
+    position: relative;
+}
+
+.rooms-empty-state i {
+    font-size: 4rem;
+    color: #444;
+    margin-bottom: 1rem;
+}
+
+.rooms-empty-state p {
+    font-size: 1.2rem;
+    margin: 0;
+    color: #999;
 }
 
 /* Tablet screens (768px - 991px) */
 @media(max-width: 991px){
-    .hero-section{
-        padding: 40px 0;
+    #roomsCarouselMobile .carousel-inner {
+        padding: 40px 15px 60px 15px !important;
     }
     
-    .hero-title{
-        font-size: 2.8rem;
+    #roomsCarouselMobile .carousel-item > div {
+        display: block !important;
     }
     
-    .hero-description{
-        font-size: 0.95rem;
-    }
-    
-    .hero-image{
-        margin-top: 3rem;
-        height: 350px;
-    }
-    
-    .btn-explore, .btn-learn{
-        padding: 0.75rem 1.75rem;
-        font-size: 0.95rem;
+    .room-card {
+        margin: 0 auto 20px auto !important;
+        max-width: 500px;
     }
 }
 
-/* Mobile landscape and small tablets (576px - 767px) */
-@media(max-width: 767px){
-    .hero-section{
-        min-height: auto;
-        padding: 30px 0;
-    }
-    
-    .hero-title{
-        font-size: 2.2rem;
-        text-align: center;
-    }
-    
-    .hero-description{
-        font-size: 0.9rem;
-        text-align: center;
-        margin-left: auto;
-        margin-right: auto;
-    }
-    
-    .hero-image{
-        margin-top: 2rem;
-        height: 300px;
-    }
-    
-    .btn-explore, .btn-learn{
-        padding: 0.7rem 1.5rem;
-        font-size: 0.9rem;
-    }
-    
-    .badge-tag{
-        font-size: 0.75rem;
-        padding: 0.3rem 0.8rem;
-        margin-right: 0.3rem;
-        display: inline-block;
-    }
-    
-    .mb-4{
-        text-align: center;
-    }
-}
-
-/* Button alignment fix for 580px - 773px */
-@media(min-width: 580px) and (max-width: 773px){
-    .hero-section .btn-explore,
-    .hero-section .btn-learn{
-        display: inline-block;
-        margin: 0.5rem 0.5rem;
-        padding: 0.7rem 1.5rem;
-    }
-    
-    .hero-section > div > div > div:last-child{
-        text-align: center;
-    }
-}
-
-/* Small mobile devices (up to 575px) */
-@media(max-width: 575px){
-    .hero-section{
-        padding: 20px 0;
-    }
-    
-    .hero-title{
-        font-size: 1.8rem;
-        line-height: 1.3;
-        margin-bottom: 1rem;
-    }
-    
-    .hero-description{
-        font-size: 0.85rem;
-        margin-bottom: 1.5rem;
-        max-width: 100%;
-    }
-    
-    .hero-image{
-        height: 250px;
-        border-radius: 10px;
-    }
-    
-    .btn-explore, .btn-learn{
-        width: 100%;
-        max-width: none;
-        padding: 0.7rem 1rem;
-        font-size: 0.85rem;
-        border-radius: 8px;
-        margin: 0.5rem 0;
-        text-align: center;
-    }
-    
-    .btn-learn{
-        margin-left: 0;
-    }
-    
-    .badge-tag{
-        font-size: 0.7rem;
-        padding: 0.25rem 0.6rem;
-        margin-bottom: 0.5rem;
-    }
-}
-
-/* Extra small devices (up to 375px) */
-@media(max-width: 375px){
-    .hero-title{
-        font-size: 1.5rem;
-    }
-    
-    .hero-description{
-        font-size: 0.8rem;
-    }
-    
-    .hero-image{
-        height: 220px;
-    }
-    
-    .btn-explore, .btn-learn{
-        padding: 0.6rem 0.8rem;
-        font-size: 0.8rem;
-    }
-    
-    .badge-tag{
-        font-size: 0.65rem;
-        padding: 0.2rem 0.5rem;
-    }
-}
-
-/* Horizontal scrolling for room cards on mobile/tablet */
-@media(max-width: 991px){
-    #roomsCarousel .carousel-inner{
-        display: flex !important;
-        overflow-x: auto !important;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: thin;
-    }
-    
-    #roomsCarousel .carousel-item{
-        flex: 0 0 100% !important;
-        scroll-snap-align: start;
-    }
-    
-    #roomsCarousel .carousel-item .row{
-        flex-wrap: nowrap !important;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
-        gap: 1rem;
-        padding: 0 1rem;
-    }
-    
-    #roomsCarousel .carousel-item .row > div{
-        flex: 0 0 85% !important;
-        max-width: 85% !important;
-        scroll-snap-align: center;
-    }
-    
-    /* Hide carousel controls on mobile */
-    #roomsCarousel .carousel-control-prev,
-    #roomsCarousel .carousel-control-next{
-        display: none;
-    }
-    
-    /* Style scrollbar */
-    #roomsCarousel .carousel-inner::-webkit-scrollbar,
-    #roomsCarousel .carousel-item .row::-webkit-scrollbar{
-        height: 6px;
-    }
-    
-    #roomsCarousel .carousel-inner::-webkit-scrollbar-track,
-    #roomsCarousel .carousel-item .row::-webkit-scrollbar-track{
-        background: #1a1a1a;
-        border-radius: 10px;
-    }
-    
-    #roomsCarousel .carousel-inner::-webkit-scrollbar-thumb,
-    #roomsCarousel .carousel-item .row::-webkit-scrollbar-thumb{
-        background: #4ade80;
-        border-radius: 10px;
-    }
-}
-
+/* Mobile screens */
 @media(max-width: 576px){
-    #roomsCarousel .carousel-item .row > div{
-        flex: 0 0 90% !important;
-        max-width: 90% !important;
+    .hero-title {
+        font-size: 2.5rem;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .section-subtitle {
+        font-size: 1rem;
+    }
+    
+    #roomsCarouselMobile .carousel-inner {
+        padding: 30px 10px 50px 10px !important;
+    }
+    
+    .room-card {
+        margin: 0 auto !important;
+        max-width: 100%;
     }
 }

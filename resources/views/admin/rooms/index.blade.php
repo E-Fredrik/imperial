@@ -3,48 +3,55 @@
     <x-slot name="header">Rooms Management</x-slot>
     <x-slot name="icon">bi-door-closed</x-slot>
 
+    @if(session('success'))
+        <div class="alert-success">
+            <i class="bi bi-check-circle"></i> {{ session('success') }}
+        </div>
+    @endif
+
     <div class="admin-card">
         <div class="card-header">
-            <h3>All Rooms</h3>
+            <h3><i class="bi bi-door-closed me-2"></i>All Rooms</h3>
             <a href="{{ route('admin.rooms.create') }}" class="btn-admin-primary">
                 <i class="bi bi-plus-circle"></i> Add New Room
             </a>
         </div>
 
-        <div style="overflow-x: auto;">
+        <div class="table-responsive">
             <table class="admin-table">
                 <thead>
                     <tr>
-                        <th style="width: 60px;">ID</th>
+                        <th>ID</th>
                         <th>Room</th>
                         <th>Type</th>
                         <th>Floor</th>
                         <th>Size</th>
                         <th>Price</th>
                         <th>Status</th>
-                        <th style="width: 220px;">Actions</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($rooms as $room)
+                    @forelse($rooms as $room)
                         <tr>
-                            <td>{{ $room->id }}</td>
-                            <td><strong style="font-size: 1.1rem; color: #FAEBD7;">{{ $room->room_number }}</strong></td>
-                            <td>{{ $room->type }}</td>
-                            <td>{{ $room->floor }}F</td>
-                            <td>{{ $room->length }}x{{ $room->width }}m</td>
-                            <td><strong>Rp {{ number_format($room->price, 0, ',', '.') }}</strong></td>
-                            <td>
-                                <span class="badge-status badge-{{ $room->status }}">
-                                    {{ $room->status }}
+                            <td data-label="ID">{{ $room->id }}</td>
+                            <td data-label="Room"><strong style="font-size: 1.1rem; color: #FAEBD7;">{{ $room->room_number }}</strong></td>
+                            <td data-label="Type">{{ $room->type }}</td>
+                            <td data-label="Floor">{{ $room->floor }}F</td>
+                            <td data-label="Size">{{ $room->length }}x{{ $room->width }}m</td>
+                            <td data-label="Price"><strong>Rp {{ number_format($room->price, 0, ',', '.') }}</strong></td>
+                            <td data-label="Status">
+                                <span class="status-badge status-{{ $room->status }}">
+
+                                    {{ ucfirst($room->status) }}
                                 </span>
                             </td>
-                            <td>
-                                <div class="d-flex gap-2">
+                            <td data-label="Actions">
+                                <div class="action-buttons">
                                     <a href="{{ route('admin.rooms.edit', $room) }}" class="btn-admin-secondary">
-                                        <i class="bi bi-pencil"></i> Edit
+                                        <i class="bi bi-pencil-square"></i> Edit
                                     </a>
-                                    <form action="{{ route('admin.rooms.destroy', $room) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure?');">
+                                    <form action="{{ route('admin.rooms.destroy', $room) }}" method="POST" style="display: inline;" onsubmit="return confirm('Delete this room?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn-admin-danger">
@@ -54,9 +61,24 @@
                                 </div>
                             </td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="8">
+                                <div class="empty-state">
+                                    <i class="bi bi-inbox"></i>
+                                    <p>No rooms found.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
+
+        @if($rooms->hasPages())
+            <div class="d-flex justify-content-center mt-4">
+                {{ $rooms->links() }}
+            </div>
+        @endif
     </div>
 </x-admin-layout>

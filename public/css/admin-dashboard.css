@@ -1,0 +1,963 @@
+/* Admin Dashboard Styles */
+body {
+    background: linear-gradient(180deg, #030303 0%, #0a0a0a 45%, #111111 100%);
+    color: #FAEBD7;
+    min-height: 100vh;
+}
+
+/* Card Styling */
+.admin-card {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    border: 2px solid rgba(250, 235, 215, 0.15);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(250, 235, 215, 0.1);
+}
+
+.card-header h3 {
+    color: #FAEBD7;
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+}
+
+/* Alert Styling */
+.alert-success {
+    background: linear-gradient(135deg, #1a3a1a 0%, #0f2a0f 100%);
+    color: #4ade80;
+    border: 1px solid #166534;
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.alert-success i {
+    font-size: 1.25rem;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #3a1a1a 0%, #2a1010 100%);
+    color: #fca5a5;
+    border: 1px solid #991b1b;
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+/* Form Input Styles */
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    color: #FAEBD7;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    font-size: 0.95rem;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="date"],
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: rgba(250, 235, 215, 0.05);
+    border: 1px solid rgba(250, 235, 215, 0.15);
+    border-radius: 8px;
+    color: #FAEBD7;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="number"]:focus,
+.form-group input[type="date"]:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: rgba(250, 235, 215, 0.3);
+    background-color: rgba(250, 235, 215, 0.08);
+}
+
+/* Date input specific styling */
+input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    cursor: pointer;
+}
+
+.form-group textarea {
+    min-height: 120px;
+    resize: vertical;
+}
+
+.form-group small {
+    display: block;
+    color: #999;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+}
+
+/* Select Dropdown Styling */
+select {
+    background-color: rgba(250, 235, 215, 0.05) !important;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23FAEBD7" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position-x: calc(100% - 0.5rem);
+    background-position-y: center;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    padding-right: 2.5rem !important;
+    cursor: pointer;
+    color: #FAEBD7 !important;
+}
+
+/* Force white background on focus/active */
+select:focus,
+select:active {
+    background-color: rgba(250, 235, 215, 0.08) !important;
+}
+
+/* Dropdown options styling - WHITE background with BLACK text */
+select option {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    padding: 0.5rem !important;
+    font-weight: 500;
+}
+
+/* Selected option */
+select option:checked {
+    background-color: #f0f0f0 !important;
+    color: #000000 !important;
+}
+
+/* Hover state for options */
+select option:hover {
+    background-color: #e5e5e5 !important;
+    color: #000000 !important;
+}
+
+/* Number Input Custom Controls */
+.number-input-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+
+.number-input-wrapper input[type="number"] {
+    padding-right: 2.5rem !important;
+}
+
+.number-controls {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.number-controls button {
+    background: rgba(250, 235, 215, 0.15);
+    border: 1px solid rgba(250, 235, 215, 0.25);
+    color: #FAEBD7;
+    width: 24px;
+    height: 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    transition: all 0.2s ease;
+}
+
+.number-controls button:hover {
+    background: rgba(250, 235, 215, 0.25);
+    border-color: rgba(250, 235, 215, 0.4);
+}
+
+/* Hide default number input arrows */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+/* File Input Styling */
+input[type="file"] {
+    background: rgba(250, 235, 215, 0.05) !important;
+    color: #FAEBD7 !important;
+    border: 2px solid rgba(250, 235, 215, 0.15) !important;
+    padding: 0.85rem 1rem !important;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+input[type="file"]::file-selector-button,
+input[type="file"]::-webkit-file-upload-button {
+    background: rgba(250, 235, 215, 0.15) !important;
+    color: #FAEBD7 !important;
+    border: 1px solid rgba(250, 235, 215, 0.25) !important;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-right: 1rem;
+    transition: all 0.3s ease;
+}
+
+input[type="file"]::file-selector-button:hover,
+input[type="file"]::-webkit-file-upload-button:hover {
+    background: rgba(250, 235, 215, 0.25) !important;
+    border-color: rgba(250, 235, 215, 0.4) !important;
+}
+
+/* Checkbox Styling */
+input[type="checkbox"] {
+    width: 20px !important;
+    height: 20px !important;
+    cursor: pointer !important;
+    appearance: none;
+    -webkit-appearance: none;
+    background: rgba(250, 235, 215, 0.05);
+    border: 2px solid rgba(250, 235, 215, 0.25);
+    border-radius: 4px;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+input[type="checkbox"]:checked {
+    background: rgba(250, 235, 215, 0.2);
+    border-color: #FAEBD7;
+}
+
+input[type="checkbox"]:checked::after {
+    content: '✓';
+    position: absolute;
+    color: #FAEBD7;
+    font-size: 14px;
+    font-weight: bold;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+input[type="checkbox"]:hover {
+    border-color: rgba(250, 235, 215, 0.4);
+    background: rgba(250, 235, 215, 0.08);
+}
+
+/* Facilities Grid */
+.facilities-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 0.75rem;
+}
+
+.facility-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: rgba(250, 235, 215, 0.05);
+    border: 2px solid rgba(250, 235, 215, 0.15);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.facility-label:hover {
+    background: rgba(250, 235, 215, 0.08);
+    border-color: rgba(250, 235, 215, 0.3);
+}
+
+.facility-label span {
+    color: #FAEBD7;
+    font-size: 0.95rem;
+}
+
+/* Action Buttons Container */
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    padding-top: 1.5rem;
+    border-top: 2px solid rgba(250, 235, 215, 0.1);
+}
+
+/* Hover effects for cards */
+.card {
+    transition: all 0.3s ease;
+}
+
+a .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* Quick action cards specific hover */
+a .card:hover .rounded-3 {
+    transform: scale(1.1) rotate(5deg);
+    transition: transform 0.3s ease;
+}
+
+/* Link hover effects */
+a:hover {
+    color: #FAEBD7 !important;
+}
+
+a i {
+    transition: transform 0.2s ease;
+}
+
+a:hover i {
+    transform: translateX(4px);
+}
+
+/* Booking/Status card hover */
+.card-body > div > div:hover {
+    transform: translateX(4px);
+    transition: transform 0.2s ease;
+}
+
+/* Quick Action Buttons */
+.admin-action-btn {
+    background: linear-gradient(135deg, #FAEBD7 0%, #d4c5a9 100%);
+    border: 2px solid transparent;
+    border-radius: 12px;
+    color: #000;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    padding: 1.75rem 1.5rem !important;
+    text-decoration: none;
+    display: flex;
+}
+
+.admin-action-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+    transition: left 0.5s ease;
+}
+
+.admin-action-btn:hover::before {
+    left: 100%;
+}
+
+.admin-action-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(250, 235, 215, 0.4);
+    border-color: rgba(250, 235, 215, 0.5);
+    color: #000;
+}
+
+.admin-action-btn:active {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(250, 235, 215, 0.3);
+}
+
+.action-icon-box {
+    width: 64px;
+    height: 64px;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.3s ease;
+}
+
+.admin-action-btn:hover .action-icon-box {
+    background: rgba(0, 0, 0, 0.15);
+    transform: scale(1.1) rotate(5deg);
+}
+
+/* Stat Cards */
+.stat-card {
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 2rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.stat-card-link {
+    text-decoration: none;
+    display: block;
+}
+
+.stat-card-link:hover .stat-card {
+    transform: translateY(-6px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+.stat-card-link:active .stat-card {
+    transform: translateY(-3px);
+}
+
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.stat-card-link:hover .stat-icon {
+    transform: scale(1.1) rotate(-5deg);
+}
+
+.stat-card-link:hover .bi-arrow-right {
+    transform: translateX(4px);
+}
+
+.bi-arrow-right {
+    transition: all 0.3s ease;
+}
+
+/* Lighter text colors */
+.stat-card .display-4,
+.stat-card p {
+    color: #f5f5f5 !important;
+}
+
+/* Secondary Button */
+.admin-secondary-btn {
+    background: rgba(250, 235, 215, 0.1);
+    border: 1px solid rgba(250, 235, 215, 0.3);
+    color: #f5f5f5;
+    border-radius: 8px;
+    padding: 0.75rem 1.5rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.admin-secondary-btn:hover {
+    background: rgba(250, 235, 215, 0.2);
+    border-color: rgba(250, 235, 215, 0.5);
+    color: #ffffff;
+    transform: translateX(4px);
+}
+
+.admin-secondary-btn:active {
+    transform: translateX(2px);
+}
+
+/* Booking Items */
+.booking-item {
+    background: rgba(250, 235, 215, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    transition: all 0.2s ease;
+    padding: 1.25rem;
+}
+
+.booking-item:hover {
+    background: rgba(250, 235, 215, 0.06);
+    border-color: rgba(250, 235, 215, 0.15);
+}
+
+/* Booking Status Badges */
+.booking-badge-pending {
+    background: #92400e;
+    color: #fbbf24;
+}
+
+.booking-badge-booked {
+    background: #065f46;
+    color: #34d399;
+}
+
+.booking-badge-declined {
+    background: #7f1d1d;
+    color: #f87171;
+}
+
+.booking-badge-completed {
+    background: #1e3a8a;
+    color: #60a5fa;
+}
+
+/* Room Status Section */
+.room-status-box {
+    background: rgba(26, 26, 26, 0.6);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 16px;
+    padding: 1.75rem;
+}
+
+.status-icon-lg {
+    width: 80px;
+    height: 80px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.percentage-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 3px solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    font-weight: 700;
+}
+
+/* Lighter text for room status */
+.room-status-box h3,
+.room-status-box .display-4,
+.room-status-box p {
+    color: #f5f5f5 !important;
+}
+
+.room-status-box .progress {
+    height: 12px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.room-status-box .progress-bar {
+    transition: width 0.6s ease;
+    border-radius: 5px;
+}
+
+/* Quick Actions Section Styling */
+.dashboard-quick-actions {
+    background: rgba(26, 26, 26, 0.5);
+    border: 1px solid rgba(255,255,255,0.05);
+    padding: 2rem !important;
+    border-radius: 1rem;
+}
+
+.dashboard-quick-actions h2 {
+    color: #f5f5f5 !important;
+    padding-bottom: 1rem;
+}
+
+/* Card body padding */
+.dashboard-card-body {
+    padding: 1.75rem !important;
+}
+
+/* General lighter text */
+.dashboard-text-light {
+    color: #e5e7eb;
+}
+
+.dashboard-text-muted {
+    color: #d1d5db !important;
+}
+
+/* Header/Title colors */
+.dashboard-heading {
+    color: #f5f5f5 !important;
+}
+
+/* Convert all links to button-style */
+a.dashboard-btn {
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+a.dashboard-btn:hover {
+    transform: translateY(-2px);
+}
+
+/* Table Styling */
+.admin-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.admin-table thead {
+    background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+}
+
+.admin-table thead th {
+    color: #FAEBD7;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 0.5px;
+    padding: 1.25rem 1rem;
+    border-bottom: 2px solid rgba(250, 235, 215, 0.2);
+    white-space: nowrap;
+}
+
+.admin-table tbody tr {
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: all 0.3s ease;
+}
+
+.admin-table tbody tr:hover {
+    background: rgba(250, 235, 215, 0.05);
+}
+
+.admin-table tbody td {
+    padding: 1rem;
+    color: #FAEBD7;
+    vertical-align: middle;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 0.4rem 0.9rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    display: inline-block;
+    white-space: nowrap;
+}
+
+.status-accepted {
+    background: linear-gradient(135deg, #166534 0%, #14532d 100%);
+    color: #4ade80;
+    border: 1px solid #22c55e;
+}
+
+.status-pending {
+    background: linear-gradient(135deg, #78350f 0%, #713f12 100%);
+    color: #fbbf24;
+    border: 1px solid #f59e0b;
+}
+
+.status-declined {
+    background: linear-gradient(135deg, #7f1d1d 0%, #991b1b 100%);
+    color: #f87171;
+    border: 1px solid #ef4444;
+}
+
+.status-booked {
+    background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+    color: #60a5fa;
+    border: 1px solid #3b82f6;
+}
+
+.status-available {
+    background: linear-gradient(135deg, #065f46 0%, #047857 100%);
+    color: #34d399;
+    border: 1px solid #10b981;
+}
+
+.status-unavailable {
+    background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+    color: #9ca3af;
+    border: 1px solid #6b7280;
+}
+
+/* Button Styling */
+.btn-admin-primary {
+    background: linear-gradient(135deg, #FAEBD7 0%, #d4c5a9 100%);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    color: #000;
+    padding: 0.75rem 1.5rem;
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.btn-admin-primary:hover {
+    background: linear-gradient(135deg, #ffffff 0%, #FAEBD7 100%);
+    color: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(250, 235, 215, 0.3);
+}
+
+.btn-admin-secondary {
+    background: rgba(250, 235, 215, 0.1);
+    border: 2px solid rgba(250, 235, 215, 0.3);
+    border-radius: 10px;
+    color: #FAEBD7;
+    padding: 0.6rem 1.2rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    font-size: 0.9rem;
+}
+
+.btn-admin-secondary:hover {
+    background: rgba(250, 235, 215, 0.2);
+    border-color: rgba(250, 235, 215, 0.5);
+    color: #FAEBD7;
+    transform: translateY(-2px);
+}
+
+.btn-admin-danger {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    border: 2px solid transparent;
+    border-radius: 10px;
+    color: #fff;
+    padding: 0.6rem 1.2rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    font-size: 0.9rem;
+}
+
+.btn-admin-danger:hover {
+    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.3);
+}
+
+/* Action Buttons Group */
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+/* Responsive Table Container */
+.table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+}
+
+/* Image Preview */
+.proof-image {
+    max-width: 80px;
+    max-height: 80px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 2px solid rgba(250, 235, 215, 0.2);
+    transition: transform 0.3s ease;
+    cursor: pointer;
+}
+
+.proof-image:hover {
+    transform: scale(1.5);
+    z-index: 10;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.6);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #999;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .admin-table thead th,
+    .admin-table tbody td {
+        padding: 0.9rem 0.75rem;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 992px) {
+    .card-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .card-header h3 {
+        font-size: 1.5rem;
+    }
+    
+    .btn-admin-primary {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .admin-table {
+        font-size: 0.85rem;
+    }
+    
+    .admin-table thead th,
+    .admin-table tbody td {
+        padding: 0.75rem 0.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-card {
+        padding: 1.25rem;
+        border-radius: 12px;
+    }
+    
+    .card-header {
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+    }
+    
+    .card-header h3 {
+        font-size: 1.35rem;
+    }
+    
+    /* Stack table cells vertically on mobile */
+    .admin-table thead {
+        display: none;
+    }
+    
+    .admin-table tbody tr {
+        display: block;
+        margin-bottom: 1.5rem;
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 12px;
+        padding: 1rem;
+        background: rgba(0,0,0,0.3);
+    }
+    
+    .admin-table tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    
+    .admin-table tbody td:last-child {
+        border-bottom: none;
+    }
+    
+    .admin-table tbody td::before {
+        content: attr(data-label);
+        font-weight: 700;
+        color: #FAEBD7;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+    }
+    
+    .action-buttons {
+        width: 100%;
+        flex-direction: column;
+    }
+    
+    .btn-admin-secondary,
+    .btn-admin-danger {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .status-badge {
+        margin-left: auto;
+    }
+}
+
+@media (max-width: 576px) {
+    .admin-card {
+        padding: 1rem;
+    }
+    
+    .card-header h3 {
+        font-size: 1.25rem;
+    }
+    
+    .btn-admin-primary,
+    .btn-admin-secondary,
+    .btn-admin-danger {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+    }
+    
+    .alert-success {
+        padding: 0.75rem 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .proof-image {
+        max-width: 60px;
+        max-height: 60px;
+    }
+}
+
+/* Pagination Styling */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.pagination .page-link {
+    background: rgba(250, 235, 215, 0.1);
+    border: 1px solid rgba(250, 235, 215, 0.3);
+    color: #FAEBD7;
+    padding: 0.5rem 0.75rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.pagination .page-link:hover {
+    background: rgba(250, 235, 215, 0.2);
+    color: #FAEBD7;
+}
+
+.pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #FAEBD7 0%, #d4c5a9 100%);
+    color: #000;
+    border-color: #FAEBD7;
+}

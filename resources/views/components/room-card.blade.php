@@ -18,50 +18,75 @@
     $borderColor = '#d1d5db';
 @endphp
 
-<div class="room-card" data-room-id="{{ $room->id }}" onclick="openRoomModal({{ $room->id }})" style="background:#FAEBD7; color:#000; border-radius:12px; overflow:hidden; box-shadow:0 6px 18px rgba(0,0,0,0.25); cursor:pointer; transition: all 0.3s ease; border: 3px solid {{ $borderColor }}; position: relative;">
-    
+<div class="room-card" data-room-id="{{ $room->id }}" onclick="openRoomModal({{ $room->id }})" style="background: linear-gradient(135deg, #FAEBD7 0%, #f5f5f5 100%); color:#000; border-radius:12px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,0.3); cursor:pointer; border: 2px solid {{ $borderColor }}; position: relative; will-change: transform;">
     <div style="height:200px; overflow:hidden; position: relative;">
-        <img src="{{ $imgUrl }}" alt="Room {{ $room->room_number }}" style="width:100%; height:100%; object-fit:cover; display:block; transition: transform 0.3s ease;">
-        
-        @if($room->status === 'booked')
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(239, 68, 68, 0.95); color: white; padding: 0.8rem 2rem; border-radius: 8px; font-weight: 700; font-size: 1.2rem; z-index: 2;">
-                OCCUPIED
-            </div>
-        @elseif($room->status === 'unavailable')
-            <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: rgba(100, 116, 139, 0.95); color: white; padding: 0.8rem 2rem; border-radius: 8px; font-weight: 700; font-size: 1.2rem; z-index: 2;">
-                UNAVAILABLE
-            </div>
-        @endif
+        <img 
+            src="{{ $imgUrl }}" 
+            alt="{{ $room->room_number }}"
+            style="width:100%; height:100%; object-fit:cover; transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);"
+        >
     </div>
     
     <div style="padding:1.5rem;">
-        <h3 style="font-size:1.5rem; font-weight:700; margin-bottom:0.5rem; color:#000;">Room {{ $room->room_number }}</h3>
-        <p style="color:#555; margin-bottom:1rem; font-size:0.9rem;">{{ $room->type }} • Floor {{ $room->floor }}</p>
-        <p style="color:#000; font-size:1.25rem; font-weight:700; margin-bottom:1rem;">Rp {{ number_format($room->price, 0, ',', '.') }}<span style="font-size:0.9rem; font-weight:400;">/month</span></p>
+        <h5 style="font-size:1.5rem; font-weight:700; margin-bottom:0.75rem; transition: color 0.3s ease;">
+            {{ $room->room_number }}
+        </h5>
         
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="padding:0.4rem 1rem; background:#333; color:#fff; border-radius:20px; font-size:0.85rem; font-weight:600;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.75rem;">
+            <span style="font-size:0.95rem; color:#666; transition: color 0.3s ease;">
+                <i class="bi bi-rulers" style="margin-right:0.25rem;"></i>
+                {{ $room->length }}m × {{ $room->width }}m
+            </span>
+            <span class="room-status-badge" style="background:#333; color:#fff; padding:0.25rem 0.75rem; border-radius:12px; font-size:0.85rem; font-weight:600; transition: all 0.3s ease;">
                 {{ ucfirst($room->status) }}
             </span>
-            <span style="color:#555; font-size:0.9rem;">{{ $room->length }}x{{ $room->width }}m</span>
         </div>
+        
+        <p style="font-size:1.25rem; font-weight:700; color:#2c3e50; margin:0; transition: color 0.3s ease;">
+            Rp {{ number_format($room->price, 0, ',', '.') }}<span style="font-size:0.9rem; font-weight:400;">/month</span>
+        </p>
     </div>
 </div>
 
 <style>
+.room-card {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    transform: translateY(0) scale(1);
+}
+
 .room-card:hover {
-    transform: translateY(-8px) scale(1.03);
-    background-color: #2a2a2a !important;
-    color: #FAEBD7 !important;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4) !important;
+    transform: translateY(-15px) scale(1.05) !important;
+    box-shadow: 0 30px 80px rgba(250, 235, 215, 0.3), 0 0 0 2px rgba(250, 235, 215, 0.6) !important;
+    background: linear-gradient(135deg, #fff 0%, #FAEBD7 100%) !important;
+    border-color: rgba(250, 235, 215, 0.8) !important;
+    z-index: 10 !important;
 }
 
 .room-card:hover img {
-    transform: scale(1.1);
+    transform: scale(1.1) !important;
 }
 
-.room-card:hover h5,
-.room-card:hover div {
+.room-card:hover h5 {
+    color: #1a1a1a !important;
+}
+
+.room-card:hover p {
+    color: #333 !important;
+}
+
+.room-card:hover .room-status-badge {
+    background: #1a1a1a !important;
     color: #FAEBD7 !important;
+    border: 1px solid rgba(250, 235, 215, 0.4);
+    transform: scale(1.05);
+}
+
+.room-card:hover span:not(.room-status-badge) {
+    color: #333 !important;
+}
+
+/* Ensure smooth transitions */
+.room-card * {
+    transition: all 0.3s ease;
 }
 </style>

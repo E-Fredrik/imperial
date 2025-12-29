@@ -38,4 +38,4 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <?php echo $__env->yieldPushContent('scripts'); ?>
 </body>
-</html><?php /**PATH C:\Uni\WebDev\Laravel\imperial\resources\views/layouts/layout.blade.php ENDPATH**/ ?>
+</html><?php /**PATH D:\Github\imperial\resources\views/layouts/layout.blade.php ENDPATH**/ ?>

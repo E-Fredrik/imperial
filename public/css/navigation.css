@@ -1,0 +1,163 @@
+/* Navigation Styles */
+.navbar {
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(250, 235, 215, 0.1);
+}
+
+.navbar-brand {
+    transition: transform 0.3s ease;
+}
+
+.navbar-brand:hover {
+    transform: scale(1.05);
+}
+
+.navbar-brand img {
+    filter: drop-shadow(0 2px 8px rgba(250, 235, 215, 0.3));
+    transition: filter 0.3s ease;
+}
+
+.navbar-brand:hover img {
+    filter: drop-shadow(0 4px 12px rgba(250, 235, 215, 0.5));
+}
+
+.navbar-nav {
+    align-items: center;
+}
+
+.nav-link {
+    position: relative;
+    padding: 0.75rem 1rem !important;
+    transition: all 0.3s ease;
+    font-weight: 600 !important;
+    letter-spacing: 0.5px;
+}
+
+.nav-link::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, transparent, #FAEBD7, transparent);
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::before {
+    width: 80%;
+}
+
+/* Active state styling */
+.nav-link[style*="border-bottom"] {
+    border-bottom: none !important;
+    padding-bottom: 0.75rem !important;
+}
+
+.nav-link[style*="border-bottom"]::before {
+    width: 80%;
+    background: linear-gradient(90deg, transparent, #FAEBD7, transparent);
+    box-shadow: 0 0 10px rgba(250, 235, 215, 0.5);
+}
+
+/* Auth buttons */
+.nav-link.btn {
+    background: linear-gradient(135deg, rgba(250, 235, 215, 0.1) 0%, rgba(250, 235, 215, 0.05) 100%);
+    border: 1px solid rgba(250, 235, 215, 0.3);
+    border-radius: 8px;
+    padding: 0.6rem 1.5rem !important;
+    margin-left: 0.5rem;
+    transition: all 0.3s ease;
+}
+
+.nav-link.btn:hover {
+    background: linear-gradient(135deg, rgba(250, 235, 215, 0.2) 0%, rgba(250, 235, 215, 0.1) 100%);
+    border-color: rgba(250, 235, 215, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(250, 235, 215, 0.2);
+}
+
+.nav-link.btn::before {
+    display: none;
+}
+
+/* Logout button - red variant */
+.nav-link.btn[style*="border: 1px solid rgba(239, 68, 68"] {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(239, 68, 68, 0.05) 100%);
+    border: 1px solid rgba(239, 68, 68, 0.5) !important;
+}
+
+.nav-link.btn[style*="border: 1px solid rgba(239, 68, 68"]:hover {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.2) 0%, rgba(239, 68, 68, 0.1) 100%);
+    border-color: rgba(239, 68, 68, 0.7) !important;
+    box-shadow: 0 5px 15px rgba(239, 68, 68, 0.2);
+}
+
+/* Navbar toggler */
+.navbar-toggler {
+    border: 1px solid rgba(250, 235, 215, 0.3);
+    padding: 0.5rem 0.75rem;
+    transition: all 0.3s ease;
+}
+
+.navbar-toggler:hover {
+    border-color: rgba(250, 235, 215, 0.5);
+    background: rgba(250, 235, 215, 0.05);
+}
+
+.navbar-toggler:focus {
+    box-shadow: 0 0 0 0.2rem rgba(250, 235, 215, 0.25);
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(250, 235, 215, 0.8)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Mobile menu */
+@media (max-width: 991px) {
+    .navbar-collapse {
+        background: rgba(0, 0, 0, 0.95);
+        backdrop-filter: blur(20px);
+        margin-top: 1rem;
+        padding: 1.5rem;
+        border-radius: 12px;
+        border: 1px solid rgba(250, 235, 215, 0.1);
+    }
+    
+    .navbar-nav {
+        gap: 0.5rem !important;
+    }
+    
+    .nav-link {
+        padding: 0.75rem 1rem !important;
+        border-radius: 8px;
+    }
+    
+    .nav-link:hover {
+        background: rgba(250, 235, 215, 0.05);
+    }
+    
+    .nav-link::before {
+        display: none;
+    }
+    
+    .nav-link.btn {
+        margin-left: 0;
+        margin-top: 0.5rem;
+        width: 100%;
+        text-align: center;
+    }
+}
+
+/* Smooth scroll behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Navbar shadow on scroll */
+.navbar.scrolled {
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.95) !important;
+}

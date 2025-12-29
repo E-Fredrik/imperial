@@ -7,25 +7,31 @@
 @endpush
 @section('content')
 <section class="hero-section">
-    <div class="container">
+    <div class="container position-relative">
         <div class="row align-items-center">
-            <div class="col-lg-6 col-md-12">
+            <div class="col-lg-6 col-md-12 mb-5 mb-lg-0">
                 <h1 class="hero-title">Your Premium Boarding Experience</h1>
                 <p class="hero-description">
                     Discover comfort and convenience with our modern boarding house. Interactive room 
                     selection, instant booking, and premium amenities await you.
                 </p>
                 <div class="mb-4">
-                    <span class="badge-tag">Premium Rooms</span>
-                    <span class="badge-tag">24/7 Available</span>
-                    <span class="badge-tag">High Satisfaction Rate</span>
+                    <span class="badge-tag"><i class="bi bi-star-fill me-1"></i>Premium Rooms</span>
+                    <span class="badge-tag"><i class="bi bi-clock-fill me-1"></i>24/7 Available</span>
+                    <span class="badge-tag"><i class="bi bi-heart-fill me-1"></i>High Satisfaction</span>
                 </div>
-                <div>
-                    <a href="{{ route('rooms') }}" class="btn-explore btn-primary btn-lg me-2">Explore Rooms</a>
+                <div class="d-flex gap-3 flex-wrap">
+                    <a href="{{ route('rooms') }}" class="btn-explore btn-primary btn-lg">
+                        <i class="bi bi-compass me-2"></i>Explore Rooms
+                    </a>
                     @guest
-                        <a href="{{ route('login') }}" class="btn-learn">Book Now</a>
+                        <a href="{{ route('login') }}" class="btn-learn">
+                            <i class="bi bi-calendar-check me-2"></i>Book Now
+                        </a>
                     @else
-                        <a href="{{ route('bookings.create') }}" class="btn-learn">Book Now</a>
+                        <a href="{{ route('bookings.create') }}" class="btn-learn">
+                            <i class="bi bi-calendar-check me-2"></i>Book Now
+                        </a>
                     @endguest
                 </div>
             </div>
@@ -48,11 +54,11 @@
                     @endphp
 
                     @if($slides->isNotEmpty())
-                        <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="1500">
+                        <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="3000">
                             <div class="carousel-inner">
                                 @foreach($slides as $i => $url)
                                     <div class="carousel-item {{ $i === 0 ? 'active' : '' }}">
-                                        <img src="{{ $url }}" class="d-block w-100" alt="Slide {{ $i+1 }}" style="border-radius:5px; height:100%; width:100%; object-fit:cover;">
+                                        <img src="{{ $url }}" class="d-block w-100" alt="Slide {{ $i+1 }}" style="border-radius:20px; height:100%; width:100%; object-fit:cover;">
                                     </div>
                                 @endforeach
                             </div>
@@ -64,7 +70,12 @@
                             </div>
                         </div>
                     @else
-                        <div class="w-100 h-100 d-flex align-items-center justify-content-center text-gray-400">No featured image</div>
+                        <div class="w-100 h-100 d-flex align-items-center justify-content-center" style="background: rgba(250, 235, 215, 0.05); border-radius: 20px; height: 450px; border: 2px dashed rgba(250, 235, 215, 0.2);">
+                            <div style="text-align: center;">
+                                <i class="bi bi-image" style="font-size: 4rem; color: rgba(250, 235, 215, 0.3);"></i>
+                                <p style="color: #666; margin-top: 1rem;">No featured image</p>
+                            </div>
+                        </div>
                     @endif
                 </div>
             </div>
@@ -72,86 +83,76 @@
     </div>
 </section>
 
-<section class="py-6" style="background:black;">
+<section class="rooms-section-home">
     <div class="container">
-        <h3 style="color:#FAEBD7; margin-bottom:1.5rem; text-align:center;">Available Rooms</h3>
+        <h2 class="section-title text-center">Available Rooms</h2>
+        <p class="section-subtitle text-center">Browse through our carefully curated selection of premium boarding rooms</p>
 
         @php
             $roomChunks = ($rooms ?? collect())->chunk(3);
-            // $roomChunks used for desktop (3-per-slide). Mobile will render one room per slide.
         @endphp
 
         @if(($rooms ?? collect())->isNotEmpty())
-            {{-- Desktop carousel: 3 cards per slide (visible on lg and up) --}}
-            <div id="roomsCarouselDesktop" class="carousel slide d-none d-lg-block pb-4" data-bs-ride="carousel" data-bs-interval="4000">
+            {{-- Desktop carousel: 3 cards per slide --}}
+            <div id="roomsCarouselDesktop" class="carousel slide d-none d-lg-block" data-bs-ride="carousel" data-bs-interval="5000">
                 <div class="carousel-inner">
-                    @foreach($roomChunks as $si => $chunk)
-                        <div class="carousel-item {{ $si === 0 ? 'active' : '' }}">
-                            <div class="row gy-4 justify-content-center">
+                    @foreach($roomChunks as $index => $chunk)
+                        <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                            <div>
                                 @foreach($chunk as $room)
-                                    <div class="col-12 col-sm-6 col-lg-4">
-                                        <x-room-card :room="$room" />
-                                    </div>
+                                    <x-room-card :room="$room" />
                                 @endforeach
                             </div>
                         </div>
                     @endforeach
                 </div>
-                <div class="carousel-indicators mt-3">
-                    @foreach($roomChunks as $i => $c)
-                        <button type="button" data-bs-target="#roomsCarouselDesktop" data-bs-slide-to="{{ $i }}" class="{{ $i === 0 ? 'active' : '' }}" aria-label="Slide {{ $i+1 }}"></button>
-                    @endforeach
-                </div>
+                @if($roomChunks->count() > 1)
+                    <div class="carousel-indicators">
+                        @foreach($roomChunks as $index => $chunk)
+                            <button type="button" data-bs-target="#roomsCarouselDesktop" data-bs-slide-to="{{ $index }}" class="{{ $index === 0 ? 'active' : '' }}" aria-label="Slide {{ $index + 1 }}"></button>
+                        @endforeach
+                    </div>
+                @endif
             </div>
 
-            {{-- Mobile carousel: single card per slide (visible under lg) --}}
-            <div id="roomsCarouselMobile" class="carousel slide d-lg-none pb-4" data-bs-ride="carousel" data-bs-interval="3000">
+            {{-- Mobile carousel: 1 card per slide --}}
+            <div id="roomsCarouselMobile" class="carousel slide d-lg-none" data-bs-ride="carousel" data-bs-interval="5000">
                 <div class="carousel-inner">
                     @foreach($rooms as $index => $room)
                         <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                            <div class="row gy-4 justify-content-center">
-                                <div class="col-12 col-sm-10 col-md-8">
-                                    <x-room-card :room="$room" />
-                                </div>
+                            <div class="d-flex justify-content-center">
+                                <x-room-card :room="$room" />
                             </div>
                         </div>
                     @endforeach
                 </div>
-                <div class="carousel-indicators mt-3">
-                    @foreach($rooms as $i => $r)
-                        <button type="button" data-bs-target="#roomsCarouselMobile" data-bs-slide-to="{{ $i }}" class="{{ $i === 0 ? 'active' : '' }}" aria-label="Slide {{ $i+1 }}"></button>
-                    @endforeach
-                </div>
+                @if($rooms->count() > 1)
+                    <div class="carousel-indicators">
+                        @foreach($rooms as $index => $room)
+                            <button type="button" data-bs-target="#roomsCarouselMobile" data-bs-slide-to="{{ $index }}" class="{{ $index === 0 ? 'active' : '' }}" aria-label="Slide {{ $index + 1 }}"></button>
+                        @endforeach
+                    </div>
+                @endif
             </div>
         @else
-            <p style="color:#999; text-align:center;">No rooms available at the moment.</p>
+            <div class="rooms-empty-state">
+                <i class="bi bi-inbox"></i>
+                <p>No rooms available at the moment</p>
+            </div>
         @endif
     </div>
 </section>
 
-{{-- Render modals directly in the page, not using push --}}
+{{-- Render modals directly in the page --}}
 @if(($rooms ?? collect())->isNotEmpty())
     @foreach($rooms as $room)
-        <x-room-modal :room="$room" />
+        @include('components.room-modal', ['room' => $room])
     @endforeach
 @endif
+
 @endsection
 
 @push('scripts')
-<script>
-    // Ensure modals are hidden on page load
-    document.addEventListener('DOMContentLoaded', function() {
-        console.log('Initializing modals...');
-        const modals = document.querySelectorAll('.room-modal');
-        console.log('Found modals:', modals.length);
-        
-        modals.forEach(modal => {
-            modal.classList.remove('active');
-            modal.style.display = 'none';
-            console.log('Hidden modal:', modal.id);
-        });
-        document.body.style.overflow = 'auto';
-    });
-</script>
+<script src="{{ asset('js/roomModal.js') }}"></script>
 @endpush
 
