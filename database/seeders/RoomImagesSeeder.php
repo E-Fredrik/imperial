@@ -34,8 +34,18 @@ class RoomImagesSeeder extends Seeder
             );
 
             $room->images()->syncWithoutDetaching($image->id);
+        }
 
-            $this->command->info("Attached image {$imagePath} to room {$room->room_number} (image id: {$image->id})");
+        // add 360 image and attach to room A (ensure is_360 = true)
+        $url360 = 'https://momento360.com/e/u/913703badaaa4dbfbf3926e70de201cb?utm_campaign=embed&utm_source=other&heading=0&pitch=0&field-of-view=75&size=medium&display-plan=true';
+        $image360 = Image::updateOrCreate(
+            ['image_path' => $url360],
+            ['description' => null, 'is_360' => true]
+        );
+
+        $roomA = Room::where('room_number', 'A')->first();
+        if ($roomA) {
+            $roomA->images()->syncWithoutDetaching($image360->id);
         }
     }
 }

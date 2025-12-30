@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('image_path');
             $table->text('description')->nullable();
             $table->boolean('is_featured')->default(false);
+            $table->boolean('is_360')->default(false);
             $table->timestamps();
         });
     }
