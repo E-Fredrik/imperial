@@ -86,15 +86,37 @@ unset($__defined_vars, $__key, $__value); ?>
                     ?>
 
                     <?php if($image360): ?>
-                        <div class="view-placeholder" style="height:400px;">
-                            <iframe
-                                src="<?php echo e($image360->image_path); ?>"
-                                title="360 Room View - <?php echo e($room->room_number); ?>"
-                                style="width:100%; height:100%; border:0; border-radius:15px; background:#000;"
-                                allow="vr; fullscreen; accelerometer; gyroscope; autoplay"
-                                loading="lazy"
-                            ></iframe>
+                        <div class="panellum-container">
+                            <div id="panorama-<?php echo e($room->id); ?>" class="panellum-viewer"></div>
                         </div>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                <?php
+                                    // Determine the correct URL for the 360 image
+                                    $imagePath = $image360->image_path;
+                                    if (filter_var($imagePath, FILTER_VALIDATE_URL)) {
+                                        $panoramaUrl = $imagePath;
+                                    } elseif (file_exists(public_path($imagePath))) {
+                                        $panoramaUrl = asset($imagePath);
+                                    } else {
+                                        $panoramaUrl = asset('storage/' . ltrim($imagePath, '/'));
+                                    }
+                                ?>
+
+                                pannellum.viewer('panorama-<?php echo e($room->id); ?>', {
+                                    "type": "equirectangular",
+                                    "panorama": "<?php echo e($panoramaUrl); ?>",
+                                    "autoLoad": true,
+                                    "autoRotate": -2,
+                                    "showControls": true,
+                                    "showFullscreenCtrl": true,
+                                    "mouseZoom": true,
+                                    "pitch": 0,
+                                    "yaw": 0,
+                                    "hfov": 110
+                                });
+                            });
+                        </script>
                     <?php else: ?>
                         <div class="view-placeholder">
                             <i class="bi bi-box" style="font-size:3rem; color:#666;"></i>
@@ -183,7 +205,7 @@ unset($__defined_vars, $__key, $__value); ?>
     </div>
 </div>
 
-<?php if (! $__env->hasRenderedOnce('4947392b-c523-4c41-8e52-b20913f9a7fe')): $__env->markAsRenderedOnce('4947392b-c523-4c41-8e52-b20913f9a7fe'); ?>
+<?php if (! $__env->hasRenderedOnce('cc4decc0-a3e8-4f1a-8c60-4451fb8d8a47')): $__env->markAsRenderedOnce('cc4decc0-a3e8-4f1a-8c60-4451fb8d8a47'); ?>
 <?php $__env->startPush('scripts'); ?>
 <script>
 function openRoomModal(roomId) {

@@ -58,15 +58,37 @@
                     @endphp
 
                     @if($image360)
-                        <div class="view-placeholder" style="height:400px;">
-                            <iframe
-                                src="{{ $image360->image_path }}"
-                                title="360 Room View - {{ $room->room_number }}"
-                                style="width:100%; height:100%; border:0; border-radius:15px; background:#000;"
-                                allow="vr; fullscreen; accelerometer; gyroscope; autoplay"
-                                loading="lazy"
-                            ></iframe>
+                        <div class="panellum-container">
+                            <div id="panorama-{{ $room->id }}" class="panellum-viewer"></div>
                         </div>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                @php
+                                    // Determine the correct URL for the 360 image
+                                    $imagePath = $image360->image_path;
+                                    if (filter_var($imagePath, FILTER_VALIDATE_URL)) {
+                                        $panoramaUrl = $imagePath;
+                                    } elseif (file_exists(public_path($imagePath))) {
+                                        $panoramaUrl = asset($imagePath);
+                                    } else {
+                                        $panoramaUrl = asset('storage/' . ltrim($imagePath, '/'));
+                                    }
+                                @endphp
+
+                                pannellum.viewer('panorama-{{ $room->id }}', {
+                                    "type": "equirectangular",
+                                    "panorama": "{{ $panoramaUrl }}",
+                                    "autoLoad": true,
+                                    "autoRotate": -2,
+                                    "showControls": true,
+                                    "showFullscreenCtrl": true,
+                                    "mouseZoom": true,
+                                    "pitch": 0,
+                                    "yaw": 0,
+                                    "hfov": 110
+                                });
+                            });
+                        </script>
                     @else
                         <div class="view-placeholder">
                             <i class="bi bi-box" style="font-size:3rem; color:#666;"></i>

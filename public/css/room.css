@@ -602,6 +602,32 @@
     margin: 0;
 }
 
+/* Panellum 360 viewer container */
+.panellum-container {
+    position: relative;
+    width: 100%;
+    padding-top: 56.25%; /* 16:9 default */
+    height: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #000;
+}
+
+.panellum-viewer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+/* Slightly taller aspect on narrow screens for better vertical room view */
+@media (max-width: 576px) {
+    .panellum-container { 
+        padding-top: 66.66%; /* 3:2 */
+    }
+}
+
 /* Responsive Design */
 @media (max-width: 1200px) {
     .floor-title h2 {
