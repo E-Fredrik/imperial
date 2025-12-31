@@ -11,8 +11,12 @@
             <div class="modal-images">
                 <div id="roomCarousel-{{ $room->id }}" class="carousel slide" data-bs-ride="false">
                     <div class="carousel-inner">
-                        @if($room->images && $room->images->count() > 0)
-                            @foreach($room->images as $index => $image)
+                        @php
+                            $regularImages = $room->images()->where('is_360', false)->get();
+                        @endphp
+                        
+                        @if($regularImages->count() > 0)
+                            @foreach($regularImages as $index => $image)
                                 @php
                                     $imagePath = $image->image_path;
                                     $publicPath = public_path($imagePath);
@@ -39,7 +43,7 @@
                         @endif
                     </div>
                     
-                    @if($room->images && $room->images->count() > 1)
+                    @if($regularImages->count() > 1)
                         <button class="carousel-control-prev" type="button" data-bs-target="#roomCarousel-{{ $room->id }}" data-bs-slide="prev">
                             <span class="carousel-control-prev-icon"></span>
                         </button>
@@ -53,46 +57,27 @@
                     <h4 style="color:#FAEBD7; margin-bottom:1rem;">3D Room View</h4>
 
                     @php
-                        // look for a 360 image attached to the room
-                        $image360 = $room->images->firstWhere('is_360', true);
+                        $image360 = $room->images()->where('is_360', true)->first();
                     @endphp
 
                     @if($image360)
+                        @php
+                            $imagePath = $image360->image_path;
+                            if (filter_var($imagePath, FILTER_VALIDATE_URL)) {
+                                $panoramaUrl = $imagePath;
+                            } elseif (file_exists(public_path($imagePath))) {
+                                $panoramaUrl = asset($imagePath);
+                            } else {
+                                $panoramaUrl = asset('storage/' . ltrim($imagePath, '/'));
+                            }
+                        @endphp
                         <div class="panellum-container">
-                            <div id="panorama-{{ $room->id }}" class="panellum-viewer"></div>
+                            <div id="panorama-{{ $room->id }}" class="panellum-viewer" data-panorama-url="{{ $panoramaUrl }}"></div>
                         </div>
-                        <script>
-                            document.addEventListener('DOMContentLoaded', function() {
-                                @php
-                                    // Determine the correct URL for the 360 image
-                                    $imagePath = $image360->image_path;
-                                    if (filter_var($imagePath, FILTER_VALIDATE_URL)) {
-                                        $panoramaUrl = $imagePath;
-                                    } elseif (file_exists(public_path($imagePath))) {
-                                        $panoramaUrl = asset($imagePath);
-                                    } else {
-                                        $panoramaUrl = asset('storage/' . ltrim($imagePath, '/'));
-                                    }
-                                @endphp
-
-                                pannellum.viewer('panorama-{{ $room->id }}', {
-                                    "type": "equirectangular",
-                                    "panorama": "{{ $panoramaUrl }}",
-                                    "autoLoad": true,
-                                    "autoRotate": -2,
-                                    "showControls": true,
-                                    "showFullscreenCtrl": true,
-                                    "mouseZoom": true,
-                                    "pitch": 0,
-                                    "yaw": 0,
-                                    "hfov": 110
-                                });
-                            });
-                        </script>
                     @else
                         <div class="view-placeholder">
                             <i class="bi bi-box" style="font-size:3rem; color:#666;"></i>
-                            <p style="color:#999; margin-top:1rem;">Interactive 3D view coming soon</p>
+                            <p style="color:#999; margin-top:1rem;">360° view not available</p>
                         </div>
                     @endif
                 </div>
@@ -119,8 +104,12 @@
                 <div class="facilities-section">
                     <h3>Facilities</h3>
                     <div class="facilities-grid">
-                        @if($room->rooms_facilities && $room->rooms_facilities->count() > 0)
-                            @foreach($room->rooms_facilities as $roomFacility)
+                        @php
+                            $facilities = $room->rooms_facilities()->with('room_facility')->get();
+                        @endphp
+                        
+                        @if($facilities->count() > 0)
+                            @foreach($facilities as $roomFacility)
                                 @if($roomFacility->room_facility)
                                     <div class="facility-item">
                                         <i class="bi bi-check-circle"></i>
@@ -147,7 +136,7 @@
                         <input type="hidden" name="room_id" value="{{ $room->id }}">
                         
                         <div class="date-input-group">
-                            <label for="check_in_{{ $room->id }}">Check-in Date</label>
+                            <label for="check_in_{{ $room->id }}">Move-in Date</label>
                             <input type="date" 
                                    id="check_in_{{ $room->id }}" 
                                    name="check_in" 
@@ -179,6 +168,9 @@
 @once
 @push('scripts')
 <script>
+// Store viewer instances
+const pannellumViewers = {};
+
 function openRoomModal(roomId) {
     console.log('Opening modal for room:', roomId);
     const modal = document.getElementById('roomModal-' + roomId);
@@ -188,23 +180,81 @@ function openRoomModal(roomId) {
         return;
     }
     
-    console.log('Modal found:', modal);
-    
-    // Show the modal
+    // Show the modal first
     modal.style.display = 'flex';
-    modal.style.opacity = '0';
     modal.style.visibility = 'visible';
     
-    // Trigger reflow
-    modal.offsetHeight;
+    // Force a reflow
+    void modal.offsetHeight;
     
-    // Add active class with animation
-    setTimeout(() => {
-        modal.classList.add('active');
+    // Add opacity transition
+    requestAnimationFrame(() => {
         modal.style.opacity = '1';
-    }, 10);
+        modal.classList.add('active');
+        
+        // Initialize Pannellum after modal is visible and layout is complete
+        setTimeout(() => {
+            initializePannellum(roomId);
+        }, 100);
+    });
     
     document.body.style.overflow = 'hidden';
+}
+
+function initializePannellum(roomId) {
+    const panoramaDiv = document.getElementById('panorama-' + roomId);
+    
+    if (!panoramaDiv) {
+        console.log('No 360° viewer found for room:', roomId);
+        return;
+    }
+    
+    // Destroy existing viewer if present
+    if (pannellumViewers[roomId]) {
+        try {
+            pannellumViewers[roomId].destroy();
+            delete pannellumViewers[roomId];
+        } catch (error) {
+            console.error('Error destroying existing viewer:', error);
+        }
+    }
+    
+    // Get the panorama URL from data attribute
+    const panoramaUrl = panoramaDiv.getAttribute('data-panorama-url');
+    
+    if (!panoramaUrl) {
+        console.error('No panorama URL found for room:', roomId);
+        return;
+    }
+    
+    // Ensure the container has dimensions
+    const container = panoramaDiv.closest('.panellum-container');
+    if (!container || container.offsetHeight === 0) {
+        console.error('Container has no height for room:', roomId);
+        return;
+    }
+    
+    try {
+        console.log('Initializing Pannellum for room:', roomId, 'with URL:', panoramaUrl);
+        
+        // Initialize Pannellum viewer
+        pannellumViewers[roomId] = pannellum.viewer('panorama-' + roomId, {
+            "type": "equirectangular",
+            "panorama": panoramaUrl,
+            "autoLoad": true,
+            "autoRotate": -2,
+            "showControls": true,
+            "showFullscreenCtrl": true,
+            "mouseZoom": true,
+            "pitch": 0,
+            "yaw": 0,
+            "hfov": 110
+        });
+        
+        console.log('Pannellum initialized successfully for room:', roomId);
+    } catch (error) {
+        console.error('Error initializing Pannellum for room:', roomId, error);
+    }
 }
 
 function closeRoomModal(roomId) {
@@ -222,6 +272,17 @@ function closeRoomModal(roomId) {
     setTimeout(() => {
         modal.style.display = 'none';
         modal.style.visibility = 'hidden';
+        
+        // Destroy Pannellum viewer to free resources
+        if (pannellumViewers[roomId]) {
+            try {
+                pannellumViewers[roomId].destroy();
+                delete pannellumViewers[roomId];
+                console.log('Pannellum destroyed for room:', roomId);
+            } catch (error) {
+                console.error('Error destroying Pannellum:', error);
+            }
+        }
     }, 300);
     
     document.body.style.overflow = 'auto';
