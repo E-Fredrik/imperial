@@ -37,184 +37,193 @@
             </div>
             
             <div class="floor-map-wrapper">
-                <svg viewBox="0 0 1000 850" class="floor-svg">
+                <svg viewBox="0 0 800 900" class="floor-svg" style="background: #000;">
                     <!-- Building outer border -->
-                    <rect x="10" y="10" width="780" height="830" fill="none" stroke="#fff" stroke-width="4"/>
+                    <rect x="10" y="10" width="780" height="880" fill="none" stroke="#fff" stroke-width="4"/>
                     
                     
-                    <!-- Top left bathroom -->
-                    <rect x="10" y="10" width="110" height="130" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <circle cx="95" cy="55" r="18" fill="none" stroke="#fff" stroke-width="2"/>
                     
-                    <!-- Room A (left top) -->
+                    <!-- Top Left - Bathroom with toilet icon -->
+                    <rect x="10" y="10" width="100" height="120" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <circle cx="60" cy="50" r="15" fill="none" stroke="#fff" stroke-width="2"/>
+                    <text x="60" y="95" fill="#fff" font-size="10" text-anchor="middle" font-weight="bold">WC</text>
+                    
+                    <!-- Room A (Large) -->
                     <?php $__currentLoopData = $floor1Rooms->where('room_number', 'A'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $room): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <g class="room-group clickable-room <?php echo e($room->status); ?>" onclick="openRoomModal(<?php echo e($room->id); ?>)">
-                        <rect x="10" y="150" width="110" height="140" class="room-fill"/>
-                        <rect x="10" y="150" width="110" height="140" class="room-outline"/>
-                        <text x="65" y="225" class="room-label"><?php echo e($room->room_number); ?></text>
+                    <g class="clickable-room <?php echo e($room->status); ?>" onclick="openRoomModal(<?php echo e($room->id); ?>)" style="cursor: pointer;">
+                        <rect x="10" y="140" width="100" height="160" class="room-fill <?php echo e($room->status); ?>" stroke="#fff" stroke-width="3"/>
+                        <text x="60" y="225" fill="#000" font-size="48" font-weight="900" text-anchor="middle" class="room-label">A</text>
                     </g>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     
-                    <!-- Kitchen below A -->
-                    <rect x="10" y="300" width="110" height="135" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <rect x="35" y="340" width="60" height="40" fill="none" stroke="#fff" stroke-width="2"/>
-                    <circle cx="95" cy="360" r="18" fill="none" stroke="#fff" stroke-width="2"/>
+                    <!-- Kitchen with sink -->
+                    <rect x="10" y="310" width="100" height="130" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <rect x="30" y="345" width="60" height="35" fill="none" stroke="#fff" stroke-width="2"/>
+                    <circle cx="85" cy="362" r="12" fill="none" stroke="#fff" stroke-width="2"/>
+                    <text x="60" y="410" fill="#fff" font-size="10" text-anchor="middle" font-weight="bold">KITCHEN</text>
                     
-                    <!-- Bathroom below kitchen -->
-                    <rect x="10" y="445" width="50" height="95" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <circle cx="35" cy="492" r="18" fill="none" stroke="#fff" stroke-width="2"/>
+                    <!-- Small Bathroom -->
+                    <rect x="10" y="450" width="50" height="90" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <circle cx="35" cy="495" r="15" fill="none" stroke="#fff" stroke-width="2"/>
                     
-                    <!-- Room C (left bottom large) -->
+                    <!-- Room C (Large Bottom) -->
                     <?php $__currentLoopData = $floor1Rooms->where('room_number', 'C'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $room): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <g class="room-group clickable-room <?php echo e($room->status); ?>" onclick="openRoomModal(<?php echo e($room->id); ?>)">
-                        <rect x="10" y="550" width="110" height="240" class="room-fill"/>
-                        <rect x="10" y="550" width="110" height="240" class="room-outline"/>
-                        <text x="65" y="675" class="room-label"><?php echo e($room->room_number); ?></text>
+                    <g class="clickable-room <?php echo e($room->status); ?>" onclick="openRoomModal(<?php echo e($room->id); ?>)" style="cursor: pointer;">
+                        <rect x="10" y="550" width="100" height="250" class="room-fill <?php echo e($room->status); ?>" stroke="#fff" stroke-width="3"/>
+                        <text x="60" y="685" fill="#000" font-size="48" font-weight="900" text-anchor="middle" class="room-label">C</text>
                     </g>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     
-                    <!-- Bottom left bathroom -->
-                    <rect x="10" y="800" width="110" height="40" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <circle cx="95" cy="820" r="15" fill="none" stroke="#fff" stroke-width="2"/>
+                    <!-- Bottom Left Bathroom -->
+                    <rect x="10" y="810" width="100" height="80" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <circle cx="60" cy="850" r="15" fill="none" stroke="#fff" stroke-width="2"/>
                     
                     
-                    <!-- Stairs at top -->
-                    <g class="stair-block">
-                        <rect x="130" y="10" width="130" height="130" fill="#000" stroke="#fff" stroke-width="3"/>
-                        <line x1="130" y1="30" x2="260" y2="30" stroke="#fff" stroke-width="2"/>
-                        <line x1="130" y1="45" x2="260" y2="45" stroke="#fff" stroke-width="2"/>
-                        <line x1="130" y1="60" x2="260" y2="60" stroke="#fff" stroke-width="2"/>
-                        <line x1="130" y1="75" x2="260" y2="75" stroke="#fff" stroke-width="2"/>
-                        <line x1="130" y1="90" x2="260" y2="90" stroke="#fff" stroke-width="2"/>
-                        <line x1="130" y1="105" x2="260" y2="105" stroke="#fff" stroke-width="2"/>
-                        <line x1="130" y1="120" x2="260" y2="120" stroke="#fff" stroke-width="2"/>
-                        <!-- Diagonal arrows -->
-                        <line x1="220" y1="120" x2="250" y2="130" stroke="#fff" stroke-width="4"/>
-                        <line x1="180" y1="120" x2="210" y2="130" stroke="#fff" stroke-width="4"/>
+                    
+                    <!-- Stairs at top with diagonal lines -->
+                    <g>
+                        <rect x="120" y="10" width="130" height="130" fill="#000" stroke="#fff" stroke-width="3"/>
+                        <line x1="130" y1="20" x2="240" y2="130" stroke="#fff" stroke-width="2"/>
+                        <line x1="135" y1="20" x2="245" y2="130" stroke="#fff" stroke-width="1"/>
+                        <line x1="125" y1="25" x2="305" y2="155" stroke="#fff" stroke-width="1"/>
+                        <line x1="120" y1="30" x2="300" y2="160" stroke="#fff" stroke-width="1"/>
+                        <line x1="115" y1="35" x2="225" y2="145" stroke="#fff" stroke-width="1"/>
+                        <line x1="110" y1="40" x2="220" y2="150" stroke="#fff" stroke-width="1"/>
+                        <line x1="105" y1="45" x2="215" y2="155" stroke="#fff" stroke-width="1"/>
+                        <text x="185" y="80" fill="#fff" font-size="14" font-weight="bold" text-anchor="middle" transform="rotate(-45 185 80)">STAIRS</text>
                     </g>
                     
-                    <!-- Central corridor/hall -->
-                    <rect x="130" y="150" width="130" height="690" fill="#000"/>
+                    <!-- Central Corridor -->
+                    <rect x="120" y="150" width="130" height="650" fill="#000" stroke="#fff" stroke-width="3"/>
                     
-                    <!-- Seating area furniture in corridor -->
-                    <rect x="155" y="300" width="35" height="55" fill="none" stroke="#fff" stroke-width="2"/>
-                    <ellipse cx="172.5" cy="380" rx="25" ry="35" fill="none" stroke="#fff" stroke-width="2"/>
-                    <ellipse cx="172.5" cy="480" rx="25" ry="35" fill="none" stroke="#fff" stroke-width="2"/>
+                    <!-- Seating/Furniture in corridor -->
+                    <rect x="145" y="300" width="35" height="50" fill="none" stroke="#fff" stroke-width="2"/>
+                    <rect x="195" y="300" width="35" height="50" fill="none" stroke="#fff" stroke-width="2"/>
+                    
+                    <!-- Table/Furniture -->
+                    <ellipse cx="185" cy="400" rx="30" ry="40" fill="none" stroke="#fff" stroke-width="2"/>
+                    <ellipse cx="185" cy="500" rx="30" ry="40" fill="none" stroke="#fff" stroke-width="2"/>
                     
                     <!-- Room B (extends next to corridor) -->
                     <?php $__currentLoopData = $floor1Rooms->where('room_number', 'B'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $room): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <g class="room-group clickable-room <?php echo e($room->status); ?>" onclick="openRoomModal(<?php echo e($room->id); ?>)">
-                        <rect x="130" y="150" width="130" height="140" class="room-fill"/>
-                        <rect x="130" y="150" width="130" height="140" class="room-outline"/>
-                        <text x="195" y="225" class="room-label"><?php echo e($room->room_number); ?></text>
+                    <g class="clickable-room <?php echo e($room->status); ?>" onclick="openRoomModal(<?php echo e($room->id); ?>)" style="cursor: pointer;">
+                        <rect x="120" y="300" width="50" height="240" class="room-fill <?php echo e($room->status); ?>" stroke="#fff" stroke-width="3"/>
+                        <text x="145" y="430" fill="#000" font-size="36" font-weight="900" text-anchor="middle" class="room-label" transform="rotate(-90 145 430)">B</text>
                     </g>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     
-                    <!-- Bathroom mid-corridor -->
-                    <rect x="130" y="550" width="130" height="90" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <rect x="155" y="570" width="80" height="50" fill="none" stroke="#fff" stroke-width="2"/>
+                    <!-- Bathroom (mid-corridor) -->
+                    <rect x="120" y="550" width="130" height="80" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <circle cx="185" cy="590" r="15" fill="none" stroke="#fff" stroke-width="2"/>
+                    <text x="185" y="615" fill="#fff" font-size="10" text-anchor="middle" font-weight="bold">WC</text>
                     
-                    <!-- Kitchen mid-corridor -->
-                    <rect x="130" y="650" width="130" height="90" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <rect x="155" y="670" width="80" height="50" fill="none" stroke="#fff" stroke-width="2"/>
+                    <!-- Kitchen (mid-corridor) -->
+                    <rect x="120" y="640" width="130" height="80" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <rect x="145" y="660" width="70" height="40" fill="none" stroke="#fff" stroke-width="2"/>
+                    <text x="185" y="710" fill="#fff" font-size="10" text-anchor="middle" font-weight="bold">KITCHEN</text>
                     
-                    <!-- Bathroom bottom corridor -->
-                    <rect x="130" y="750" width="130" height="90" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <circle cx="225" cy="795" r="18" fill="none" stroke="#fff" stroke-width="2"/>
+                    <!-- Bathroom (bottom corridor) -->
+                    <rect x="120" y="730" width="130" height="70" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <circle cx="185" cy="765" r="15" fill="none" stroke="#fff" stroke-width="2"/>
+                    
+                    <!-- Exit door at bottom of corridor -->
+                    <rect x="120" y="810" width="130" height="80" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <rect x="155" y="830" width="60" height="40" fill="none" stroke="#fff" stroke-width="3"/>
+                    <text x="185" y="855" fill="#fff" font-size="12" font-weight="bold" text-anchor="middle">EXIT</text>
                     
                     
-                    <!-- Small bathroom top right -->
-                    <rect x="270" y="10" width="180" height="65" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <circle cx="440" cy="42" r="15" fill="none" stroke="#fff" stroke-width="2"/>
                     
-                    <!-- Room D (top right) -->
+                    <!-- Top right bathroom -->
+                    <rect x="260" y="10" width="190" height="60" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <circle cx="355" cy="40" r="12" fill="none" stroke="#fff" stroke-width="2"/>
+                    <text x="405" y="45" fill="#fff" font-size="10" text-anchor="middle" font-weight="bold">WC</text>
+                    
+                    <!-- Room D -->
                     <?php $__currentLoopData = $floor1Rooms->where('room_number', 'D'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $room): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <g class="room-group clickable-room <?php echo e($room->status); ?>" onclick="openRoomModal(<?php echo e($room->id); ?>)">
-                        <rect x="270" y="85" width="85" height="110" class="room-fill"/>
-                        <rect x="270" y="85" width="85" height="110" class="room-outline"/>
-                        <text x="312" y="145" class="room-label"><?php echo e($room->room_number); ?></text>
+                    <g class="clickable-room <?php echo e($room->status); ?>" onclick="openRoomModal(<?php echo e($room->id); ?>)" style="cursor: pointer;">
+                        <rect x="260" y="80" width="190" height="120" class="room-fill <?php echo e($room->status); ?>" stroke="#fff" stroke-width="3"/>
+                        <text x="355" y="150" fill="#000" font-size="48" font-weight="900" text-anchor="middle" class="room-label">D</text>
                     </g>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     
-                    <!-- Room E (right of D) -->
+                    <!-- Room E (next to D) -->
                     <?php $__currentLoopData = $floor1Rooms->where('room_number', 'E'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $room): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <g class="room-group clickable-room <?php echo e($room->status); ?>" onclick="openRoomModal(<?php echo e($room->id); ?>)">
-                        <rect x="365" y="85" width="85" height="110" class="room-fill"/>
-                        <rect x="365" y="85" width="85" height="110" class="room-outline"/>
-                        <text x="407" y="145" class="room-label"><?php echo e($room->room_number); ?></text>
+                    <g class="clickable-room <?php echo e($room->status); ?>" onclick="openRoomModal(<?php echo e($room->id); ?>)" style="cursor: pointer;">
+                        <rect x="260" y="210" width="190" height="90" class="room-fill <?php echo e($room->status); ?>" stroke="#fff" stroke-width="3"/>
+                        <text x="355" y="265" fill="#000" font-size="48" font-weight="900" text-anchor="middle" class="room-label">E</text>
                     </g>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     
                     <!-- Small bathroom between rooms -->
-                    <rect x="460" y="10" width="85" height="185" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <circle cx="502" cy="102" r="18" fill="none" stroke="#fff" stroke-width="2"/>
+                    <rect x="460" y="10" width="80" height="190" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <circle cx="500" cy="105" r="18" fill="none" stroke="#fff" stroke-width="2"/>
                     
-                    <!-- Room F (right middle) -->
+                    <!-- Room F -->
                     <?php $__currentLoopData = $floor1Rooms->where('room_number', 'F'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $room): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <g class="room-group clickable-room <?php echo e($room->status); ?>" onclick="openRoomModal(<?php echo e($room->id); ?>)">
-                        <rect x="270" y="205" width="180" height="95" class="room-fill"/>
-                        <rect x="270" y="205" width="180" height="95" class="room-outline"/>
-                        <text x="360" y="257" class="room-label"><?php echo e($room->room_number); ?></text>
+                    <g class="clickable-room <?php echo e($room->status); ?>" onclick="openRoomModal(<?php echo e($room->id); ?>)" style="cursor: pointer;">
+                        <rect x="260" y="310" width="190" height="130" class="room-fill <?php echo e($room->status); ?>" stroke="#fff" stroke-width="3"/>
+                        <text x="355" y="385" fill="#000" font-size="48" font-weight="900" text-anchor="middle" class="room-label">F</text>
                     </g>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     
                     <!-- Small bathroom -->
-                    <rect x="460" y="205" width="85" height="95" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <circle cx="532" cy="252" r="18" fill="none" stroke="#fff" stroke-width="2"/>
+                    <rect x="460" y="210" width="80" height="90" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <circle cx="500" cy="255" r="15" fill="none" stroke="#fff" stroke-width="2"/>
                     
-                    <!-- Room G (right large section) -->
+                    <!-- Room G (Large) -->
                     <?php $__currentLoopData = $floor1Rooms->where('room_number', 'G'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $room): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <g class="room-group clickable-room <?php echo e($room->status); ?>" onclick="openRoomModal(<?php echo e($room->id); ?>)">
-                        <rect x="270" y="310" width="275" height="190" class="room-fill"/>
-                        <rect x="270" y="310" width="275" height="190" class="room-outline"/>
-                        <text x="407" y="410" class="room-label"><?php echo e($room->room_number); ?></text>
+                    <g class="clickable-room <?php echo e($room->status); ?>" onclick="openRoomModal(<?php echo e($room->id); ?>)" style="cursor: pointer;">
+                        <rect x="260" y="450" width="280" height="340" class="room-fill <?php echo e($room->status); ?>" stroke="#fff" stroke-width="3"/>
+                        <text x="400" y="635" fill="#000" font-size="48" font-weight="900" text-anchor="middle" class="room-label">G</text>
                     </g>
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     
+                    <!-- Bathroom (right of G) -->
+                    <rect x="460" y="310" width="80" height="130" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <circle cx="500" cy="375" r="18" fill="none" stroke="#fff" stroke-width="2"/>
+                    
+                    
                     
                     <!-- Top bathroom -->
-                    <rect x="555" y="10" width="90" height="95" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <circle cx="630" cy="57" r="18" fill="none" stroke="#fff" stroke-width="2"/>
+                    <rect x="550" y="10" width="90" height="95" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <circle cx="595" cy="57" r="18" fill="none" stroke="#fff" stroke-width="2"/>
                     
-                    <!-- Small bedroom -->
-                    <rect x="555" y="115" width="90" height="85" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <!-- Small bedroom (top right) -->
+                    <rect x="550" y="115" width="90" height="90" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <rect x="560" y="130" width="70" height="60" fill="none" stroke="#fff" stroke-width="2"/>
+                    <text x="595" y="165" fill="#fff" font-size="10" text-anchor="middle" font-weight="bold">BED</text>
                     
-                    <!-- Bathroom -->
-                    <rect x="555" y="210" width="90" height="90" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <circle cx="630" cy="255" r="18" fill="none" stroke="#fff" stroke-width="2"/>
+                    <!-- Another room -->
+                    <rect x="550" y="215" width="90" height="130" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <rect x="560" y="235" width="70" height="90" fill="none" stroke="#fff" stroke-width="2"/>
                     
-                    <!-- Another bedroom -->
-                    <rect x="555" y="310" width="90" height="95" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <!-- Small room/storage -->
+                    <rect x="550" y="355" width="90" height="90" fill="#000" stroke="#fff" stroke-width="3"/>
                     
-                    <!-- Bathroom -->
-                    <rect x="555" y="415" width="90" height="85" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <circle cx="630" cy="457" r="18" fill="none" stroke="#fff" stroke-width="2"/>
+                    <!-- Tall room section -->
+                    <rect x="650" y="10" width="90" height="180" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <rect x="660" y="30" width="70" height="140" fill="none" stroke="#fff" stroke-width="2"/>
                     
+                    <!-- Medium bathroom -->
+                    <rect x="650" y="200" width="90" height="95" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <circle cx="695" cy="247" r="18" fill="none" stroke="#fff" stroke-width="2"/>
                     
-                    <!-- Large empty area / dining -->
-                    <rect x="270" y="510" width="275" height="180" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <rect x="295" y="570" width="60" height="80" fill="none" stroke="#fff" stroke-width="2"/>
-                    <ellipse cx="400" cy="610" rx="50" ry="30" fill="none" stroke="#fff" stroke-width="2"/>
+                    <!-- Another room -->
+                    <rect x="650" y="305" width="90" height="140" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <rect x="660" y="320" width="70" height="100" fill="none" stroke="#fff" stroke-width="2"/>
                     
-                    <!-- Bathrooms bottom right -->
-                    <rect x="555" y="510" width="90" height="95" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <circle cx="630" cy="557" r="18" fill="none" stroke="#fff" stroke-width="2"/>
+                    <!-- Bottom sections -->
+                    <rect x="550" y="455" width="190" height="170" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <rect x="570" y="480" width="70" height="60" fill="none" stroke="#fff" stroke-width="2"/>
+                    <rect x="660" y="480" width="60" height="60" fill="none" stroke="#fff" stroke-width="2"/>
                     
-                    <rect x="555" y="615" width="90" height="75" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <circle cx="630" cy="652" r="18" fill="none" stroke="#fff" stroke-width="2"/>
+                    <!-- Bottom bathroom -->
+                    <rect x="550" y="635" width="190" height="90" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <circle cx="645" cy="680" r="18" fill="none" stroke="#fff" stroke-width="2"/>
                     
-                    <!-- Kitchen/dining bottom -->
-                    <rect x="270" y="700" width="185" height="140" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <rect x="295" y="730" width="60" height="40" fill="none" stroke="#fff" stroke-width="2"/>
-                    <rect x="365" y="730" width="70" height="40" fill="none" stroke="#fff" stroke-width="2"/>
-                    
-                    <!-- Bathroom bottom right corner -->
-                    <rect x="465" y="700" width="180" height="140" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <circle cx="630" cy="770" r="18" fill="none" stroke="#fff" stroke-width="2"/>
-                    
-                    
-                    <rect x="655" y="10" width="135" height="830" fill="#000" stroke="#fff" stroke-width="3"/>
-                    
+                    <!-- Bottom large room -->
+                    <rect x="550" y="735" width="190" height="155" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <rect x="570" y="755" width="150" height="110" fill="none" stroke="#fff" stroke-width="2"/>
                 </svg>
             </div>
         </div>
@@ -226,212 +235,97 @@
             </div>
             
             <div class="floor-map-wrapper">
-                <svg viewBox="0 0 1000 290" class="floor-svg">
+                <svg viewBox="0 0 1000 300" class="floor-svg" style="background: #000;">
                     <!-- Building outer border -->
-                    <rect x="10" y="10" width="980" height="270" fill="none" stroke="#fff" stroke-width="4"/>
+                    <rect x="10" y="10" width="980" height="280" fill="none" stroke="#fff" stroke-width="4"/>
                     
                     
-                    <rect x="10" y="10" width="230" height="270" fill="#000" stroke="#fff" stroke-width="3"/>
                     
+                    <!-- Large open space (left) -->
+                    <rect x="10" y="10" width="220" height="150" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <text x="120" y="90" fill="#fff" font-size="14" text-anchor="middle" font-weight="bold">OPEN AREA</text>
                     
-                    <g class="stair-block-2f">
-                        <rect x="250" y="10" width="90" height="120" fill="#000" stroke="#fff" stroke-width="3"/>
-                        <line x1="250" y1="25" x2="340" y2="25" stroke="#fff" stroke-width="2"/>
-                        <line x1="250" y1="38" x2="340" y2="38" stroke="#fff" stroke-width="2"/>
-                        <line x1="250" y1="51" x2="340" y2="51" stroke="#fff" stroke-width="2"/>
-                        <line x1="250" y1="64" x2="340" y2="64" stroke="#fff" stroke-width="2"/>
-                        <line x1="250" y1="77" x2="340" y2="77" stroke="#fff" stroke-width="2"/>
-                        <line x1="250" y1="90" x2="340" y2="90" stroke="#fff" stroke-width="2"/>
-                        <line x1="250" y1="103" x2="340" y2="103" stroke="#fff" stroke-width="2"/>
-                        <line x1="250" y1="116" x2="340" y2="116" stroke="#fff" stroke-width="2"/>
-                        <!-- Diagonal arrows -->
-                        <line x1="310" y1="115" x2="330" y2="125" stroke="#fff" stroke-width="4"/>
-                        <line x1="280" y1="115" x2="300" y2="125" stroke="#fff" stroke-width="4"/>
+                    <!-- Stairs (2F) -->
+                    <g>
+                        <rect x="240" y="10" width="80" height="150" fill="#000" stroke="#fff" stroke-width="3"/>
+                        <line x1="250" y1="20" x2="310" y2="150" stroke="#fff" stroke-width="2"/>
+                        <line x1="255" y1="20" x2="315" y2="150" stroke="#fff" stroke-width="1"/>
+                        <line x1="245" y1="25" x2="305" y2="155" stroke="#fff" stroke-width="1"/>
+                        <line x1="240" y1="30" x2="300" y2="160" stroke="#fff" stroke-width="1"/>
+                        <text x="280" y="90" fill="#fff" font-size="12" font-weight="bold" text-anchor="middle" transform="rotate(-60 280 90)">STAIRS</text>
                     </g>
                     
-                    
-                    <rect x="250" y="140" width="290" height="140" fill="#000"/>
-                    
-                    
-                    <!-- Bathroom top right -->
-                    <rect x="550" y="10" width="90" height="120" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <circle cx="618" cy="70" r="18" fill="none" stroke="#fff" stroke-width="2"/>
-                    
-                    <!-- Room H (top right 1) -->
-                    <?php $__currentLoopData = $floor2Rooms->where('room_number', 'H'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $room): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <g class="room-group clickable-room <?php echo e($room->status); ?>" onclick="openRoomModal(<?php echo e($room->id); ?>)">
-                        <rect x="650" y="10" width="90" height="120" class="room-fill"/>
-                        <rect x="650" y="10" width="90" height="120" class="room-outline"/>
-                        <text x="695" y="75" class="room-label"><?php echo e($room->room_number); ?></text>
-                    </g>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                    
-                    <!-- Bathroom -->
-                    <rect x="750" y="10" width="85" height="120" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <circle cx="818" cy="70" r="18" fill="none" stroke="#fff" stroke-width="2"/>
-                    
-                    <!-- Room I (top right 2) -->
-                    <?php $__currentLoopData = $floor2Rooms->where('room_number', 'I'); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $room): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                    <g class="room-group clickable-room <?php echo e($room->status); ?>" onclick="openRoomModal(<?php echo e($room->id); ?>)">
-                        <rect x="845" y="10" width="145" height="120" class="room-fill"/>
-                        <rect x="845" y="10" width="145" height="120" class="room-outline"/>
-                        <text x="917" y="75" class="room-label"><?php echo e($room->room_number); ?></text>
-                    </g>
-                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                    <!-- Bottom left corridor -->
+                    <rect x="10" y="170" width="310" height="120" fill="#000" stroke="#fff" stroke-width="3"/>
                     
                     
-                    <!-- Dining/seating area -->
-                    <rect x="550" y="140" width="90" height="140" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <ellipse cx="595" cy="195" rx="25" ry="35" fill="none" stroke="#fff" stroke-width="2"/>
-                    <rect x="565" cy="245" width="50" height="25" fill="none" stroke="#fff" stroke-width="2"/>
                     
-                    <!-- Large room bottom right -->
-                    <rect x="650" y="140" width="185" height="140" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <rect x="675" y="170" width="60" height="35" fill="none" stroke="#fff" stroke-width="2"/>
-                    <ellipse cx="765" cy="230" rx="35" ry="25" fill="none" stroke="#fff" stroke-width="2"/>
+                    <!-- Row of rooms (top) -->
+                    <!-- Small bathroom 1 -->
+                    <rect x="330" y="10" width="90" height="130" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <circle cx="375" cy="75" r="15" fill="none" stroke="#fff" stroke-width="2"/>
+                    <text x="375" y="110" fill="#fff" font-size="9" text-anchor="middle" font-weight="bold">WC</text>
                     
-                    <!-- Bathroom bottom -->
-                    <rect x="845" y="140" width="70" height="140" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <circle cx="903" cy="210" r="18" fill="none" stroke="#fff" stroke-width="2"/>
+                    <!-- Room (small bedroom 1) -->
+                    <rect x="430" y="10" width="110" height="130" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <rect x="445" y="30" width="80" height="85" fill="none" stroke="#fff" stroke-width="2"/>
+                    <text x="485" y="80" fill="#fff" font-size="10" text-anchor="middle" font-weight="bold">BED</text>
                     
-                    <!-- Room/storage bottom right -->
-                    <rect x="925" y="140" width="65" height="140" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <!-- Small bathroom 2 -->
+                    <rect x="550" y="10" width="90" height="130" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <circle cx="595" cy="75" r="15" fill="none" stroke="#fff" stroke-width="2"/>
                     
+                    <!-- Room (small bedroom 2) -->
+                    <rect x="650" y="10" width="110" height="130" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <rect x="665" y="30" width="80" height="85" fill="none" stroke="#fff" stroke-width="2"/>
+                    
+                    <!-- Small bathroom 3 -->
+                    <rect x="770" y="10" width="90" height="130" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <circle cx="815" cy="75" r="15" fill="none" stroke="#fff" stroke-width="2"/>
+                    
+                    <!-- Room (small bedroom 3) -->
+                    <rect x="870" y="10" width="120" height="130" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <rect x="885" y="30" width="90" height="85" fill="none" stroke="#fff" stroke-width="2"/>
+                    
+                    
+                    
+                    <!-- Corridor section -->
+                    <rect x="330" y="150" width="140" height="140" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <circle cx="400" cy="220" r="25" fill="none" stroke="#fff" stroke-width="2"/>
+                    <text x="400" y="228" fill="#fff" font-size="10" text-anchor="middle" font-weight="bold">TABLE</text>
+                    
+                    <!-- Room with dining -->
+                    <rect x="480" y="150" width="140" height="140" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <rect x="500" y="170" width="100" height="50" fill="none" stroke="#fff" stroke-width="2"/>
+                    <rect x="510" y="235" width="35" height="40" fill="none" stroke="#fff" stroke-width="2"/>
+                    <rect x="565" y="235" width="35" height="40" fill="none" stroke="#fff" stroke-width="2"/>
+                    
+                    <!-- Room with dining 2 -->
+                    <rect x="630" y="150" width="140" height="140" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <rect x="650" y="170" width="100" height="50" fill="none" stroke="#fff" stroke-width="2"/>
+                    <rect x="660" y="235" width="35" height="40" fill="none" stroke="#fff" stroke-width="2"/>
+                    
+                    <!-- Room with furniture -->
+                    <rect x="780" y="150" width="130" height="140" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <rect x="800" y="170" width="90" height="60" fill="none" stroke="#fff" stroke-width="2"/>
+                    <circle cx="845" cy="255" r="18" fill="none" stroke="#fff" stroke-width="2"/>
+                    
+                    <!-- Room with furniture 2 -->
+                    <rect x="920" y="150" width="70" height="140" fill="#000" stroke="#fff" stroke-width="3"/>
+                    <rect x="930" y="170" width="50" height="100" fill="none" stroke="#fff" stroke-width="2"/>
                 </svg>
             </div>
         </div>
 
         <div class="floor-info-text">
-            <p><i class="bi bi-info-circle"></i> Click on any room to view details and book</p>
+            <p><i class="bi bi-info-circle"></i> Click on any available room to view details and book</p>
         </div>
     </div>
 </section>
 
 
 <?php $__currentLoopData = $rooms; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $room): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-<div id="room-modal-<?php echo e($room->id); ?>" class="room-modal">
-    <div class="modal-overlay"></div>
-    <div class="modal-content">
-        <button class="modal-close" onclick="closeRoomModal(<?php echo e($room->id); ?>)">
-            <i class="bi bi-x-lg"></i> Close
-        </button>
-        
-        <div class="modal-layout">
-            
-            <div class="modal-visual">
-                
-                <div class="room-gallery">
-                    <?php if($room->images->count() > 0): ?>
-                        <div class="gallery-main">
-                            <img src="<?php echo e(asset($room->images->first()->image_path)); ?>" alt="Room <?php echo e($room->room_number); ?>" class="main-image">
-                        </div>
-                        <?php if($room->images->count() > 1): ?>
-                            <div class="gallery-thumbnails">
-                                <?php $__currentLoopData = $room->images; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $image): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                                    <img src="<?php echo e(asset($image->image_path)); ?>" alt="Room <?php echo e($room->room_number); ?>" class="thumbnail">
-                                <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
-                            </div>
-                        <?php endif; ?>
-                    <?php else: ?>
-                        <div class="no-images">
-                            <i class="bi bi-image"></i>
-                            <p>No images available</p>
-                        </div>
-                    <?php endif; ?>
-                </div>
-                
-                
-                <div class="room-3d-view">
-                    <div class="view-placeholder">
-                        <i class="bi bi-box"></i>
-                        <p>3D View Coming Soon</p>
-                    </div>
-                </div>
-            </div>
-            
-            
-            <div class="modal-info">
-                <div class="info-header">
-                    <h2>Room <?php echo e($room->room_number); ?></h2>
-                    <p><?php echo e($room->type); ?> • Floor <?php echo e($room->floor); ?></p>
-                </div>
-                
-                <div class="info-details">
-                    <div class="detail-row">
-                        <i class="bi bi-rulers"></i>
-                        <span><?php echo e($room->length); ?>m × <?php echo e($room->width); ?>m</span>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <i class="bi bi-cash-coin"></i>
-                        <span class="price">Rp <?php echo e(number_format($room->price, 0, ',', '.')); ?>/month</span>
-                    </div>
-                    
-                    <div class="detail-row">
-                        <i class="bi bi-info-circle"></i>
-                        <span class="status-badge status-<?php echo e($room->status); ?>"><?php echo e(ucfirst($room->status)); ?></span>
-                    </div>
-                </div>
-                
-                <div class="description-section">
-                    <h3>Description</h3>
-                    <p><?php echo e($room->description ?: 'This is a comfortable ' . $room->type . ' room located on floor ' . $room->floor . '.'); ?></p>
-                </div>
-                
-                <div class="facilities-section">
-                    <h3>Facilities</h3>
-                    <div class="facilities-list">
-                        <?php $__empty_1 = true; $__currentLoopData = $room->rooms_facilities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $rf): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
-                            <div class="facility-item">
-                                <?php if($rf->room_facility && $rf->room_facility->images->count() > 0): ?>
-                                    <img src="<?php echo e(asset($rf->room_facility->images->first()->image_path)); ?>" alt="<?php echo e($rf->room_facility->name); ?>">
-                                <?php else: ?>
-                                    <i class="bi bi-check-circle-fill"></i>
-                                <?php endif; ?>
-                                <span><?php echo e(optional($rf->room_facility)->name ?? 'N/A'); ?></span>
-                            </div>
-                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
-                            <p>No facilities listed</p>
-                        <?php endif; ?>
-                    </div>
-                </div>
-                
-                <div class="booking-section">
-                    <h3>Book This Room</h3>
-                    <?php if(auth()->guard()->check()): ?>
-                        <?php if($room->status === 'available'): ?>
-                            <form action="<?php echo e(route('bookings.store')); ?>" method="POST">
-                                <?php echo csrf_field(); ?>
-                                <input type="hidden" name="room_id" value="<?php echo e($room->id); ?>">
-                                
-                                <div class="date-input-group">
-                                    <label for="move_in_date_<?php echo e($room->id); ?>">Move-in Date</label>
-                                    <input type="date" id="move_in_date_<?php echo e($room->id); ?>" name="move_in_date" min="<?php echo e(date('Y-m-d')); ?>" required>
-                                </div>
-                                
-                                <div class="action-buttons">
-                                    <button type="submit" class="btn-book">
-                                        <i class="bi bi-calendar-check"></i> Book Now
-                                    </button>
-                                </div>
-                            </form>
-                        <?php else: ?>
-                            <div class="unavailable-notice">
-                                <i class="bi bi-exclamation-circle"></i>
-                                <p>This room is currently <?php echo e($room->status); ?></p>
-                            </div>
-                        <?php endif; ?>
-                    <?php else: ?>
-                        <div class="login-notice">
-                            <i class="bi bi-info-circle"></i>
-                            <p>Please <a href="<?php echo e(route('login')); ?>">login</a> to book this room</p>
-                        </div>
-                    <?php endif; ?>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+    <?php echo $__env->make('components.room-modal', ['room' => $room], array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?>
 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
 <?php $__env->stopSection(); ?>
 

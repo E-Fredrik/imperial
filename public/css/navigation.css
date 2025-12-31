@@ -117,6 +117,10 @@
 
 /* Mobile menu */
 @media (max-width: 991px) {
+    .navbar {
+        padding: 1rem 0 !important;
+    }
+    
     .navbar-collapse {
         background: rgba(0, 0, 0, 0.95);
         backdrop-filter: blur(20px);
@@ -148,6 +152,28 @@
         margin-top: 0.5rem;
         width: 100%;
         text-align: center;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 576px) {
+    .navbar-brand img {
+        height: 45px !important;
+    }
+    
+    .navbar-collapse {
+        padding: 1rem;
+        margin-top: 0.75rem;
+    }
+    
+    .nav-link {
+        padding: 0.6rem 0.85rem !important;
+        font-size: 0.95rem;
+    }
+    
+    .nav-link.btn {
+        padding: 0.6rem 1rem !important;
+        font-size: 0.95rem;
     }
 }
 

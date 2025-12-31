@@ -119,4 +119,4 @@ unset($__defined_vars, $__key, $__value); ?>
 .room-card * {
     transition: all 0.3s ease;
 }
-</style><?php /**PATH C:\Uni\WebDev\Laravel\imperial\resources\views/components/room-card.blade.php ENDPATH**/ ?>
+</style><?php /**PATH D:\Github\imperial\resources\views/components/room-card.blade.php ENDPATH**/ ?>

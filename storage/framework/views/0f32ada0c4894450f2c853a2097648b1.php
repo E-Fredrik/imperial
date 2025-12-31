@@ -79,10 +79,50 @@ unset($__defined_vars, $__key, $__value); ?>
                 
                 <div class="room-3d-view">
                     <h4 style="color:#FAEBD7; margin-bottom:1rem;">3D Room View</h4>
-                    <div class="view-placeholder">
-                        <i class="bi bi-box" style="font-size:3rem; color:#666;"></i>
-                        <p style="color:#999; margin-top:1rem;">Interactive 3D view coming soon</p>
-                    </div>
+
+                    <?php
+                        // look for a 360 image attached to the room
+                        $image360 = $room->images->firstWhere('is_360', true);
+                    ?>
+
+                    <?php if($image360): ?>
+                        <div class="panellum-container">
+                            <div id="panorama-<?php echo e($room->id); ?>" class="panellum-viewer"></div>
+                        </div>
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                <?php
+                                    // Determine the correct URL for the 360 image
+                                    $imagePath = $image360->image_path;
+                                    if (filter_var($imagePath, FILTER_VALIDATE_URL)) {
+                                        $panoramaUrl = $imagePath;
+                                    } elseif (file_exists(public_path($imagePath))) {
+                                        $panoramaUrl = asset($imagePath);
+                                    } else {
+                                        $panoramaUrl = asset('storage/' . ltrim($imagePath, '/'));
+                                    }
+                                ?>
+
+                                pannellum.viewer('panorama-<?php echo e($room->id); ?>', {
+                                    "type": "equirectangular",
+                                    "panorama": "<?php echo e($panoramaUrl); ?>",
+                                    "autoLoad": true,
+                                    "autoRotate": -2,
+                                    "showControls": true,
+                                    "showFullscreenCtrl": true,
+                                    "mouseZoom": true,
+                                    "pitch": 0,
+                                    "yaw": 0,
+                                    "hfov": 110
+                                });
+                            });
+                        </script>
+                    <?php else: ?>
+                        <div class="view-placeholder">
+                            <i class="bi bi-box" style="font-size:3rem; color:#666;"></i>
+                            <p style="color:#999; margin-top:1rem;">Interactive 3D view coming soon</p>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
             
@@ -165,7 +205,7 @@ unset($__defined_vars, $__key, $__value); ?>
     </div>
 </div>
 
-<?php if (! $__env->hasRenderedOnce('20712b4d-4637-4e78-87b2-56ff5b170e1a')): $__env->markAsRenderedOnce('20712b4d-4637-4e78-87b2-56ff5b170e1a'); ?>
+<?php if (! $__env->hasRenderedOnce('78071085-a02c-4bff-9998-2fc2bae56b4e')): $__env->markAsRenderedOnce('78071085-a02c-4bff-9998-2fc2bae56b4e'); ?>
 <?php $__env->startPush('scripts'); ?>
 <script>
 function openRoomModal(roomId) {
