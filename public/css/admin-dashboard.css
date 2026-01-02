@@ -7,39 +7,37 @@ body {
 
 /* Card Styling */
 .admin-card {
-    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
-    border: 2px solid rgba(250, 235, 215, 0.15);
+    background: linear-gradient(135deg, #0a0a0a 0%, #111111 100%);
+    border: 1px solid rgba(250, 235, 215, 0.15);
     border-radius: 16px;
     padding: 2rem;
     margin-bottom: 2rem;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
 }
 
 .card-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1.5rem;
-    padding-bottom: 1rem;
-    border-bottom: 2px solid rgba(250, 235, 215, 0.1);
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(250, 235, 215, 0.1);
 }
 
 .card-header h3 {
     color: #FAEBD7;
-    font-size: 1.5rem;
     font-weight: 600;
     margin: 0;
-    display: flex;
-    align-items: center;
+    font-size: 1.5rem;
 }
 
 /* Alert Styling */
 .alert-success {
-    background: linear-gradient(135deg, #1a3a1a 0%, #0f2a0f 100%);
+    background: rgba(34, 197, 94, 0.1);
+    border: 1px solid rgba(34, 197, 94, 0.3);
     color: #4ade80;
-    border: 1px solid #166534;
+    padding: 1rem 1.25rem;
     border-radius: 12px;
-    padding: 1rem 1.5rem;
     margin-bottom: 1.5rem;
     display: flex;
     align-items: center;
@@ -51,11 +49,11 @@ body {
 }
 
 .alert-danger {
-    background: linear-gradient(135deg, #3a1a1a 0%, #2a1010 100%);
-    color: #fca5a5;
-    border: 1px solid #991b1b;
+    background: rgba(239, 68, 68, 0.1);
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    color: #f87171;
+    padding: 1rem 1.25rem;
     border-radius: 12px;
-    padding: 1rem;
     margin-bottom: 1.5rem;
 }
 
@@ -67,8 +65,8 @@ body {
 .form-group label {
     display: block;
     color: #FAEBD7;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
+    font-weight: 500;
+    margin-bottom: 0.75rem;
     font-size: 0.95rem;
 }
 
@@ -78,10 +76,10 @@ body {
 .form-group select,
 .form-group textarea {
     width: 100%;
-    padding: 0.75rem;
-    background-color: rgba(250, 235, 215, 0.05);
-    border: 1px solid rgba(250, 235, 215, 0.15);
-    border-radius: 8px;
+    padding: 0.85rem 1rem;
+    background: #0a0a0a;
+    border: 1px solid rgba(250, 235, 215, 0.2);
+    border-radius: 10px;
     color: #FAEBD7;
     font-size: 1rem;
     transition: all 0.3s ease;
@@ -93,8 +91,8 @@ body {
 .form-group select:focus,
 .form-group textarea:focus {
     outline: none;
-    border-color: rgba(250, 235, 215, 0.3);
-    background-color: rgba(250, 235, 215, 0.08);
+    border-color: rgba(250, 235, 215, 0.4);
+    box-shadow: 0 0 0 3px rgba(250, 235, 215, 0.05);
 }
 
 /* Date input specific styling */
@@ -104,50 +102,47 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 }
 
 .form-group textarea {
-    min-height: 120px;
     resize: vertical;
+    min-height: 150px;
+    font-family: inherit;
 }
 
 .form-group small {
     display: block;
-    color: #999;
-    font-size: 0.85rem;
+    color: rgba(250, 235, 215, 0.6);
+    font-size: 0.875rem;
     margin-top: 0.5rem;
 }
 
 /* Select Dropdown Styling */
 select {
-    background-color: rgba(250, 235, 215, 0.05) !important;
-    background-image: url('data:image/svg+xml;utf8,<svg fill="%23FAEBD7" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
-    background-repeat: no-repeat;
-    background-position-x: calc(100% - 0.5rem);
-    background-position-y: center;
-    -webkit-appearance: none;
-    -moz-appearance: none;
     appearance: none;
-    padding-right: 2.5rem !important;
-    cursor: pointer;
-    color: #FAEBD7 !important;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23FAEBD7' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14L2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 16px 12px;
+    padding-right: 2.5rem;
 }
 
 /* Force white background on focus/active */
 select:focus,
 select:active {
-    background-color: rgba(250, 235, 215, 0.08) !important;
+    background-color: #0a0a0a !important;
+    color: #FAEBD7 !important;
 }
 
 /* Dropdown options styling - WHITE background with BLACK text */
 select option {
     background-color: #ffffff !important;
     color: #000000 !important;
-    padding: 0.5rem !important;
-    font-weight: 500;
+    padding: 0.75rem;
 }
 
 /* Selected option */
 select option:checked {
     background-color: #f0f0f0 !important;
     color: #000000 !important;
+    font-weight: 600;
 }
 
 /* Hover state for options */
@@ -159,12 +154,10 @@ select option:hover {
 /* Number Input Custom Controls */
 .number-input-wrapper {
     position: relative;
-    display: inline-block;
-    width: 100%;
 }
 
 .number-input-wrapper input[type="number"] {
-    padding-right: 2.5rem !important;
+    padding-right: 3rem;
 }
 
 .number-controls {
@@ -178,23 +171,23 @@ select option:hover {
 }
 
 .number-controls button {
-    background: rgba(250, 235, 215, 0.15);
-    border: 1px solid rgba(250, 235, 215, 0.25);
+    background: rgba(250, 235, 215, 0.1);
+    border: 1px solid rgba(250, 235, 215, 0.2);
     color: #FAEBD7;
-    width: 24px;
-    height: 20px;
-    border-radius: 4px;
-    cursor: pointer;
+    width: 28px;
+    height: 22px;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    border-radius: 4px;
     font-size: 12px;
     transition: all 0.2s ease;
 }
 
 .number-controls button:hover {
-    background: rgba(250, 235, 215, 0.25);
-    border-color: rgba(250, 235, 215, 0.4);
+    background: rgba(250, 235, 215, 0.2);
+    border-color: rgba(250, 235, 215, 0.3);
 }
 
 /* Hide default number input arrows */
@@ -286,7 +279,7 @@ input[type="checkbox"]:hover {
     gap: 0.5rem;
     padding: 0.75rem 1rem;
     background: rgba(250, 235, 215, 0.05);
-    border: 2px solid rgba(250, 235, 215, 0.15);
+    border: 1px solid rgba(250, 235, 215, 0.15);
     border-radius: 10px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -933,31 +926,702 @@ a.dashboard-btn:hover {
     }
 }
 
-/* Pagination Styling */
-.pagination {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-top: 2rem;
-    flex-wrap: wrap;
+/* Base Mobile Styles (320px+) */
+@media (max-width: 575px) {
+    /* Navigation Adjustments */
+    .navbar {
+        padding: 0.75rem 0 !important;
+    }
+
+    .navbar-brand {
+        font-size: 0.9rem !important;
+    }
+
+    .navbar-brand img {
+        height: 35px !important;
+    }
+
+    .navbar-brand span {
+        display: none; /* Hide "Admin Panel" text on very small screens */
+    }
+
+    /* FIX: Hamburger Menu - Make it visible and functional */
+    .navbar-toggler {
+        padding: 0.5rem;
+        border: 2px solid rgba(250, 235, 215, 0.3);
+        background: rgba(250, 235, 215, 0.05);
+    }
+
+    .navbar-toggler:focus {
+        box-shadow: 0 0 0 0.2rem rgba(250, 235, 215, 0.25);
+    }
+
+    .navbar-collapse {
+        background: rgba(10, 10, 10, 0.98);
+        backdrop-filter: blur(20px);
+        margin-top: 1rem;
+        padding: 1.5rem;
+        border-radius: 12px;
+        border: 1px solid rgba(250, 235, 215, 0.15);
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    /* Make navbar items visible */
+    .navbar-nav {
+        display: flex !important;
+        flex-direction: column;
+        gap: 0.5rem !important;
+        width: 100%;
+    }
+
+    .navbar-nav .nav-item {
+        width: 100%;
+    }
+
+    .navbar-nav .nav-link {
+        padding: 0.85rem 1rem !important;
+        border-radius: 8px;
+        font-size: 0.95rem;
+        display: flex !important;
+        align-items: center;
+        gap: 0.5rem;
+        width: 100%;
+        color: #FAEBD7 !important;
+        background: rgba(250, 235, 215, 0.03);
+        border: 1px solid rgba(250, 235, 215, 0.1);
+    }
+
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link.active {
+        background: rgba(250, 235, 215, 0.15);
+        border-color: rgba(250, 235, 215, 0.3);
+    }
+
+    .navbar-nav .nav-link i {
+        font-size: 1.1rem;
+    }
+
+    /* User dropdown in mobile */
+    .navbar-collapse .dropdown {
+        width: 100%;
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(250, 235, 215, 0.1);
+    }
+
+    .navbar-collapse .dropdown .btn {
+        width: 100%;
+        justify-content: center;
+        padding: 0.85rem 1rem !important;
+    }
+
+    .dropdown-menu {
+        width: 100%;
+        background: #0a0a0a !important;
+        border: 1px solid rgba(250, 235, 215, 0.2) !important;
+        margin-top: 0.5rem !important;
+    }
+
+    .dropdown-item {
+        padding: 0.75rem 1rem !important;
+        color: #FAEBD7 !important;
+    }
+
+    .dropdown-item:hover {
+        background: rgba(250, 235, 215, 0.1) !important;
+    }
+
+    /* Page Header */
+    div[style*="padding: 2rem 0"] {
+        padding: 1.5rem 0 !important;
+    }
+
+    div[style*="padding: 2rem 0"] h1 {
+        font-size: 1.5rem !important;
+    }
+
+    div[style*="padding: 2rem 0"] p {
+        font-size: 0.85rem !important;
+    }
+
+    div[style*="padding: 2rem 0"] i {
+        font-size: 1.5rem !important;
+    }
+
+    div[style*="padding: 1rem"] {
+        padding: 0.75rem !important;
+    }
+
+    /* Container Padding */
+    .container-fluid.px-4,
+    .container.px-4 {
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+    }
+
+    /* Admin Cards */
+    .admin-card {
+        padding: 1rem !important;
+        margin-bottom: 1.5rem !important;
+        border-radius: 12px !important;
+    }
+
+    .card-header {
+        flex-direction: column !important;
+        align-items: flex-start !important;
+        gap: 1rem;
+        padding: 1rem !important;
+    }
+
+    .card-header h3 {
+        font-size: 1.25rem !important;
+        width: 100%;
+    }
+
+    .card-header a,
+    .card-header button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    /* Form Groups */
+    .form-group {
+        margin-bottom: 1.25rem !important;
+    }
+
+    .form-group label {
+        font-size: 0.9rem !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 0.75rem !important;
+        font-size: 0.95rem !important;
+    }
+
+    .form-group small {
+        font-size: 0.8rem !important;
+    }
+
+    /* Responsive Grid Layouts */
+    .row.g-3 {
+        gap: 1rem !important;
+    }
+
+    .col-md-6,
+    .col-md-4 {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 100% !important;
+    }
+
+    /* Number Input Controls */
+    .number-input-wrapper input[type="number"] {
+        padding-right: 2.5rem !important;
+    }
+
+    .number-controls {
+        right: 6px !important;
+    }
+
+    .number-controls button {
+        width: 24px !important;
+        height: 20px !important;
+        font-size: 11px !important;
+    }
+
+    /* File Upload */
+    input[type="file"] {
+        padding: 0.75rem !important;
+        font-size: 0.9rem !important;
+    }
+
+    input[type="file"]::file-selector-button {
+        padding: 0.5rem 0.85rem !important;
+        font-size: 0.85rem !important;
+        margin-right: 0.75rem !important;
+    }
+
+    /* FIX: Facilities Grid - Single column, no scrolling */
+    .facilities-grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 0.75rem !important;
+        max-height: none !important; /* Remove any height restriction */
+        overflow: visible !important; /* Ensure no scrolling */
+    }
+
+    .facility-label {
+        padding: 0.85rem 1rem !important;
+        font-size: 0.95rem !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 0.75rem !important;
+        background: rgba(250, 235, 215, 0.05) !important;
+        border: 1px solid rgba(250, 235, 215, 0.15) !important;
+        border-radius: 8px !important;
+        cursor: pointer !important;
+        transition: all 0.3s ease !important;
+        width: 100% !important;
+    }
+
+    .facility-label:active {
+        background: rgba(250, 235, 215, 0.15) !important;
+        transform: scale(0.98);
+    }
+
+    .facility-label input[type="checkbox"] {
+        width: 22px !important;
+        height: 22px !important;
+        margin: 0 !important;
+        flex-shrink: 0 !important;
+    }
+
+    .facility-label span {
+        flex: 1;
+        font-size: 0.95rem !important;
+        color: #FAEBD7 !important;
+    }
+
+    /* Action Buttons */
+    .form-actions {
+        flex-direction: column !important;
+        gap: 0.75rem !important;
+        padding-top: 1rem !important;
+    }
+
+    .form-actions a,
+    .form-actions button {
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 0.85rem 1rem !important;
+        font-size: 1rem !important;
+    }
+
+    /* Button Sizing */
+    .btn-admin-primary,
+    .btn-admin-secondary,
+    .btn-admin-danger,
+    .btn-admin-info {
+        padding: 0.85rem 1rem !important;
+        font-size: 0.95rem !important;
+        width: 100%;
+        justify-content: center;
+        min-height: 48px; /* Better touch target */
+    }
+
+    /* Action Buttons Container */
+    .action-buttons {
+        flex-direction: column !important;
+        gap: 0.5rem !important;
+    }
+
+    .action-buttons a,
+    .action-buttons button {
+        width: 100% !important;
+        min-height: 44px;
+    }
+
+    /* Table Responsiveness */
+    .table-responsive {
+        margin-left: -1rem;
+        margin-right: -1rem;
+        padding: 0 1rem;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .admin-table {
+        min-width: 600px;
+        font-size: 0.85rem;
+    }
+
+    .admin-table th,
+    .admin-table td {
+        padding: 0.75rem 0.5rem !important;
+        white-space: nowrap;
+    }
+
+    .admin-table th:first-child,
+    .admin-table td:first-child {
+        position: sticky;
+        left: 0;
+        background: #0b0b0b;
+        z-index: 2;
+    }
+
+    /* Status Badges */
+    .status-badge {
+        padding: 0.4rem 0.75rem !important;
+        font-size: 0.8rem !important;
+        white-space: nowrap;
+    }
+
+    /* Alert Messages */
+    .alert-success,
+    .alert-danger,
+    .alert-info {
+        padding: 1rem !important;
+        font-size: 0.9rem !important;
+        margin-bottom: 1rem !important;
+    }
+
+    .alert-success i,
+    .alert-danger i,
+    .alert-info i {
+        font-size: 1rem !important;
+    }
+
+    /* Dashboard Stats */
+    .stat-card {
+        margin-bottom: 1rem;
+    }
+
+    .stat-card .card-body {
+        padding: 1.25rem !important;
+    }
+
+    .stat-card .display-4 {
+        font-size: 2rem !important;
+    }
+
+    .stat-card .stat-icon {
+        width: 45px !important;
+        height: 45px !important;
+        font-size: 1.25rem !important;
+    }
+
+    /* Quick Actions */
+    .dashboard-quick-actions {
+        margin-bottom: 2rem !important;
+    }
+
+    .dashboard-quick-actions h2 {
+        font-size: 1.25rem !important;
+        margin-bottom: 1rem !important;
+    }
+
+    .admin-action-btn {
+        padding: 1rem !important;
+        font-size: 0.95rem !important;
+    }
+
+    .action-icon-box {
+        width: 45px !important;
+        height: 45px !important;
+        font-size: 1.35rem !important;
+    }
+
+    /* Image Preview */
+    .proof-image {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+
+    /* Existing Images Grid */
+    div[style*="grid-template-columns: repeat(auto-fill, minmax(150px, 1fr))"] {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.75rem !important;
+    }
+
+    /* Dropdown Menu */
+    .dropdown-menu {
+        min-width: 200px !important;
+        font-size: 0.9rem !important;
+    }
+
+    .dropdown-item {
+        padding: 0.65rem 1rem !important;
+    }
+
+    /* Footer */
+    footer {
+        padding: 1.25rem 0 !important;
+    }
+
+    footer .d-flex {
+        flex-direction: column !important;
+        text-align: center;
+        gap: 0.5rem !important;
+    }
+
+    footer p {
+        font-size: 0.85rem !important;
+    }
+
+    /* Booking/Transaction Items */
+    .booking-item,
+    .transaction-item-modern,
+    .payment-item,
+    .upcoming-payment-item {
+        padding: 1rem !important;
+    }
+
+    /* Profile Header Card */
+    .profile-header-card {
+        padding: 1.25rem !important;
+    }
+
+    .profile-avatar-modern {
+        width: 60px !important;
+        height: 60px !important;
+        font-size: 1.5rem !important;
+    }
+
+    .profile-name-modern {
+        font-size: 1.35rem !important;
+    }
+
+    .profile-email-modern {
+        font-size: 0.85rem !important;
+    }
+
+    /* Room Badge */
+    .room-badge-modern {
+        padding: 1rem 1.25rem !important;
+        max-width: 100% !important;
+    }
+
+    /* Empty State */
+    .empty-state {
+        padding: 2rem 1rem !important;
+    }
+
+    .empty-state i {
+        font-size: 3rem !important;
+    }
+
+    /* Image Upload Preview */
+    #image-preview {
+        max-height: 250px !important;
+    }
+
+    /* Textarea */
+    textarea {
+        min-height: 120px !important;
+    }
 }
 
-.pagination .page-link {
-    background: rgba(250, 235, 215, 0.1);
-    border: 1px solid rgba(250, 235, 215, 0.3);
-    color: #FAEBD7;
-    padding: 0.5rem 0.75rem;
-    border-radius: 8px;
-    transition: all 0.3s ease;
+/* Small Tablets (576px - 767px) */
+@media (min-width: 576px) and (max-width: 767px) {
+    .navbar-brand span {
+        display: inline; /* Show "Admin Panel" text */
+    }
+
+    .container-fluid.px-4,
+    .container.px-4 {
+        padding-left: 1.5rem !important;
+        padding-right: 1.5rem !important;
+    }
+
+    .admin-card {
+        padding: 1.5rem !important;
+    }
+
+    .card-header {
+        flex-direction: row !important;
+        flex-wrap: wrap;
+    }
+
+    .facilities-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 0.75rem !important;
+    }
+
+    .form-actions {
+        flex-direction: row !important;
+        justify-content: flex-end !important;
+    }
+
+    .form-actions a,
+    .form-actions button {
+        width: auto !important;
+        min-width: 140px;
+    }
+
+    div[style*="grid-template-columns: repeat(auto-fill, minmax(150px, 1fr))"] {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+
+    /* Navbar improvements for small tablets */
+    .navbar-collapse {
+        padding: 1rem;
+    }
+
+    .navbar-nav .nav-link {
+        padding: 0.65rem 1rem !important;
+    }
 }
 
-.pagination .page-link:hover {
-    background: rgba(250, 235, 215, 0.2);
-    color: #FAEBD7;
+/* Tablets (768px - 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+    .container-fluid.px-4,
+    .container.px-4 {
+        padding-left: 2rem !important;
+        padding-right: 2rem !important;
+    }
+
+    .navbar-nav {
+        gap: 0.35rem !important;
+    }
+
+    .navbar-nav .nav-link {
+        font-size: 0.9rem !important;
+        padding: 0.5rem 0.85rem !important;
+    }
+
+    .admin-card {
+        padding: 1.75rem !important;
+    }
+
+    .facilities-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 1rem !important;
+    }
+
+    .admin-table {
+        font-size: 0.9rem;
+    }
+
+    .admin-table th,
+    .admin-table td {
+        padding: 0.85rem 1rem !important;
+    }
+
+    div[style*="grid-template-columns: repeat(auto-fill, minmax(150px, 1fr))"] {
+        grid-template-columns: repeat(4, 1fr) !important;
+    }
 }
 
-.pagination .page-item.active .page-link {
-    background: linear-gradient(135deg, #FAEBD7 0%, #d4c5a9 100%);
-    color: #000;
-    border-color: #FAEBD7;
+/* Small Desktops (992px - 1199px) */
+@media (min-width: 992px) and (max-width: 1199px) {
+    .container-fluid.px-4,
+    .container.px-4 {
+        padding-left: 2.5rem !important;
+        padding-right: 2.5rem !important;
+    }
+
+    .facilities-grid {
+        grid-template-columns: repeat(3, 1fr) !important;
+    }
+}
+
+/* Landscape Mobile Devices */
+@media (max-width: 767px) and (orientation: landscape) {
+    div[style*="padding: 2rem 0"] {
+        padding: 1rem 0 !important;
+    }
+
+    .admin-card {
+        padding: 1rem !important;
+    }
+
+    .form-group {
+        margin-bottom: 1rem !important;
+    }
+
+    .navbar-collapse {
+        max-height: 60vh;
+        overflow-y: auto;
+    }
+}
+
+/* Touch-specific improvements */
+@media (hover: none) and (pointer: coarse) {
+    /* Larger touch targets */
+    .btn,
+    .nav-link,
+    .dropdown-toggle,
+    input[type="checkbox"],
+    .facility-label {
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+    }
+
+    /* Better form controls */
+    input,
+    select,
+    textarea,
+    button {
+        font-size: 16px !important; /* Prevents zoom on iOS */
+    }
+
+    /* Improved table scrolling */
+    .table-responsive {
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
+    }
+
+    /* Better checkbox hit area */
+    input[type="checkbox"] {
+        min-width: 24px;
+        min-height: 24px;
+    }
+}
+
+/* Extra Small Devices (320px - 374px) */
+@media (max-width: 374px) {
+    .navbar-brand img {
+        height: 30px !important;
+    }
+
+    .card-header h3 {
+        font-size: 1.1rem !important;
+    }
+
+    .form-group label {
+        font-size: 0.85rem !important;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 0.9rem !important;
+        padding: 0.65rem !important;
+    }
+
+    .btn-admin-primary,
+    .btn-admin-secondary {
+        font-size: 0.9rem !important;
+        padding: 0.75rem 1rem !important;
+    }
+
+    .stat-card .display-4 {
+        font-size: 1.75rem !important;
+    }
+
+    div[style*="grid-template-columns: repeat(auto-fill, minmax(150px, 1fr))"] {
+        grid-template-columns: 1fr !important;
+    }
+
+    .facility-label {
+        padding: 0.75rem 0.85rem !important;
+        font-size: 0.9rem !important;
+    }
+}
+
+/* Print Styles */
+@media print {
+    .navbar,
+    .navbar-collapse,
+    footer,
+    .btn,
+    .action-buttons,
+    .form-actions {
+        display: none !important;
+    }
+
+    .admin-card {
+        border: 1px solid #ddd !important;
+        page-break-inside: avoid;
+    }
+
+    body {
+        background: white !important;
+        color: black !important;
+    }
 }

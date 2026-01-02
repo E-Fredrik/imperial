@@ -299,25 +299,6 @@
                     <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     
                     
-                    
-                    <!-- Room with dining table 1 (below H) -->
-                    <rect x="530" y="220" width="270" height="100" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <rect x="550" y="240" width="80" height="50" fill="none" stroke="#fff" stroke-width="2"/>
-                    <rect x="560" y="300" width="30" height="30" fill="none" stroke="#fff" stroke-width="2"/>
-                    <rect x="600" y="300" width="30" height="30" fill="none" stroke="#fff" stroke-width="2"/>
-                    
-                    <!-- Room with dining table 2 (below I) -->
-                    <rect x="810" y="220" width="280" height="100" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <rect x="830" y="240" width="80" height="50" fill="none" stroke="#fff" stroke-width="2"/>
-                    <circle cx="1000" cy="270" r="20" fill="none" stroke="#fff" stroke-width="2"/>
-                    
-                    <!-- Room with furniture 3 -->
-                    <rect x="530" y="330" width="270" height="110" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <rect x="550" y="350" width="230" height="70" fill="none" stroke="#fff" stroke-width="2"/>
-                    
-                    <!-- Room with furniture 4 -->
-                    <rect x="810" y="330" width="280" height="110" fill="#000" stroke="#fff" stroke-width="3"/>
-                    <rect x="830" y="350" width="240" height="70" fill="none" stroke="#fff" stroke-width="2"/>
                 </svg>
             </div>
         </div>
