@@ -34,6 +34,27 @@
             </div>
         <?php endif; ?>
 
+        <?php if(session('success')): ?>
+            <div class="alert-success">
+                <i class="bi bi-check-circle"></i> <?php echo e(session('success')); ?>
+
+            </div>
+        <?php endif; ?>
+
+        <?php if(session('error')): ?>
+            <div class="alert-danger">
+                <i class="bi bi-exclamation-triangle-fill"></i> <?php echo e(session('error')); ?>
+
+            </div>
+        <?php endif; ?>
+
+        <?php if(session('info')): ?>
+            <div class="alert-success">
+                <i class="bi bi-info-circle"></i> <?php echo e(session('info')); ?>
+
+            </div>
+        <?php endif; ?>
+
         <form action="<?php echo e(route('admin.info.update', $information)); ?>" method="POST">
             <?php echo csrf_field(); ?>
             <?php echo method_field('PUT'); ?>

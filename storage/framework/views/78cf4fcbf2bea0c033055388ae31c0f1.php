@@ -19,6 +19,20 @@
         </div>
     <?php endif; ?>
 
+    <?php if(session('error')): ?>
+        <div class="alert-danger">
+            <i class="bi bi-exclamation-triangle-fill"></i> <?php echo e(session('error')); ?>
+
+        </div>
+    <?php endif; ?>
+
+    <?php if(session('info')): ?>
+        <div class="alert-success">
+            <i class="bi bi-info-circle"></i> <?php echo e(session('info')); ?>
+
+        </div>
+    <?php endif; ?>
+
     <div class="admin-card">
         <div class="card-header">
             <h3>All Information</h3>

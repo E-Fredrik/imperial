@@ -25,6 +25,24 @@
             </div>
         @endif
 
+        @if(session('success'))
+            <div class="alert-success">
+                <i class="bi bi-check-circle"></i> {{ session('success') }}
+            </div>
+        @endif
+
+        @if(session('error'))
+            <div class="alert-danger">
+                <i class="bi bi-exclamation-triangle-fill"></i> {{ session('error') }}
+            </div>
+        @endif
+
+        @if(session('info'))
+            <div class="alert-success">
+                <i class="bi bi-info-circle"></i> {{ session('info') }}
+            </div>
+        @endif
+
         <form action="{{ route('admin.info.store') }}" method="POST">
             @csrf
 

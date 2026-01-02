@@ -9,6 +9,18 @@
         </div>
     @endif
 
+    @if (session('error'))
+        <div class="alert-danger">
+            <i class="bi bi-exclamation-triangle-fill"></i> {{ session('error') }}
+        </div>
+    @endif
+
+    @if (session('info'))
+        <div class="alert-success">
+            <i class="bi bi-info-circle"></i> {{ session('info') }}
+        </div>
+    @endif
+
     <div class="admin-card">
         <div class="card-header">
             <h3>All Information</h3>

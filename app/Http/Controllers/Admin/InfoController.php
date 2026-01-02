@@ -64,6 +64,21 @@ class InfoController extends Controller
             'content' => ['nullable', 'string'],
         ]);
 
+        $protectedTitles = [
+            'Title',
+            'Description',
+            'Rules',
+            'Terms & Conditions',
+        ];
+
+        if (in_array($info->title, $protectedTitles, true)) {
+            if (($data['title'] ?? '') !== $info->title) {
+                return redirect()->back()
+                    ->withInput()
+                    ->with('error', 'The title of this information entry cannot be changed.');
+            }
+        }
+
         $info->update([
             'title' => $data['title'],
             'content' => $data['content'] ?? '',
@@ -74,9 +89,15 @@ class InfoController extends Controller
 
     public function destroy(Information $info) : RedirectResponse
     {
-        $protectedIds = Information::whereIn('title', ['Title', 'Description'])->pluck('id')->toArray();
+        // make sure protected titles cannot be deleted
+        $protectedTitles = [
+            'Title',
+            'Description',
+            'Rules',
+            'Terms & Conditions',
+        ];
 
-        if (in_array($info->id, $protectedIds, true)) {
+        if (in_array($info->title, $protectedTitles, true)) {
             return redirect()
                 ->route('admin.info.index')
                 ->with('info', 'This information entry is protected and cannot be deleted.');
