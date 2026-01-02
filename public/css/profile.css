@@ -1,240 +1,700 @@
-.profile-section{
-    background-color: black;
-    color: white;
-    padding: 60px 0;
+/* Profile Section */
+.profile-section {
+    background: linear-gradient(180deg, #030303 0%, #0a0a0a 45%, #111111 100%);
+    color: #FAEBD7;
+    padding: 80px 0;
     min-height: 100vh;
 }
 
-.profile-card{
-    background-color: darkgray;
-    border-radius: 25px;
-    padding: 2.5rem;
-    margin-bottom: 2rem;
-}
-
-.profile-header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 2rem;
-}
-
-.profile-info{
+/* Alert Styling */
+.alert {
     display: flex;
     align-items: center;
-    gap: 2rem;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    border-radius: 12px;
+    font-weight: 500;
+    border: 1px solid;
 }
 
-.profile-avatar{
-    width: 100px;
-    height: 100px;
+.alert i {
+    font-size: 1.25rem;
+    flex-shrink: 0;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #1a3a1a 0%, #0f2a0f 100%);
+    color: #4ade80;
+    border-color: #166534;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #3a1a1a 0%, #2a1010 100%);
+    color: #f87171;
+    border-color: #991b1b;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #1a2a3a 0%, #0f1a2a 100%);
+    color: #60a5fa;
+    border-color: #1e40af;
+}
+
+/* Profile Header Card */
+.profile-header-card {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    border: 2px solid rgba(250, 235, 215, 0.15);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+}
+
+.profile-header-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 15px 50px rgba(0, 0, 0, 0.6);
+    border-color: rgba(250, 235, 215, 0.25);
+}
+
+.profile-avatar-modern {
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
-    background-color: #d3d3d3;
+    background: linear-gradient(135deg, #FAEBD7 0%, #f5f5dc 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 2.5rem;
-    color: #666;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #000;
+    box-shadow: 0 8px 20px rgba(250, 235, 215, 0.3);
+    flex-shrink: 0;
 }
 
-.profile-details h2{
-    font-size: 1.8rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-}
-
-.profile-details p{
-    color: #999;
-    font-size: 1rem;
+.profile-name-modern {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #FAEBD7;
     margin: 0;
+    line-height: 1.2;
 }
 
-.room-badge{
-    background-color: #f5f5dc;
-    color: black;
-    padding: 1.2rem 2rem;
-    border-radius: 20px;
-    text-align: left;
+.profile-email-modern {
+    font-size: 0.95rem;
+    color: #999;
+    margin: 0.5rem 0 0 0;
+    display: flex;
+    align-items: center;
 }
 
-.room-badge h6 {
-    font-size: 0.75rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
+.profile-email-modern i {
+    font-size: 0.85rem;
+}
+
+/* Room Badge Modern */
+.room-badge-modern {
+    background: linear-gradient(135deg, #FAEBD7 0%, #f5f5dc 100%);
+    color: #000;
+    padding: 1.25rem 1.75rem;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(250, 235, 215, 0.2);
+    transition: all 0.3s ease;
+    flex: 1;
+    max-width: 280px;
+}
+
+.room-badge-modern:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(250, 235, 215, 0.3);
+}
+
+.room-badge-empty {
+    background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+    border: 2px solid rgba(250, 235, 215, 0.15);
+}
+
+.room-badge-empty .room-badge-room,
+.room-badge-empty .room-badge-details,
+.room-badge-empty .room-badge-header {
+    color: #999 !important;
+}
+
+.room-badge-header {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 0.75rem;
+    color: #666;
 }
 
-.room-badge .room-name {
-    font-size: 1.1rem;
+.room-badge-room {
+    font-size: 1.35rem;
     font-weight: 700;
-    margin: 0;
+    margin: 0 0 0.25rem 0;
+    color: #000;
 }
 
-.room-badge .room-details {
+.room-badge-details {
     font-size: 0.85rem;
     color: #333;
     margin: 0;
 }
 
-.transaction-card {
-    background-color: #3a3a3a;
-    border-radius: 20px;
-    padding: 2.5rem;
-}
-
-.transaction-card h3 {
-    font-size: 1.8rem;
+/* Logout Button Modern */
+.btn-logout-modern {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.15) 0%, rgba(239, 68, 68, 0.08) 100%);
+    border: 2px solid rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
     font-weight: 600;
-    margin-bottom: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    white-space: nowrap;
 }
 
-.transaction-item {
-    background-color: #e0e0e0;
-    border-radius: 15px;
-    padding: 1.2rem 1.5rem;
-    margin-bottom: 1rem;
+.btn-logout-modern:hover {
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.25) 0%, rgba(239, 68, 68, 0.15) 100%);
+    border-color: rgba(239, 68, 68, 0.5);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(239, 68, 68, 0.2);
+}
+
+/* Payment Schedule Card */
+.payment-schedule-card {
+    background: linear-gradient(135deg, #1a1a3a 0%, #0f0f2a 100%);
+    border: 2px solid rgba(59, 130, 246, 0.3);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 40px rgba(59, 130, 246, 0.1);
+    transition: all 0.3s ease;
+}
+
+.payment-schedule-card:hover {
+    border-color: rgba(59, 130, 246, 0.5);
+    box-shadow: 0 15px 50px rgba(59, 130, 246, 0.2);
+}
+
+.payment-schedule-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(59, 130, 246, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.75rem;
+    color: #3b82f6;
+    flex-shrink: 0;
+}
+
+.payment-schedule-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #3b82f6;
+    margin: 0;
+}
+
+.payment-schedule-subtitle {
+    font-size: 0.95rem;
+    color: #999;
+    margin: 0.5rem 0 0 0;
+}
+
+.btn-schedule-view {
+    background: #3b82f6;
+    color: #fff;
+    padding: 0.875rem 1.75rem;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.btn-schedule-view:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
+    color: #fff;
+}
+
+.btn-schedule-view-sm {
+    background: #3b82f6;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.btn-schedule-view-sm:hover {
+    background: #2563eb;
+    color: #fff;
+}
+
+/* Urgent Payments Card */
+.urgent-payments-card {
+    background: linear-gradient(135deg, #3a1a1a 0%, #2a1010 100%);
+    border: 2px solid rgba(251, 191, 36, 0.3);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 40px rgba(251, 191, 36, 0.1);
+}
+
+.urgent-payments-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    gap: 1rem;
 }
 
-.transaction-date {
-    font-size: 0.85rem;
-    color: #666;
-    margin-bottom: 0.3rem;
-}
-
-.transaction-amount {
-    font-size: 1.25rem;
+.urgent-payments-title {
+    font-size: 1.5rem;
     font-weight: 700;
-    color: #000;
+    color: #fbbf24;
+    margin: 0;
     display: flex;
     align-items: center;
     gap: 0.5rem;
 }
 
-.transaction-info-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background-color: #999;
-    border: none;
+.urgent-payments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.payment-item {
+    background: rgba(250, 235, 215, 0.05);
+    border: 2px solid rgba(250, 235, 215, 0.15);
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.payment-item:hover {
+    background: rgba(250, 235, 215, 0.08);
+    border-color: rgba(250, 235, 215, 0.25);
+    transform: translateY(-2px);
+}
+
+.payment-item-overdue {
+    border-left: 4px solid #f87171;
+    border-left-width: 4px;
+}
+
+.payment-item-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.payment-item-date {
+    font-size: 0.9rem;
+    color: #999;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.payment-item-amount {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #FAEBD7;
+}
+
+.payment-item-room {
+    font-size: 0.85rem;
+    color: #999;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-pay-now {
+    background: linear-gradient(135deg, #FAEBD7 0%, #f5f5dc 100%);
+    color: #000;
+    padding: 0.875rem 1.75rem;
+    border-radius: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+.btn-pay-now:hover {
+    background: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(250, 235, 215, 0.3);
+    color: #000;
+}
+
+.urgent-payments-footer {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 12px;
+    text-align: center;
+}
+
+/* Transaction History Card */
+.transaction-history-card {
+    background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+    border: 2px solid rgba(250, 235, 215, 0.15);
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+}
+
+.transaction-history-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid rgba(250, 235, 215, 0.1);
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.transaction-history-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #FAEBD7;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.transaction-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.transaction-item-modern {
+    background: rgba(250, 235, 215, 0.05);
+    border: 2px solid rgba(250, 235, 215, 0.15);
+    border-radius: 16px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.transaction-item-modern:hover {
+    background: rgba(250, 235, 215, 0.08);
+    border-color: rgba(250, 235, 215, 0.25);
+    transform: translateY(-2px);
+}
+
+.transaction-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.transaction-date {
+    font-size: 0.9rem;
+    color: #999;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.transaction-amount {
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #FAEBD7;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.transaction-booking {
+    font-size: 0.85rem;
+    color: #999;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.transaction-empty-state {
+    text-align: center;
+    padding: 4rem 2rem;
+    color: #666;
+}
+
+.transaction-empty-state i {
+    font-size: 4rem;
+    color: #444;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.transaction-empty-state p {
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+/* Badges */
+.badge {
+    padding: 0.375rem 0.75rem;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.badge-success {
+    background: rgba(74, 222, 128, 0.15);
+    color: #4ade80;
+    border: 1px solid rgba(74, 222, 128, 0.3);
+}
+
+.badge-warning {
+    background: rgba(251, 191, 36, 0.15);
+    color: #fbbf24;
+    border: 1px solid rgba(251, 191, 36, 0.3);
+}
+
+.badge-danger {
+    background: rgba(248, 113, 113, 0.15);
+    color: #f87171;
+    border: 1px solid rgba(248, 113, 113, 0.3);
+}
+
+.badge-secondary {
+    background: rgba(150, 150, 150, 0.15);
+    color: #999;
+    border: 1px solid rgba(150, 150, 150, 0.3);
+}
+
+.badge-danger-solid {
+    background: #f87171;
     color: #fff;
-    font-size: 1.2rem;
+    border: none;
+}
+
+.badge-warning-solid {
+    background: #fbbf24;
+    color: #000;
+    border: none;
+}
+
+/* Links */
+.link-view-all {
+    color: #60a5fa;
+    font-size: 0.875rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.link-view-all:hover {
+    color: #3b82f6;
+    text-decoration: underline;
+}
+
+.link-view-more {
+    color: #60a5fa;
+    text-decoration: none;
+    font-weight: 600;
     display: flex;
     align-items: center;
     justify-content: center;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    gap: 0.5rem;
+    transition: all 0.3s ease;
 }
 
-.transaction-info-btn:hover {
-    background-color: #777;
+.link-view-more:hover {
+    color: #3b82f6;
+    text-decoration: underline;
 }
 
-@media (max-width: 768px) {
+.link-complete-payment {
+    color: #FAEBD7;
+    font-size: 0.85rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+}
+
+.link-complete-payment:hover {
+    color: #fff;
+    text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 991px) {
+    .profile-section {
+        padding: 60px 0;
+    }
+
+    .profile-header-card,
+    .payment-schedule-card,
+    .urgent-payments-card,
+    .transaction-history-card {
+        padding: 1.5rem;
+    }
+
+    .profile-avatar-modern {
+        width: 70px;
+        height: 70px;
+        font-size: 1.75rem;
+    }
+
+    .profile-name-modern {
+        font-size: 1.5rem;
+    }
+
+    .room-badge-modern {
+        max-width: 100%;
+    }
+
+    .payment-schedule-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 1.5rem;
+    }
+
+    .payment-schedule-title {
+        font-size: 1.25rem;
+    }
+
+    .urgent-payments-title {
+        font-size: 1.25rem;
+    }
+
+    .transaction-history-title {
+        font-size: 1.25rem;
+    }
+}
+
+@media (max-width: 767px) {
     .profile-section {
         padding: 40px 0;
     }
-    
-    .profile-card {
-        padding: 1.5rem;
-        margin-bottom: 1.5rem;
+
+    .profile-header-card,
+    .payment-schedule-card,
+    .urgent-payments-card,
+    .transaction-history-card {
+        padding: 1.25rem;
     }
-    
-    .profile-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 1.5rem;
-    }
-    
-    .profile-info {
-        flex-direction: column;
-        align-items: flex-start;
-        width: 100%;
-    }
-    
-    .profile-avatar {
-        width: 80px;
-        height: 80px;
-        font-size: 2rem;
-    }
-    
-    .profile-details h2 {
+
+    .profile-avatar-modern {
+        width: 60px;
+        height: 60px;
         font-size: 1.5rem;
     }
-    
-    .room-badge {
+
+    .profile-name-modern {
+        font-size: 1.25rem;
+    }
+
+    .profile-email-modern {
+        font-size: 0.85rem;
+    }
+
+    .room-badge-modern {
+        padding: 1rem 1.25rem;
+    }
+
+    .room-badge-room {
+        font-size: 1.15rem;
+    }
+
+    .btn-logout-modern {
+        padding: 0.625rem 1.25rem;
+        font-size: 0.9rem;
+    }
+
+    .btn-schedule-view {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
         width: 100%;
-        padding: 1rem 1.5rem;
+        justify-content: center;
     }
-    
-    .transaction-card {
-        padding: 1.5rem;
+
+    .payment-schedule-icon {
+        display: none;
     }
-    
-    .transaction-card h3 {
-        font-size: 1.5rem;
+
+    .payment-item,
+    .transaction-item-modern {
+        padding: 1.25rem;
     }
-    
-    .transaction-item {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 0.75rem;
-        padding: 1rem;
+
+    .payment-item-amount {
+        font-size: 1.25rem;
     }
-    
+
     .transaction-amount {
-        font-size: 1.1rem;
+        font-size: 1.15rem;
+    }
+
+    .btn-pay-now {
+        padding: 0.75rem 1.5rem;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .urgent-payments-header,
+    .transaction-history-header {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }
 
-@media (max-width: 576px) {
+@media (max-width: 575px) {
+    .container {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+
     .profile-section {
         padding: 30px 0;
     }
-    
-    .profile-card {
-        padding: 1.25rem;
-        border-radius: 20px;
+
+    .payment-item-date {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.375rem;
     }
-    
-    .profile-details h2 {
-        font-size: 1.3rem;
-    }
-    
-    .profile-details p {
-        font-size: 0.9rem;
-    }
-    
-    .room-badge {
-        padding: 0.85rem 1rem;
-    }
-    
-    .room-badge h6 {
+
+    .badge {
         font-size: 0.7rem;
-    }
-    
-    .room-badge .room-name {
-        font-size: 1rem;
-    }
-    
-    .transaction-card {
-        padding: 1.25rem;
-    }
-    
-    .transaction-item {
-        padding: 0.85rem;
-    }
-    
-    .transaction-date {
-        font-size: 0.8rem;
-    }
-    
-    .transaction-amount {
-        font-size: 1rem;
+        padding: 0.25rem 0.5rem;
     }
 }
