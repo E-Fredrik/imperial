@@ -10,10 +10,15 @@
     <div class="container position-relative">
         <div class="row align-items-center">
             <div class="col-lg-6 col-md-12 mb-5 mb-lg-0">
-                <h1 class="hero-title">Your Premium Boarding Experience</h1>
+                <h1 class="hero-title">
+                    {!! optional($information->firstWhere('title', 'Title'))->content
+                        ?? optional($information->first())->content
+                        ?? 'Imperial Kost' !!}
+                </h1>
                 <p class="hero-description">
-                    Discover comfort and convenience with our modern boarding house. Interactive room 
-                    selection, instant booking, and premium amenities await you.
+                    {!! optional($information->firstWhere('title', 'Description'))->content
+                        ?? optional($information->first())->content
+                        ?? 'Discover comfort and convenience with our modern boarding house. Interactive room selection, instant booking, and premium amenities await you.' !!}
                 </p>
                 <div class="mb-4">
                     <span class="badge-tag"><i class="bi bi-star-fill me-1"></i>Premium Rooms</span>

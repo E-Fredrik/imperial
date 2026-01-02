@@ -1,63 +1,75 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Kost Facilities') }}
-        </h2>
-    </x-slot>
+<x-admin-layout>
+    <x-slot name="title">Kost Facilities Management</x-slot>
+    <x-slot name="header">Kost Facilities Management</x-slot>
+    <x-slot name="icon">bi-building</x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    @if (session('success'))
-                        <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
-                            {{ session('success') }}
-                        </div>
-                    @endif
-
-                    <table class="table-auto w-full text-white">
-                        <thead>
-                            <tr>
-                                <th class="px-4 py-2 text-sm font-medium text-white">ID</th>
-                                <th class="px-4 py-2 text-sm font-medium text-white">Name</th>
-                                <th class="px-4 py-2 text-sm font-medium text-white">Description</th>
-                                <th class="px-4 py-2 text-sm font-medium text-white">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($facilities as $facility)
-                                <tr>
-                                    <td class="border px-4 py-2 text-white">{{ $facility->id }}</td>
-                                    <td class="border px-4 py-2 text-white">{{ $facility->name }}</td>
-                                    <td class="border px-4 py-2 text-white">
-                                        <div class="prose max-w-none text-sm text-gray-800 dark:text-white" style="max-height:6rem; overflow:auto;">
-                                            {!! $facility->description !!}
-                                        </div>
-                                    </td>
-                                    <td class="border px-4 py-2">
-                                        <a href="{{ route('admin.kostfac.edit', $facility) }}" class="inline-block px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white rounded text-sm me-2">Edit</a>
-                                        <form action="{{ route('admin.kostfac.destroy', $facility) }}" method="POST" class="inline" onsubmit="return confirm('Are you sure?')">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="inline-block px-2 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded text-sm">Delete</button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-
-                    <div class="mt-4">
-                        {{ $facilities->links() }}
-                    </div>
-
-                    <div class="mt-4">
-                        <a href="{{ route('admin.kostfac.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-800 rounded-md text-sm font-medium hover:opacity-90">
-                            Add New Facility
-                        </a>
-                    </div>
-                </div>
-            </div>
+    @if(session('success'))
+        <div class="alert-success">
+            <i class="bi bi-check-circle"></i> {{ session('success') }}
         </div>
+    @endif
+
+    <div class="admin-card">
+        <div class="card-header">
+            <h3><i class="bi bi-building me-2"></i>All Kost Facilities</h3>
+            <a href="{{ route('admin.kostfac.create') }}" class="btn-admin-primary">
+                <i class="bi bi-plus-circle"></i> Add New Facility
+            </a>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">ID</th>
+                        <th style="width: 200px;">Name</th>
+                        <th>Description</th>
+                        <th style="width: 200px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($facilities as $facility)
+                        <tr>
+                            <td data-label="ID">{{ $facility->id }}</td>
+                            <td data-label="Name"><strong>{{ $facility->name }}</strong></td>
+                            <td data-label="Description">
+                                <div style="max-height: 100px; overflow: auto; color: #FAEBD7;">
+                                    {!! $facility->description !!}
+                                </div>
+                            </td>
+                            <td data-label="Actions">
+                                <div class="d-flex gap-2">
+                                    <a href="{{ route('admin.kostfac.edit', $facility) }}" class="btn-admin-secondary">
+                                        <i class="bi bi-pencil"></i> Edit
+                                    </a>
+                                    <form action="{{ route('admin.kostfac.destroy', $facility) }}" method="POST" onsubmit="return confirm('Are you sure?');" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn-admin-danger">
+                                            <i class="bi bi-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="4">
+                                <div class="empty-state">
+                                    <i class="bi bi-inbox"></i>
+                                    <p>No kost facilities found.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        @if($facilities->hasPages())
+            <div class="d-flex justify-content-center mt-4">
+                {{ $facilities->links() }}
+            </div>
+        @endif
     </div>
-</x-app-layout>
+</x-admin-layout>

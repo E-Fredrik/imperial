@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Image;
 use App\Models\Room;
+use App\Models\Information;
 
 class HomeController extends Controller
 {
@@ -22,6 +23,8 @@ class HomeController extends Controller
         ->orderBy('room_number')
         ->get();
 
-        return view('home', compact('featured', 'rooms'));
+        $information = Information::all();
+
+        return view('home', compact('featured', 'rooms', 'information'));
     }
 }

@@ -47,6 +47,22 @@
                     <span class="fw-semibold fs-6">Upload Image</span>
                 </a>
             </div>
+            <div class="col-md-6 col-lg-3">
+                <a href="{{ route('admin.roomfac.index') }}" class="btn w-100 text-start d-flex align-items-center gap-3 admin-action-btn dashboard-btn">
+                    <div class="action-icon-box">
+                        <i class="bi bi-check2-square fs-3"></i>
+                    </div>
+                    <span class="fw-semibold fs-6">Manage Room Facilities</span>
+                </a>
+            </div>
+            <div class="col-md-6 col-lg-3">
+                <a href="{{ route('admin.kostfac.index') }}" class="btn w-100 text-start d-flex align-items-center gap-3 admin-action-btn dashboard-btn">
+                    <div class="action-icon-box">
+                        <i class="bi bi-building fs-3"></i>
+                    </div>
+                    <span class="fw-semibold fs-6">Manage Kost Facilities</span>
+                </a>
+            </div>
         </div>
     </div>
 

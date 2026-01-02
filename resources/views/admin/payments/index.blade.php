@@ -1,121 +1,133 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-            {{ __('Payments') }}
-        </h2>
-    </x-slot>
+<x-admin-layout>
+    <x-slot name="title">Payments Management</x-slot>
+    <x-slot name="header">Payments Management</x-slot>
+    <x-slot name="icon">bi-credit-card</x-slot>
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900 dark:text-gray-100">
-                    @if(session('success'))
-                        <div class="mb-4 font-medium text-sm text-green-600 dark:text-green-400">
-                            {{ session('success') }}
-                        </div>
-                    @endif
+    @if(session('success'))
+        <div class="alert-success">
+            <i class="bi bi-check-circle"></i> {{ session('success') }}
+        </div>
+    @endif
 
-                    <div class="mb-4 p-4 bg-blue-50 dark:bg-blue-900 rounded-lg">
-                        <p class="text-sm text-blue-800 dark:text-blue-200">
-                            <strong>Note:</strong> Payments are now processed via Midtrans. Status updates automatically when customers complete payment.
-                            You can still manually accept/decline payments for cash or offline transactions.
-                        </p>
-                    </div>
-
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-                            <thead class="bg-gray-50 dark:bg-gray-700">
-                                <tr>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-200">ID</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-200">Booking</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-200">User</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-200">Room</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-200">Month</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-200">Amount</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-200">Payment Type</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-200">Status</th>
-                                    <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 dark:text-gray-200">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody class="bg-white dark:bg-transparent divide-y divide-gray-200 dark:divide-gray-700">
-                                @forelse($payments as $payment)
-                                    <tr class="odd:bg-white even:bg-gray-50 dark:even:bg-gray-800">
-                                        <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">{{ $payment->id }}</td>
-
-                                        <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
-                                            <a href="{{ route('admin.bookings.show', $payment->booking_id) }}" class="text-blue-600 hover:underline">
-                                                #{{ $payment->booking_id }}
-                                            </a>
-                                        </td>
-
-                                        <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
-                                            {{ optional($payment->booking->user)->first_name ?? '-' }}
-                                            {{ optional($payment->booking->user)->last_name ?? '' }}<br />
-                                            <span class="text-xs text-gray-500 dark:text-gray-400">{{ optional($payment->booking->user)->email ?? '' }}</span>
-                                        </td>
-
-                                        <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
-                                            {{ optional($payment->booking->room)->room_number ?? '-' }}
-                                        </td>
-
-                                        <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
-                                            {{ $payment->payment_for_month }}
-                                        </td>
-
-                                        <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
-                                            {{ number_format($payment->amount) }}
-                                        </td>
-
-                                        <td class="px-4 py-3 text-sm text-gray-900 dark:text-gray-100">
-                                            {{ $payment->payment_type ?? 'N/A' }}
-                                        </td>
-
-                                        <td class="px-4 py-3 text-sm">
-                                            <span class="inline-flex items-center px-2 py-1 rounded text-xs
-                                                @if($payment->status === 'accepted') bg-green-100 text-green-800
-                                                @elseif($payment->status === 'pending') bg-yellow-100 text-yellow-800
-                                                @elseif($payment->status === 'declined') bg-rose-100 text-rose-800
-                                                @else bg-gray-100 text-gray-800 @endif">
-                                                {{ $payment->status }}
-                                            </span>
-                                        </td>
-
-                                        <td class="px-4 py-3 text-sm">
-                                            <div class="flex items-center gap-2">
-                                                <a href="{{ route('admin.bookings.show', $payment->booking_id) }}" class="inline-flex px-3 py-1 bg-blue-600 text-white rounded text-sm">View Booking</a>
-
-                                                @if($payment->status === 'pending')
-                                                    <form method="POST" action="{{ route('admin.payments.update', $payment) }}">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <input type="hidden" name="action" value="accept" />
-                                                        <button type="submit" class="inline-flex px-3 py-1 bg-green-600 hover:bg-green-500 text-white rounded text-sm" title="Manual accept (for cash payments)">Accept</button>
-                                                    </form>
-
-                                                    <form method="POST" action="{{ route('admin.payments.update', $payment) }}" onsubmit="return confirm('Decline this payment?');">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <input type="hidden" name="action" value="decline" />
-                                                        <button type="submit" class="inline-flex px-3 py-1 bg-rose-600 hover:bg-rose-500 text-white rounded text-sm">Decline</button>
-                                                    </form>
-                                                @endif
-                                            </div>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr>
-                                        <td colspan="9" class="px-4 py-6 text-center text-gray-600 dark:text-gray-400">No payments found.</td>
-                                    </tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="mt-4">
-                        {{ $payments->links() }}
-                    </div>
-                </div>
+    <div class="admin-card">
+        <div class="card-header">
+            <h3><i class="bi bi-credit-card me-2"></i>All Payments</h3>
+            <div class="d-flex gap-2">
+                <a href="{{ route('admin.bookings.create') }}" class="btn-admin-primary">
+                    <i class="bi bi-plus-circle"></i> New Booking
+                </a>
             </div>
         </div>
+
+        <div class="mb-3 p-3" style="background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px;">
+            <p style="color: #60a5fa; font-size: 0.9rem; margin: 0;">
+                <i class="bi bi-info-circle me-1"></i>
+                <strong>Note:</strong> Payments are processed via Midtrans. Status updates automatically when customers complete payment. You can still manually accept/decline payments for cash or offline transactions.
+            </p>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th style="width: 60px;">ID</th>
+                        <th style="width: 100px;">Booking</th>
+                        <th style="width: 180px;">User</th>
+                        <th style="width: 100px;">Room</th>
+                        <th style="width: 120px;">Month</th>
+                        <th style="width: 130px;">Amount</th>
+                        <th style="width: 120px;">Payment Type</th>
+                        <th style="width: 100px;">Status</th>
+                        <th style="width: 220px;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($payments as $payment)
+                        <tr>
+                            <td data-label="ID">{{ $payment->id }}</td>
+                            <td data-label="Booking">
+                                <a href="{{ route('admin.bookings.show', $payment->booking_id) }}" style="color: #60a5fa; text-decoration: underline;">
+                                    #{{ $payment->booking_id }}
+                                </a>
+                            </td>
+                            <td data-label="User">
+                                <div>
+                                    <strong>{{ optional($payment->booking->user)->first_name ?? '-' }} {{ optional($payment->booking->user)->last_name ?? '' }}</strong>
+                                </div>
+                                <div style="font-size: 0.75rem; color: #999;">
+                                    {{ optional($payment->booking->user)->email ?? '' }}
+                                </div>
+                            </td>
+                            <td data-label="Room">
+                                <strong>{{ optional($payment->booking->room)->room_number ?? '-' }}</strong>
+                            </td>
+                            <td data-label="Month">
+                                {{ $payment->payment_for_month }}
+                            </td>
+                            <td data-label="Amount">
+                                <strong>Rp {{ number_format($payment->amount, 0, ',', '.') }}</strong>
+                                @if($payment->late_fee > 0)
+                                    <div style="font-size: 0.75rem; color: #f87171;">
+                                        +Rp {{ number_format($payment->late_fee, 0, ',', '.') }} late fee
+                                    </div>
+                                @endif
+                            </td>
+                            <td data-label="Payment Type">
+                                <span style="font-size: 0.875rem; color: #999;">
+                                    {{ $payment->payment_type ?? 'N/A' }}
+                                </span>
+                            </td>
+                            <td data-label="Status">
+                                <span class="status-badge status-{{ $payment->status }}">
+                                    {{ ucfirst($payment->status) }}
+                                </span>
+                            </td>
+                            <td data-label="Actions">
+                                <div class="d-flex gap-2 flex-wrap">
+                                    <a href="{{ route('admin.bookings.show', $payment->booking_id) }}" class="btn-admin-info" style="padding: 0.4rem 0.8rem; font-size: 0.875rem;">
+                                        <i class="bi bi-eye"></i> View
+                                    </a>
+                                    
+                                    @if($payment->status === 'pending')
+                                        <form method="POST" action="{{ route('admin.payments.update', $payment) }}" class="d-inline">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="hidden" name="action" value="accept" />
+                                            <button type="submit" class="btn-admin-primary" style="padding: 0.4rem 0.8rem; font-size: 0.875rem;" title="Manual accept (for cash payments)">
+                                                <i class="bi bi-check-circle"></i> Accept
+                                            </button>
+                                        </form>
+
+                                        <form method="POST" action="{{ route('admin.payments.update', $payment) }}" onsubmit="return confirm('Decline this payment?');" class="d-inline">
+                                            @csrf
+                                            @method('PUT')
+                                            <input type="hidden" name="action" value="decline" />
+                                            <button type="submit" class="btn-admin-danger" style="padding: 0.4rem 0.8rem; font-size: 0.875rem;">
+                                                <i class="bi bi-x-circle"></i> Decline
+                                            </button>
+                                        </form>
+                                    @endif
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="9">
+                                <div class="empty-state">
+                                    <i class="bi bi-inbox"></i>
+                                    <p>No payments found.</p>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        @if($payments->hasPages())
+            <div class="d-flex justify-content-center mt-4">
+                {{ $payments->links() }}
+            </div>
+        @endif
     </div>
-</x-app-layout>
+</x-admin-layout>

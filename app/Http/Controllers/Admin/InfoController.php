@@ -74,7 +74,16 @@ class InfoController extends Controller
 
     public function destroy(Information $info) : RedirectResponse
     {
+        $protectedIds = Information::whereIn('title', ['Title', 'Description'])->pluck('id')->toArray();
+
+        if (in_array($info->id, $protectedIds, true)) {
+            return redirect()
+                ->route('admin.info.index')
+                ->with('info', 'This information entry is protected and cannot be deleted.');
+        }
+
         $info->delete();
+
         return redirect()->route('admin.info.index')->with('success', 'Information deleted.');
     }
 }

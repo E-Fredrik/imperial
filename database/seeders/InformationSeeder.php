@@ -20,5 +20,12 @@ class InformationSeeder extends Seeder
             'title' => 'Rules',
             'content' => 'This is another sample information record.',
         ]);
+        Information::create([
+            'title' => 'Description',
+            'content'=> 'Live like a king, Feel like home'
+        ]);Information::create([
+            'title' => 'Title',
+            'content'=> 'Imperial Kost'
+        ]);
     }
 }
