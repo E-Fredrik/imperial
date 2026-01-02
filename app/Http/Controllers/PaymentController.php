@@ -272,6 +272,21 @@ class PaymentController extends Controller
                 'next_payment_month' => $nextMonthString,
             ]);
 
+            // Check if booking has a move-out date set
+            if ($booking->move_out_date) {
+                $moveOutMonth = Carbon::parse($booking->move_out_date)->startOfMonth();
+                
+                // Don't generate payment if next month is after move-out month
+                if ($nextPaymentMonth->greaterThan($moveOutMonth)) {
+                    Log::info('Skipping payment generation - after move-out date', [
+                        'booking_id' => $booking->id,
+                        'next_payment_month' => $nextMonthString,
+                        'move_out_date' => $booking->move_out_date->format('Y-m-d'),
+                    ]);
+                    return;
+                }
+            }
+
             // Check if next payment already exists
             $existingPayment = Payment::where('booking_id', $booking->id)
                 ->where('payment_for_month', $nextMonthString)
@@ -285,15 +300,17 @@ class PaymentController extends Controller
                 return;
             }
 
-            // Calculate late fee based on whether we're past the 1st of the payment month
+            // Calculate late fee ONLY if we're generating this payment AFTER the 1st of the month it's due
+            // This means the user hasn't paid on time and is now overdue
             $lateFee = 0;
             $today = now();
             $firstDayOfPaymentMonth = $nextPaymentMonth->copy()->startOfMonth();
             
-            // Only add late fee if today is after the 1st of the payment month
+            // Only add late fee if today is AFTER the 1st of the payment month
+            // This means the payment is being generated late (user is overdue)
             if ($today->greaterThan($firstDayOfPaymentMonth)) {
                 $lateFee = (int) ($booking->monthly_rent * 0.1); // 10% late fee
-                Log::info('Late fee applied for payment generated after due date', [
+                Log::info('Late fee applied for overdue recurring payment', [
                     'today' => $today->format('Y-m-d'),
                     'payment_month_start' => $firstDayOfPaymentMonth->format('Y-m-d'),
                     'late_fee' => $lateFee,
@@ -384,13 +401,27 @@ class PaymentController extends Controller
             ->with('room')
             ->first();
         
+        // Get all pending payments for this user
         $upcomingPayments = Payment::with('booking.room')
             ->whereHas('booking', function ($q) use ($user) {
                 $q->where('user_id', $user->id);
             })
             ->where('status', 'pending')
             ->orderBy('payment_for_month')
-            ->get();
+            ->get()
+            ->filter(function ($payment) {
+                // If booking has a move-out date set, exclude payments after that date
+                $booking = $payment->booking;
+                if ($booking && $booking->move_out_date) {
+                    $paymentMonth = Carbon::createFromFormat('Y-m', $payment->payment_for_month)->startOfMonth();
+                    $moveOutDate = Carbon::parse($booking->move_out_date)->startOfMonth();
+                    
+                    // Only show payments for months before or equal to move-out month
+                    return $paymentMonth->lessThanOrEqualTo($moveOutDate);
+                }
+                
+                return true;
+            });
 
         return view('payments.upcoming', compact('upcomingPayments', 'currentBooking'));
     }

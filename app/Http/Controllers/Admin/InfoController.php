@@ -69,6 +69,9 @@ class InfoController extends Controller
             'Description',
             'Rules',
             'Terms & Conditions',
+            'Phone',
+            'Whatsapp',
+            'Email'
         ];
 
         if (in_array($info->title, $protectedTitles, true)) {
@@ -95,6 +98,9 @@ class InfoController extends Controller
             'Description',
             'Rules',
             'Terms & Conditions',
+            'Phone',
+            'Whatsapp',
+            'Email'
         ];
 
         if (in_array($info->title, $protectedTitles, true)) {

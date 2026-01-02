@@ -48,7 +48,6 @@ unset($__defined_vars, $__key, $__value); ?>
                                 <?php
                                     $imagePath = $image->image_path;
                                     $publicPath = public_path($imagePath);
-                                    
                                     if (file_exists($publicPath)) {
                                         $imageUrl = asset($imagePath);
                                     } else {
@@ -161,7 +160,7 @@ unset($__defined_vars, $__key, $__value); ?>
                 
                 <div class="booking-section">
                     <h3>Book This Room</h3>
-                    <form action="<?php echo e(route('bookings.create')); ?>" method="GET">
+                    <form action="<?php echo e(route('bookings.create')); ?>" method="GET" onsubmit="return validateModalBookingForm(<?php echo e($room->id); ?>)">
                         <input type="hidden" name="room_id" value="<?php echo e($room->id); ?>">
                         
                         <div class="date-input-group">
@@ -171,8 +170,12 @@ unset($__defined_vars, $__key, $__value); ?>
                                    name="check_in" 
                                    class="form-control" 
                                    style="background:#2a2a2a; border:1px solid #666; color:#FAEBD7; padding:0.8rem; border-radius:8px;"
+                                   value="<?php echo e(date('Y-m-d')); ?>"
                                    min="<?php echo e(date('Y-m-d')); ?>"
                                    required>
+                            <small style="color: #999; font-size: 0.875rem; margin-top: 0.5rem; display: block;">
+                                <i class="bi bi-info-circle"></i> Move-in date cannot be in the past. You have a 5-day grace period from the 1st of each month before late fees apply.
+                            </small>
                         </div>
                         
                         <div class="action-buttons">
@@ -194,7 +197,7 @@ unset($__defined_vars, $__key, $__value); ?>
     </div>
 </div>
 
-<?php if (! $__env->hasRenderedOnce('2ce90a8b-27bc-4795-a7a3-067e09f7f749')): $__env->markAsRenderedOnce('2ce90a8b-27bc-4795-a7a3-067e09f7f749'); ?>
+<?php if (! $__env->hasRenderedOnce('dbda0358-25dd-41f6-837a-20d310098cdc')): $__env->markAsRenderedOnce('dbda0358-25dd-41f6-837a-20d310098cdc'); ?>
 <?php $__env->startPush('scripts'); ?>
 <script>
 // Store viewer instances
@@ -234,52 +237,44 @@ function initializePannellum(roomId) {
     const panoramaDiv = document.getElementById('panorama-' + roomId);
     
     if (!panoramaDiv) {
-        console.log('No 360° viewer found for room:', roomId);
+        console.log('No panorama div found for room:', roomId);
         return;
     }
     
-    // Destroy existing viewer if present
+    const panoramaUrl = panoramaDiv.dataset.panoramaUrl;
+    
+    if (!panoramaUrl) {
+        console.log('No panorama URL for room:', roomId);
+        return;
+    }
+    
+    // Clean up existing viewer if it exists
     if (pannellumViewers[roomId]) {
         try {
             pannellumViewers[roomId].destroy();
             delete pannellumViewers[roomId];
         } catch (error) {
-            console.error('Error destroying existing viewer:', error);
+            console.error('Error destroying existing Pannellum:', error);
         }
     }
     
-    // Get the panorama URL from data attribute
-    const panoramaUrl = panoramaDiv.getAttribute('data-panorama-url');
-    
-    if (!panoramaUrl) {
-        console.error('No panorama URL found for room:', roomId);
-        return;
-    }
-    
-    // Ensure the container has dimensions
-    const container = panoramaDiv.closest('.panellum-container');
-    if (!container || container.offsetHeight === 0) {
-        console.error('Container has no height for room:', roomId);
-        return;
-    }
-    
     try {
-        console.log('Initializing Pannellum for room:', roomId, 'with URL:', panoramaUrl);
-        
-        // Initialize Pannellum viewer
-        pannellumViewers[roomId] = pannellum.viewer('panorama-' + roomId, {
-            "type": "equirectangular",
-            "panorama": panoramaUrl,
-            "autoLoad": true,
-            "autoRotate": -2,
-            "showControls": true,
-            "showFullscreenCtrl": true,
-            "mouseZoom": true,
-            "pitch": 0,
-            "yaw": 0,
-            "hfov": 110
+        pannellumViewers[roomId] = pannellum.viewer(panoramaDiv, {
+            type: 'equirectangular',
+            panorama: panoramaUrl,
+            autoLoad: true,
+            showControls: true,
+            mouseZoom: true,
+            draggable: true,
+            hotSpotDebug: false,
+            compass: false,
+            northOffset: 0,
+            pitch: 0,
+            yaw: 0,
+            hfov: 100,
+            minHfov: 50,
+            maxHfov: 120
         });
-        
         console.log('Pannellum initialized successfully for room:', roomId);
     } catch (error) {
         console.error('Error initializing Pannellum for room:', roomId, error);
@@ -316,6 +311,43 @@ function closeRoomModal(roomId) {
     
     document.body.style.overflow = 'auto';
 }
+
+// Validate move-in date in modal before submitting
+function validateModalBookingForm(roomId) {
+    const dateInput = document.getElementById('check_in_' + roomId);
+    if (!dateInput) return true;
+    
+    const selectedDate = new Date(dateInput.value);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    if (selectedDate < today) {
+        alert('Move-in date cannot be in the past. Please select today or a future date.');
+        dateInput.focus();
+        return false;
+    }
+    
+    return true;
+}
+
+// Prevent typing/pasting invalid dates in all modal date inputs
+document.addEventListener('DOMContentLoaded', function() {
+    // Find all modal date inputs
+    const modalDateInputs = document.querySelectorAll('[id^="check_in_"]');
+    
+    modalDateInputs.forEach(function(input) {
+        input.addEventListener('change', function() {
+            const selectedDate = new Date(this.value);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            if (selectedDate < today) {
+                alert('Move-in date cannot be in the past. Please select today or a future date.');
+                this.value = '<?php echo e(date("Y-m-d")); ?>';
+            }
+        });
+    });
+});
 
 // Close modal on Escape key
 document.addEventListener('keydown', (e) => {

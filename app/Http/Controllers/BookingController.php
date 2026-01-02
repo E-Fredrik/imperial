@@ -43,7 +43,7 @@ class BookingController extends Controller
     {
         $data = $request->validate([
             'room_id' => ['required','exists:rooms,id'],
-            'move_in_date' => ['required','date'],
+            'move_in_date' => ['required','date','after_or_equal:today'], // prevent past dates
             'id_card' => ['nullable','file','image','max:4096'],
         ]);
 
@@ -54,14 +54,21 @@ class BookingController extends Controller
             return back()->withErrors(['room_id' => 'Room is not available'])->withInput();
         }
 
-        // monthly_rent follows the room price (no admin-supplied rent)
+        // monthly_rent follows the room price
         $monthly = (int) $room->price;
+
+        // Normalize move-in date to start of day
+        $moveInDate = Carbon::parse($data['move_in_date'])->startOfDay();
+        $paymentForMonth = $moveInDate->format('Y-m');
+
+        // NO LATE FEE FOR INITIAL BOOKING
+        // Late fees only apply to recurring monthly payments when user pays after due date
 
         // create booking (pending)
         $booking = Booking::create([
             'user_id' => Auth::id(),
             'room_id' => $room->id,
-            'move_in_date' => $data['move_in_date'],
+            'move_in_date' => $moveInDate,
             'monthly_rent' => $monthly,
             'status' => 'pending',
         ]);
@@ -82,29 +89,18 @@ class BookingController extends Controller
             $user->update(['id_card' => $idPath]);
         }
 
-        // Determine the payment month based on move-in date
-        $moveInDate = Carbon::parse($data['move_in_date']);
-        $paymentForMonth = $moveInDate->format('Y-m');
-
-        // Calculate late fee if move-in is after the 1st of the month
-        $lateFee = 0;
-        if ($moveInDate->day > 1) {
-            $lateFee = (int) ($monthly * 0.1); // 10% late fee
-        }
-
-        // Create initial payment record for the first month (pending - will be paid via Midtrans)
-        // First payment has 24h expiration
+        // Create initial payment record for the first month
+        // NO LATE FEE - user is just booking the room
         $payment = Payment::create([
             'booking_id' => $booking->id,
-            'amount' => $monthly + $lateFee,
+            'amount' => $monthly, // Only monthly rent, no late fee
             'payment_for_month' => $paymentForMonth,
             'monthly_rent' => $monthly,
-            'late_fee' => $lateFee,
+            'late_fee' => 0, // Always 0 for initial booking
             'status' => 'pending',
-            'expires_at' => now()->addHours(24), // Only first payment has expiration
+            'expires_at' => now()->addHours(24), // 24h to complete first payment
         ]);
 
-        // Redirect to payment page
         return redirect()->route('payment.show', $payment)->with('success', 'Booking created! Please complete payment within 24 hours to confirm.');
     }
 

@@ -23,9 +23,23 @@ class InformationSeeder extends Seeder
         Information::create([
             'title' => 'Description',
             'content'=> 'Live like a king, Feel like home'
-        ]);Information::create([
+        ]);
+        Information::create([
             'title' => 'Title',
             'content'=> 'Imperial Kost'
         ]);
+        Information::create([
+            'title' => 'Phone',
+            'content' => '+6282139721494'
+        ]);
+        Information::create([
+            'title' => 'Whatsapp',
+            'content' => '+628385675857'
+        ]);
+        Information::create([
+            'title' => 'Email',
+            'content' => 'test@imperial.com'
+        ]);
+
     }
 }

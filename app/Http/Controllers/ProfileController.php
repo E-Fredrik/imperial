@@ -50,7 +50,32 @@ class ProfileController extends Controller
         // Count all pending payments for the badge
         $totalPendingCount = $transactions->where('status', 'pending')->count();
 
-        return view('profile', compact('user', 'transactions', 'pendingPayments', 'totalPendingCount'));
+        // Get upcoming payments (next 3 months, pending status only)
+        // Exclude payments that fall after the booking's move-out date
+        $upcomingPayments = Payment::with(['booking.room'])
+            ->whereHas('booking', function ($q) use ($user) {
+                $q->where('user_id', $user->id)
+                  ->where('status', 'booked');
+            })
+            ->where('status', 'pending')
+            ->orderBy('payment_for_month')
+            ->get()
+            ->filter(function ($payment) {
+                // If booking has a move-out date set, exclude payments after that date
+                $booking = $payment->booking;
+                if ($booking && $booking->move_out_date) {
+                    $paymentMonth = Carbon::createFromFormat('Y-m', $payment->payment_for_month)->startOfMonth();
+                    $moveOutDate = Carbon::parse($booking->move_out_date)->startOfMonth();
+                    
+                    // Only show payments for months before or equal to move-out month
+                    return $paymentMonth->lessThanOrEqualTo($moveOutDate);
+                }
+                
+                return true;
+            })
+            ->take(3);
+
+        return view('profile', compact('user', 'transactions', 'pendingPayments', 'totalPendingCount', 'upcomingPayments'));
     }
 
     /**

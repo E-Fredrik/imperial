@@ -34,7 +34,7 @@
             </div>
         <?php endif; ?>
 
-        <form action="<?php echo e(route('admin.bookings.store')); ?>" method="POST" enctype="multipart/form-data">
+        <form action="<?php echo e(route('admin.bookings.store')); ?>" method="POST" enctype="multipart/form-data" onsubmit="return validateAdminBookingForm()">
             <?php echo csrf_field(); ?>
 
             <!-- User Selection -->
@@ -81,6 +81,9 @@
                     value="<?php echo e(old('move_in_date')); ?>"
                     required
                     min="<?php echo e(date('Y-m-d')); ?>">
+                <small>
+                    <i class="bi bi-info-circle me-1"></i>Move-in date cannot be in the past. 5-day grace period before late fees apply.
+                </small>
             </div>
 
             <!-- Proof of Payment -->
@@ -142,6 +145,41 @@
     </div>
 
     <script src="<?php echo e(asset('js/booking.js')); ?>"></script>
+    <script>
+    function validateAdminBookingForm() {
+        const moveInInput = document.getElementById('move_in_date');
+        if (!moveInInput) return true;
+        
+        const selectedDate = new Date(moveInInput.value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        if (selectedDate < today) {
+            alert('Move-in date cannot be in the past. Please select today or a future date.');
+            moveInInput.focus();
+            return false;
+        }
+        
+        return true;
+    }
+
+    // Also prevent typing/pasting invalid dates
+    document.addEventListener('DOMContentLoaded', function() {
+        const moveInInput = document.getElementById('move_in_date');
+        if (moveInInput) {
+            moveInInput.addEventListener('change', function() {
+                const selectedDate = new Date(this.value);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                
+                if (selectedDate < today) {
+                    alert('Move-in date cannot be in the past. Please select today or a future date.');
+                    this.value = '<?php echo e(date("Y-m-d")); ?>';
+                }
+            });
+        }
+    });
+    </script>
  <?php echo $__env->renderComponent(); ?>
 <?php endif; ?>
 <?php if (isset($__attributesOriginal91fdd17964e43374ae18c674f95cdaa3)): ?>

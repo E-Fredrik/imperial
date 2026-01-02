@@ -25,7 +25,7 @@
             </div>
         @endif
 
-        <form action="{{ route('admin.bookings.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('admin.bookings.store') }}" method="POST" enctype="multipart/form-data" onsubmit="return validateAdminBookingForm()">
             @csrf
 
             <!-- User Selection -->
@@ -70,6 +70,9 @@
                     value="{{ old('move_in_date') }}"
                     required
                     min="{{ date('Y-m-d') }}">
+                <small>
+                    <i class="bi bi-info-circle me-1"></i>Move-in date cannot be in the past. 5-day grace period before late fees apply.
+                </small>
             </div>
 
             <!-- Proof of Payment -->
@@ -131,4 +134,39 @@
     </div>
 
     <script src="{{ asset('js/booking.js') }}"></script>
+    <script>
+    function validateAdminBookingForm() {
+        const moveInInput = document.getElementById('move_in_date');
+        if (!moveInInput) return true;
+        
+        const selectedDate = new Date(moveInInput.value);
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        if (selectedDate < today) {
+            alert('Move-in date cannot be in the past. Please select today or a future date.');
+            moveInInput.focus();
+            return false;
+        }
+        
+        return true;
+    }
+
+    // Also prevent typing/pasting invalid dates
+    document.addEventListener('DOMContentLoaded', function() {
+        const moveInInput = document.getElementById('move_in_date');
+        if (moveInInput) {
+            moveInInput.addEventListener('change', function() {
+                const selectedDate = new Date(this.value);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                
+                if (selectedDate < today) {
+                    alert('Move-in date cannot be in the past. Please select today or a future date.');
+                    this.value = '{{ date("Y-m-d") }}';
+                }
+            });
+        }
+    });
+    </script>
 </x-admin-layout>

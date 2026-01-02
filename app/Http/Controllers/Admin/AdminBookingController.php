@@ -51,7 +51,7 @@ class AdminBookingController extends Controller
             'room_id'      => ['required','exists:rooms,id'],
             'move_in_date' => ['required','date'],
             'proof' => ['nullable','file','image','max:4096'],
-            'id_card' => ['nullable','file','image','max:4096'], // new
+            'id_card' => ['nullable','file','image','max:4096'],
         ]);
 
         $room = Room::findOrFail($data['room_id']);
@@ -98,12 +98,13 @@ class AdminBookingController extends Controller
             }
         }
 
+        // Create initial payment with NO late fee
         Payment::create([
             'booking_id' => $booking->id,
-            'amount' => $monthly,
+            'amount' => $monthly, // No late fee for initial booking
             'payment_for_month' => date('Y-m', strtotime($data['move_in_date'])),
             'monthly_rent' => $monthly,
-            'late_fee' => 0,
+            'late_fee' => 0, // Always 0 for initial booking
             'proof' => $proofPath,
             'status' => 'pending',
         ]);

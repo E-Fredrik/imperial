@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Image;
 use App\Models\Room;
 use App\Models\Information;
+use App\Models\KostFacility;
 
 class HomeController extends Controller
 {
@@ -23,8 +24,14 @@ class HomeController extends Controller
         ->orderBy('room_number')
         ->get();
 
+        // Get all information entries
         $information = Information::all();
 
-        return view('home', compact('featured', 'rooms', 'information'));
+        // Get kost facilities with their images
+        $kostFacilities = KostFacility::with('facilities_images.image')
+            ->orderBy('name')
+            ->get();
+
+        return view('home', compact('featured', 'rooms', 'information', 'kostFacilities'));
     }
 }

@@ -19,7 +19,7 @@
                         </div>
                     <?php endif; ?>
 
-                    <form method="POST" action="<?php echo e(route('bookings.store')); ?>" enctype="multipart/form-data">
+                    <form method="POST" action="<?php echo e(route('bookings.store')); ?>" enctype="multipart/form-data" onsubmit="return validateBookingForm()">
                         <?php echo csrf_field(); ?>
 
                         <div class="mb-3">
@@ -58,7 +58,8 @@
                             <label for="move_in_date" class="form-label" style="color:#cfc6bc;">Move-in date</label>
                             <input id="move_in_date" name="move_in_date" type="date" required
                                    class="form-control" style="background:#111; color:#FAEBD7; border:1px solid #2b2b2b;"
-                                   value="<?php echo e(old('move_in_date', request()->get('check_in') ?? now()->format('Y-m-d'))); ?>" />
+                                   value="<?php echo e(old('move_in_date', request()->get('check_in') ?? now()->format('Y-m-d'))); ?>"
+                                   min="<?php echo e(date('Y-m-d')); ?>" />
                             <?php if (isset($component)) { $__componentOriginalf94ed9c5393ef72725d159fe01139746 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalf94ed9c5393ef72725d159fe01139746 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.input-error','data' => ['messages' => $errors->get('move_in_date'),'class' => 'mt-2']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -79,13 +80,16 @@
 <?php $component = $__componentOriginalf94ed9c5393ef72725d159fe01139746; ?>
 <?php unset($__componentOriginalf94ed9c5393ef72725d159fe01139746); ?>
 <?php endif; ?>
+                            <div class="form-text" style="color:#999;">
+                                <i class="bi bi-info-circle me-1"></i>You have a 5-day grace period from the 1st of each month before late fees apply.
+                            </div>
                         </div>
 
                         <div class="mb-3">
-                            <label for="id_card" class="form-label" style="color:#cfc6bc;">ID Card (photo) - Optional</label>
+                            <label for="id_card" class="form-label" style="color:#cfc6bc;">ID Card (photo)</label>
                             <input id="id_card" name="id_card" type="file" accept="image/*"
                                    class="form-control"
-                                   style="background:#000; color:#FAEBD7; border:1px solid #2b2b2b; border-radius:6px; padding:.375rem .75rem;" />
+                                   style="background:#000; color:#FAEBD7; border:1px solid #2b2b2b; border-radius:6px; padding:.375rem .75rem;" required/>
                             <?php if (isset($component)) { $__componentOriginalf94ed9c5393ef72725d159fe01139746 = $component; } ?>
 <?php if (isset($attributes)) { $__attributesOriginalf94ed9c5393ef72725d159fe01139746 = $attributes; } ?>
 <?php $component = Illuminate\View\AnonymousComponent::resolve(['view' => 'components.input-error','data' => ['messages' => $errors->get('id_card'),'class' => 'mt-2']] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
@@ -132,5 +136,41 @@
         </div>
     </div>
 </section>
+
+<script>
+function validateBookingForm() {
+    const moveInInput = document.getElementById('move_in_date');
+    if (!moveInInput) return true;
+    
+    const selectedDate = new Date(moveInInput.value);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    if (selectedDate < today) {
+        alert('Move-in date cannot be in the past. Please select today or a future date.');
+        moveInInput.focus();
+        return false;
+    }
+    
+    return true;
+}
+
+// Also prevent typing/pasting invalid dates
+document.addEventListener('DOMContentLoaded', function() {
+    const moveInInput = document.getElementById('move_in_date');
+    if (moveInInput) {
+        moveInInput.addEventListener('change', function() {
+            const selectedDate = new Date(this.value);
+            const today = new Date();
+            today.setHours(0, 0, 0, 0);
+            
+            if (selectedDate < today) {
+                alert('Move-in date cannot be in the past. Please select today or a future date.');
+                this.value = '<?php echo e(date("Y-m-d")); ?>';
+            }
+        });
+    }
+});
+</script>
 <?php $__env->stopSection(); ?>
 <?php echo $__env->make('layouts.layout', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Uni\WebDev\Laravel\imperial\resources\views/bookings/create.blade.php ENDPATH**/ ?>

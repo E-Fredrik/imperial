@@ -1,37 +1,48 @@
-<x-admin-layout>
-    <x-slot name="title">Booking Details</x-slot>
-    <x-slot name="header">Booking Details</x-slot>
-    <x-slot name="icon">bi-calendar-check</x-slot>
+<?php if (isset($component)) { $__componentOriginal91fdd17964e43374ae18c674f95cdaa3 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal91fdd17964e43374ae18c674f95cdaa3 = $attributes; } ?>
+<?php $component = App\View\Components\AdminLayout::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('admin-layout'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\AdminLayout::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+     <?php $__env->slot('title', null, []); ?> Booking Details <?php $__env->endSlot(); ?>
+     <?php $__env->slot('header', null, []); ?> Booking Details <?php $__env->endSlot(); ?>
+     <?php $__env->slot('icon', null, []); ?> bi-calendar-check <?php $__env->endSlot(); ?>
 
     <div class="admin-card" style="max-width: 1200px; margin: 0 auto;">
         <div class="card-header">
-            <h3><i class="bi bi-calendar-check me-2"></i>Booking #{{ $booking->id }}</h3>
+            <h3><i class="bi bi-calendar-check me-2"></i>Booking #<?php echo e($booking->id); ?></h3>
             <div class="d-flex gap-2">
-                <a href="{{ route('admin.bookings.index') }}" class="btn-admin-secondary">
+                <a href="<?php echo e(route('admin.bookings.index')); ?>" class="btn-admin-secondary">
                     <i class="bi bi-arrow-left"></i> Back to Bookings
                 </a>
-                @if($booking->status === 'pending')
-                    <form action="{{ route('admin.bookings.decline', $booking) }}" method="POST" onsubmit="return confirm('Decline this booking and the latest payment?');" style="display: inline;">
-                        @csrf
+                <?php if($booking->status === 'pending'): ?>
+                    <form action="<?php echo e(route('admin.bookings.decline', $booking)); ?>" method="POST" onsubmit="return confirm('Decline this booking and the latest payment?');" style="display: inline;">
+                        <?php echo csrf_field(); ?>
                         <button type="submit" class="btn-admin-danger">
                             <i class="bi bi-x-circle"></i> Decline Booking
                         </button>
                     </form>
-                @endif
+                <?php endif; ?>
             </div>
         </div>
 
-        @if(session('success'))
+        <?php if(session('success')): ?>
             <div class="alert-success mb-4">
-                <i class="bi bi-check-circle"></i> {{ session('success') }}
-            </div>
-        @endif
+                <i class="bi bi-check-circle"></i> <?php echo e(session('success')); ?>
 
-        @if($errors->has('move_out_date'))
-            <div class="alert-danger mb-4">
-                <i class="bi bi-exclamation-triangle-fill"></i> {{ $errors->first('move_out_date') }}
             </div>
-        @endif
+        <?php endif; ?>
+
+        <?php if($errors->has('move_out_date')): ?>
+            <div class="alert-danger mb-4">
+                <i class="bi bi-exclamation-triangle-fill"></i> <?php echo e($errors->first('move_out_date')); ?>
+
+            </div>
+        <?php endif; ?>
 
         <div class="row g-4 mb-4">
             <!-- Left Column: User & Room Info -->
@@ -44,18 +55,18 @@
                     <div class="info-grid">
                         <div class="info-item">
                             <span class="info-label">Name</span>
-                            <span class="info-value">{{ optional($booking->user)->first_name ?? '-' }} {{ optional($booking->user)->last_name ?? '' }}</span>
+                            <span class="info-value"><?php echo e(optional($booking->user)->first_name ?? '-'); ?> <?php echo e(optional($booking->user)->last_name ?? ''); ?></span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Email</span>
-                            <span class="info-value">{{ optional($booking->user)->email ?? '-' }}</span>
+                            <span class="info-value"><?php echo e(optional($booking->user)->email ?? '-'); ?></span>
                         </div>
-                        @if(optional($booking->user)->phone_number)
+                        <?php if(optional($booking->user)->phone_number): ?>
                             <div class="info-item">
                                 <span class="info-label">Phone</span>
-                                <span class="info-value">{{ $booking->user->phone_number }}</span>
+                                <span class="info-value"><?php echo e($booking->user->phone_number); ?></span>
                             </div>
-                        @endif
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -67,20 +78,21 @@
                     <div class="info-grid">
                         <div class="info-item">
                             <span class="info-label">Room Number</span>
-                            <span class="info-value">{{ optional($booking->room)->room_number ?? '-' }}</span>
+                            <span class="info-value"><?php echo e(optional($booking->room)->room_number ?? '-'); ?></span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Type</span>
-                            <span class="info-value">{{ optional($booking->room)->type ?? '-' }}</span>
+                            <span class="info-value"><?php echo e(optional($booking->room)->type ?? '-'); ?></span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Price</span>
-                            <span class="info-value">Rp {{ number_format(optional($booking->room)->price ?? $booking->monthly_rent, 0, ',', '.') }}</span>
+                            <span class="info-value">Rp <?php echo e(number_format(optional($booking->room)->price ?? $booking->monthly_rent, 0, ',', '.')); ?></span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Room Status</span>
-                            <span class="status-badge status-{{ optional($booking->room)->status ?? 'unavailable' }}">
-                                {{ ucfirst(optional($booking->room)->status ?? 'N/A') }}
+                            <span class="status-badge status-<?php echo e(optional($booking->room)->status ?? 'unavailable'); ?>">
+                                <?php echo e(ucfirst(optional($booking->room)->status ?? 'N/A')); ?>
+
                             </span>
                         </div>
                     </div>
@@ -94,18 +106,18 @@
                     <div class="info-grid">
                         <div class="info-item">
                             <span class="info-label">Move-in Date</span>
-                            <span class="info-value">{{ optional($booking->move_in_date)->format('M d, Y') ?? '-' }}</span>
+                            <span class="info-value"><?php echo e(optional($booking->move_in_date)->format('M d, Y') ?? '-'); ?></span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Move-out Date</span>
                             <div class="d-flex align-items-center gap-2">
-                                <form method="POST" action="{{ route('admin.bookings.update', $booking) }}" class="d-flex align-items-center gap-2" style="flex: 1;">
-                                    @csrf
-                                    @method('PUT')
+                                <form method="POST" action="<?php echo e(route('admin.bookings.update', $booking)); ?>" class="d-flex align-items-center gap-2" style="flex: 1;">
+                                    <?php echo csrf_field(); ?>
+                                    <?php echo method_field('PUT'); ?>
                                     <input
                                         type="date"
                                         name="move_out_date"
-                                        value="{{ old('move_out_date', optional($booking->move_out_date)->format('Y-m-d')) }}"
+                                        value="<?php echo e(old('move_out_date', optional($booking->move_out_date)->format('Y-m-d'))); ?>"
                                         class="form-control"
                                         style="background: #111; color: #FAEBD7; border: 1px solid #333; padding: 0.5rem; border-radius: 6px; max-width: 200px;">
                                     <button type="submit" class="btn-admin-primary" style="padding: 0.5rem 1rem; white-space: nowrap;">
@@ -116,12 +128,13 @@
                         </div>
                         <div class="info-item">
                             <span class="info-label">Monthly Rent</span>
-                            <span class="info-value">Rp {{ number_format($booking->monthly_rent, 0, ',', '.') }}</span>
+                            <span class="info-value">Rp <?php echo e(number_format($booking->monthly_rent, 0, ',', '.')); ?></span>
                         </div>
                         <div class="info-item">
                             <span class="info-label">Booking Status</span>
-                            <span class="badge-status badge-{{ $booking->status }}">
-                                {{ ucfirst($booking->status) }}
+                            <span class="badge-status badge-<?php echo e($booking->status); ?>">
+                                <?php echo e(ucfirst($booking->status)); ?>
+
                             </span>
                         </div>
                     </div>
@@ -137,22 +150,24 @@
                     <div class="summary-stats">
                         <div class="summary-stat">
                             <div class="stat-label">Total Payments</div>
-                            <div class="stat-value">Rp {{ number_format($booking->payments->sum('amount'), 0, ',', '.') }}</div>
+                            <div class="stat-value">Rp <?php echo e(number_format($booking->payments->sum('amount'), 0, ',', '.')); ?></div>
                         </div>
                         <div class="summary-stat">
                             <div class="stat-label">Payment Count</div>
-                            <div class="stat-value">{{ $booking->payments->count() }}</div>
+                            <div class="stat-value"><?php echo e($booking->payments->count()); ?></div>
                         </div>
                         <div class="summary-stat">
                             <div class="stat-label">Pending Payments</div>
                             <div class="stat-value" style="color: #fbbf24;">
-                                {{ $booking->payments->where('status', 'pending')->count() }}
+                                <?php echo e($booking->payments->where('status', 'pending')->count()); ?>
+
                             </div>
                         </div>
                         <div class="summary-stat">
                             <div class="stat-label">Accepted Payments</div>
                             <div class="stat-value" style="color: #4ade80;">
-                                {{ $booking->payments->where('status', 'accepted')->count() }}
+                                <?php echo e($booking->payments->where('status', 'accepted')->count()); ?>
+
                             </div>
                         </div>
                     </div>
@@ -178,18 +193,18 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @forelse($booking->payments as $payment)
+                        <?php $__empty_1 = true; $__currentLoopData = $booking->payments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $payment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                             <tr>
-                                <td data-label="ID">{{ $payment->id }}</td>
-                                <td data-label="Month">{{ $payment->payment_for_month }}</td>
+                                <td data-label="ID"><?php echo e($payment->id); ?></td>
+                                <td data-label="Month"><?php echo e($payment->payment_for_month); ?></td>
                                 <td data-label="Amount">
-                                    <strong>Rp {{ number_format($payment->amount, 0, ',', '.') }}</strong>
-                                    @if($payment->late_fee > 0)
-                                        <br><small style="color: #f87171;">+Rp {{ number_format($payment->late_fee, 0, ',', '.') }} late fee</small>
-                                    @endif
+                                    <strong>Rp <?php echo e(number_format($payment->amount, 0, ',', '.')); ?></strong>
+                                    <?php if($payment->late_fee > 0): ?>
+                                        <br><small style="color: #f87171;">+Rp <?php echo e(number_format($payment->late_fee, 0, ',', '.')); ?> late fee</small>
+                                    <?php endif; ?>
                                 </td>
                                 <td data-label="Proof">
-                                    @php
+                                    <?php
                                         $path = $payment->proof ?? '';
                                         if ($path !== '' && file_exists(public_path($path))) {
                                             $url = asset($path);
@@ -198,54 +213,55 @@
                                         } else {
                                             $url = null;
                                         }
-                                    @endphp
-                                    @if($url)
-                                        <a href="{{ $url }}" target="_blank" class="btn-admin-info" style="padding: 0.3rem 0.8rem; font-size: 0.875rem;">
+                                    ?>
+                                    <?php if($url): ?>
+                                        <a href="<?php echo e($url); ?>" target="_blank" class="btn-admin-info" style="padding: 0.3rem 0.8rem; font-size: 0.875rem;">
                                             <i class="bi bi-eye"></i> View
                                         </a>
-                                    @else
+                                    <?php else: ?>
                                         <span style="color: #666;">—</span>
-                                    @endif
+                                    <?php endif; ?>
                                 </td>
                                 <td data-label="Status">
-                                    <span class="badge-status badge-{{ $payment->status }}">
-                                        {{ ucfirst($payment->status) }}
+                                    <span class="badge-status badge-<?php echo e($payment->status); ?>">
+                                        <?php echo e(ucfirst($payment->status)); ?>
+
                                     </span>
                                 </td>
                                 <td data-label="Actions">
                                     <div class="d-flex gap-2 flex-wrap">
-                                        @if($payment->status !== 'accepted')
-                                            <form method="POST" action="{{ route('admin.payments.update', $payment) }}" style="display: inline;">
-                                                @csrf
-                                                @method('PUT')
+                                        <?php if($payment->status !== 'accepted'): ?>
+                                            <form method="POST" action="<?php echo e(route('admin.payments.update', $payment)); ?>" style="display: inline;">
+                                                <?php echo csrf_field(); ?>
+                                                <?php echo method_field('PUT'); ?>
                                                 <input type="hidden" name="action" value="accept" />
                                                 <button type="submit" class="btn-admin-primary" style="padding: 0.4rem 0.8rem; font-size: 0.875rem;">
                                                     <i class="bi bi-check-circle"></i> Accept
                                                 </button>
                                             </form>
-                                        @endif
+                                        <?php endif; ?>
 
-                                        @if($payment->status !== 'declined')
-                                            <form method="POST" action="{{ route('admin.payments.update', $payment) }}" onsubmit="return confirm('Decline this payment?');" style="display: inline;">
-                                                @csrf
-                                                @method('PUT')
+                                        <?php if($payment->status !== 'declined'): ?>
+                                            <form method="POST" action="<?php echo e(route('admin.payments.update', $payment)); ?>" onsubmit="return confirm('Decline this payment?');" style="display: inline;">
+                                                <?php echo csrf_field(); ?>
+                                                <?php echo method_field('PUT'); ?>
                                                 <input type="hidden" name="action" value="decline" />
                                                 <button type="submit" class="btn-admin-danger" style="padding: 0.4rem 0.8rem; font-size: 0.875rem;">
                                                     <i class="bi bi-x-circle"></i> Decline
                                                 </button>
                                             </form>
-                                        @endif
+                                        <?php endif; ?>
                                     </div>
                                 </td>
                             </tr>
-                        @empty
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                             <tr>
                                 <td colspan="6" style="text-align: center; padding: 3rem; color: #666;">
                                     <i class="bi bi-inbox" style="font-size: 3rem;"></i>
                                     <p style="margin-top: 1rem;">No payments recorded.</p>
                                 </td>
                             </tr>
-                        @endforelse
+                        <?php endif; ?>
                     </tbody>
                 </table>
             </div>
@@ -353,4 +369,13 @@
         }
     }
     </style>
-</x-admin-layout>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal91fdd17964e43374ae18c674f95cdaa3)): ?>
+<?php $attributes = $__attributesOriginal91fdd17964e43374ae18c674f95cdaa3; ?>
+<?php unset($__attributesOriginal91fdd17964e43374ae18c674f95cdaa3); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal91fdd17964e43374ae18c674f95cdaa3)): ?>
+<?php $component = $__componentOriginal91fdd17964e43374ae18c674f95cdaa3; ?>
+<?php unset($__componentOriginal91fdd17964e43374ae18c674f95cdaa3); ?>
+<?php endif; ?><?php /**PATH C:\Uni\WebDev\Laravel\imperial\resources\views/admin/bookings/show.blade.php ENDPATH**/ ?>

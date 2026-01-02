@@ -811,3 +811,67 @@
         font-size: 24px;
     }
 }
+
+/* Fix stray white stripe between kost facilities carousel and contact section */
+.facilities-section,
+.facilities-section .container,
+#kostFacilitiesCarouselDesktop,
+#kostFacilitiesCarouselMobile,
+#kostFacilitiesCarouselDesktop .carousel-inner,
+#kostFacilitiesCarouselMobile .carousel-inner,
+#kostFacilitiesCarouselDesktop .carousel-item,
+#kostFacilitiesCarouselMobile .carousel-item {
+  background-color: #000 !important;
+  color: inherit !important;
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+  border: none !important;
+}
+
+/* Remove any default indicator/container background that could create a bar */
+.carousel,
+.carousel-inner,
+.carousel-item,
+.carousel .p-3,
+.carousel-indicators,
+.carousel-indicators * {
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+/* Make indicators unobtrusive and dark-theme friendly */
+.carousel-indicators {
+  bottom: 12px;
+  height: auto;
+  pointer-events: auto;
+}
+
+.carousel-indicators button {
+  width: 8px;
+  height: 8px;
+  margin: 0 4px;
+  border-radius: 50%;
+  border: none;
+  background-color: rgba(250,235,215,0.12) !important;
+  opacity: 1;
+}
+
+/* Defensive: remove any HR / border leaking white */
+.facilities-section hr,
+.facilities-section + hr,
+.facilities-section + .contact-location-section,
+.facilities-section + * {
+  background: transparent !important;
+  border: 0 !important;
+}
+
+/* Ensure contact-location-section directly after stays black */
+.facilities-section + .contact-location-section {
+  background: #000 !important;
+  padding-top: 2.5rem !important;
+}
+
+/* Ensure iframe and embedded maps remain dark */
+.contact-location-section iframe {
+  background: #000 !important;
+}
