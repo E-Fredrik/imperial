@@ -126,7 +126,7 @@
                                 </form>
                             </div>
                         </div>
-                        <div class="info-item">
+                        <div class="info-item text-end">
                             <span class="info-label">Monthly Rent</span>
                             <span class="info-value">Rp <?php echo e(number_format($booking->monthly_rent, 0, ',', '.')); ?></span>
                         </div>
@@ -148,6 +148,10 @@
                         <i class="bi bi-graph-up me-2"></i>Summary
                     </h4>
                     <div class="summary-stats">
+                        <div class="summary-stat">
+                            <div class="stat-label">Monthly Rent</div>
+                            <div class="stat-value">Rp <?php echo e(number_format($booking->monthly_rent, 0, ',', '.')); ?></div>
+                        </div>
                         <div class="summary-stat">
                             <div class="stat-label">Total Payments</div>
                             <div class="stat-value">Rp <?php echo e(number_format($booking->payments->sum('amount'), 0, ',', '.')); ?></div>
@@ -295,6 +299,18 @@
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
+    }
+
+    /* Right-align specific info items (e.g., Monthly Rent) */
+    .info-item.text-end {
+        justify-self: end;
+        text-align: right;
+    }
+
+    .info-item.text-end .info-label,
+    .info-item.text-end .info-value {
+        display: block;
+        text-align: right;
     }
 
     .info-label {
