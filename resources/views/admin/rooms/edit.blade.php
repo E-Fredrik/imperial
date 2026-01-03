@@ -252,19 +252,18 @@
                 </label>
                 <div class="facilities-grid">
                     @php
-                        $currentFacilities = old('facilities', $room->facilities ?? []);
-                        if (is_string($currentFacilities)) {
-                            $currentFacilities = json_decode($currentFacilities, true) ?? [];
-                        }
+                        // Get current facility IDs from the room
+                        $currentFacilityIds = $room->rooms_facilities()->pluck('facility_id')->toArray();
                     @endphp
-                    <label class="facility-label">
-                        <input type="checkbox" name="facilities[]" value="Kamar Mandi Dalam" {{ in_array('Kamar Mandi Dalam', $currentFacilities) ? 'checked' : '' }}>
-                        <span>Kamar Mandi Dalam</span>
-                    </label>
-                    <label class="facility-label">
-                        <input type="checkbox" name="facilities[]" value="Water Heater" {{ in_array('Water Heater', $currentFacilities) ? 'checked' : '' }}>
-                        <span>Water Heater</span>
-                    </label>
+                    @foreach($facilities as $facility)
+                        <label class="facility-label">
+                            <input type="checkbox" 
+                                   name="facilities[]" 
+                                   value="{{ $facility->id }}" 
+                                   {{ in_array($facility->id, $currentFacilityIds) ? 'checked' : '' }}>
+                            <span>{{ $facility->name }}</span>
+                        </label>
+                    @endforeach
                 </div>
             </div>
 

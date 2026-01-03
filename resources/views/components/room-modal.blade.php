@@ -3,12 +3,14 @@
 <div id="roomModal-{{ $room->id }}" class="room-modal" style="display: none; opacity: 0; visibility: hidden;">
     <div class="modal-backdrop" onclick="closeRoomModal({{ $room->id }})"></div>
     <div class="modal-content">
-        <button class="modal-close" onclick="closeRoomModal({{ $room->id }})">
-            <i class="bi bi-arrow-left"></i> Back
-        </button>
         
         <div class="modal-body">
             <div class="modal-images">
+                <!-- Back button moved inside modal-images with adjusted positioning -->
+                <button class="modal-close" onclick="closeRoomModal({{ $room->id }})" style="position: absolute; top: 80px; left: 20px; z-index: 10002;">
+                    <i class="bi bi-arrow-left"></i> Back
+                </button>
+                
                 <div id="roomCarousel-{{ $room->id }}" class="carousel slide" data-bs-ride="false">
                     <div class="carousel-inner">
                         @php
@@ -20,6 +22,7 @@
                                 @php
                                     $imagePath = $image->image_path;
                                     $publicPath = public_path($imagePath);
+                                    
                                     if (file_exists($publicPath)) {
                                         $imageUrl = asset($imagePath);
                                     } else {
@@ -27,7 +30,7 @@
                                     }
                                 @endphp
                                 <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
-                                    <img src="{{ $imageUrl }}" alt="Room {{ $room->room_number }}" style="width: 100%; height: 400px; object-fit: cover;">
+                                    <img src="{{ $imageUrl }}" alt="Room {{ $room->room_number }}" style="width: 100%; height: 100%; object-fit: contain; background: #000;">
                                 </div>
                             @endforeach
                         @else
