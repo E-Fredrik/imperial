@@ -400,7 +400,7 @@
                                         <h4
                                             style="color: #FAEBD7; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">
                                             Whatsapp</h4>
-                                        <a href="tel:+62123456789"
+                                        <a href="http://wa.me/6283856705857"
                                             style="color: #FAEBD7; text-decoration: none; font-size: 1.1rem;">
                                             {{$information->firstWhere('title', 'Whatsapp')->content}}
                                         </a>
@@ -418,7 +418,7 @@
                                         <h4
                                             style="color: #FAEBD7; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">
                                             Phone</h4>
-                                        <a href="tel:+62123456789"
+                                        <a href="tel:+6282139721494"
                                             style="color: #FAEBD7; text-decoration: none; font-size: 1.1rem;">
                                             {{$information->firstWhere('title', 'Phone')->content}}
                                         </a>
