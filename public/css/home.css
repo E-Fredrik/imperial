@@ -453,3 +453,226 @@
         font-size: 0.95rem;
     }
 }
+
+/* Terms & Rules Section */
+.terms-rules-section {
+    position: relative;
+    overflow: hidden;
+    /* Changed to continue gradient from facilities section */
+    background: linear-gradient(180deg, #0a0a0a 0%, #000 50%, #030303 100%) !important;
+    padding: 5rem 0 !important;
+}
+
+.terms-rules-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: 
+        radial-gradient(circle at 30% 30%, rgba(59, 130, 246, 0.05) 0%, transparent 50%),
+        radial-gradient(circle at 70% 70%, rgba(251, 191, 36, 0.05) 0%, transparent 50%);
+    pointer-events: none;
+}
+
+.info-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.info-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #3b82f6, #60a5fa);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+}
+
+.info-card:hover::before {
+    transform: scaleX(1);
+}
+
+.info-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(250, 235, 215, 0.3) !important;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.info-card:last-child::before {
+    background: linear-gradient(90deg, #fbbf24, #fcd34d);
+}
+
+/* Style lists inside terms/rules */
+.info-content ul,
+.info-content ol {
+    padding-left: 1.5rem;
+    margin: 1rem 0;
+}
+
+.info-content li {
+    margin-bottom: 0.75rem;
+    position: relative;
+    padding-left: 0.5rem;
+}
+
+.info-content ul li::marker {
+    color: #3b82f6;
+}
+
+.info-content ol li::marker {
+    color: #fbbf24;
+    font-weight: 600;
+}
+
+.info-content p {
+    margin-bottom: 1rem;
+}
+
+.info-content h4,
+.info-content h5 {
+    color: #FAEBD7;
+    font-weight: 600;
+    margin-top: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.info-content strong {
+    color: #FAEBD7;
+    font-weight: 600;
+}
+
+.info-content a {
+    color: #60a5fa;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.info-content a:hover {
+    color: #93c5fd;
+    text-decoration: underline;
+}
+
+/* Responsive adjustments for Terms & Rules */
+@media (max-width: 991px) {
+    .terms-rules-section {
+        padding: 4rem 0 !important;
+    }
+
+    .info-card {
+        padding: 2rem !important;
+    }
+
+    .info-header h3 {
+        font-size: 1.5rem !important;
+    }
+
+    .info-header > div > div {
+        width: 50px !important;
+        height: 50px !important;
+    }
+
+    .info-header > div > div i {
+        font-size: 1.5rem !important;
+    }
+}
+
+@media (max-width: 767px) {
+    .terms-rules-section {
+        padding: 3rem 0 !important;
+    }
+
+    .info-card {
+        padding: 1.5rem !important;
+        margin-bottom: 1.5rem;
+    }
+
+    .info-header {
+        margin-bottom: 1.5rem !important;
+    }
+
+    .info-header h3 {
+        font-size: 1.35rem !important;
+    }
+
+    .info-header > div {
+        gap: 1rem !important;
+    }
+
+    .info-header > div > div {
+        width: 45px !important;
+        height: 45px !important;
+    }
+
+    .info-header > div > div i {
+        font-size: 1.35rem !important;
+    }
+
+    .info-content {
+        font-size: 0.95rem !important;
+        line-height: 1.7 !important;
+    }
+
+    .info-content ul,
+    .info-content ol {
+        padding-left: 1.25rem;
+    }
+
+    .info-content li {
+        margin-bottom: 0.5rem;
+    }
+}
+
+@media (max-width: 575px) {
+    .section-title {
+        font-size: 1.8rem !important;
+    }
+
+    .section-subtitle {
+        font-size: 0.95rem !important;
+        margin-bottom: 2rem !important;
+    }
+
+    .info-card {
+        padding: 1.25rem !important;
+    }
+
+    .info-header h3 {
+        font-size: 1.25rem !important;
+    }
+
+    .info-header > div > div {
+        width: 40px !important;
+        height: 40px !important;
+    }
+
+    .info-header > div > div i {
+        font-size: 1.25rem !important;
+    }
+
+    .info-content {
+        font-size: 0.9rem !important;
+    }
+
+    .info-content h4,
+    .info-content h5 {
+        font-size: 1rem !important;
+        margin-top: 1rem;
+        margin-bottom: 0.75rem;
+    }
+}
+
+@media (max-width: 374px) {
+    .info-header h3 {
+        font-size: 1.1rem !important;
+    }
+
+    .info-content {
+        font-size: 0.875rem !important;
+    }
+}

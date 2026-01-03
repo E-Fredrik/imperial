@@ -203,7 +203,7 @@
     </section>
 
     
-    <section class="facilities-section" style="background: #0a0a0a; padding: 5rem 0;">
+    <section class="facilities-section">
         <div class="container">
             <h2 class="section-title text-center">Kost Facilities</h2>
             <p class="section-subtitle text-center">Enjoy our premium amenities designed for your comfort</p>
@@ -397,6 +397,61 @@
             <?php endif; ?>
         </div>
     </section>
+
+    
+    <?php
+        $termsInfo = $information->firstWhere('title', 'Terms');
+        $rulesInfo = $information->firstWhere('title', 'Rules');
+    ?>
+
+    <?php if($termsInfo || $rulesInfo): ?>
+    <section class="terms-rules-section">
+        <div class="container">
+            <h2 class="section-title text-center mb-2">Important Information</h2>
+            <p class="section-subtitle text-center mb-5">Please read our terms and house rules carefully</p>
+
+            <div class="row g-4">
+                <?php if($termsInfo): ?>
+                <div class="col-lg-6">
+                    <div class="info-card" style="background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%); border: 2px solid rgba(250, 235, 215, 0.15); border-radius: 20px; padding: 2.5rem; height: 100%; transition: all 0.3s ease;">
+                        <div class="info-header mb-4">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <div style="width: 60px; height: 60px; background: rgba(59, 130, 246, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="bi bi-file-text-fill" style="font-size: 1.75rem; color: #3b82f6;"></i>
+                                </div>
+                                <h3 style="color: #FAEBD7; font-size: 1.75rem; font-weight: 700; margin: 0;">Terms & Conditions</h3>
+                            </div>
+                        </div>
+                        <div class="info-content" style="color: rgba(250, 235, 215, 0.9); line-height: 1.8; font-size: 1rem;">
+                            <?php echo $termsInfo->content; ?>
+
+                        </div>
+                    </div>
+                </div>
+                <?php endif; ?>
+
+                <?php if($rulesInfo): ?>
+                <div class="col-lg-6">
+                    <div class="info-card" style="background: linear-gradient(135deg, #1a1a1a 0%, #0f0f0f 100%); border: 2px solid rgba(250, 235, 215, 0.15); border-radius: 20px; padding: 2.5rem; height: 100%; transition: all 0.3s ease;">
+                        <div class="info-header mb-4">
+                            <div class="d-flex align-items-center gap-3 mb-3">
+                                <div style="width: 60px; height: 60px; background: rgba(251, 191, 36, 0.15); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                    <i class="bi bi-shield-fill-check" style="font-size: 1.75rem; color: #fbbf24;"></i>
+                                </div>
+                                <h3 style="color: #FAEBD7; font-size: 1.75rem; font-weight: 700; margin: 0;">House Rules</h3>
+                            </div>
+                        </div>
+                        <div class="info-content" style="color: rgba(250, 235, 215, 0.9); line-height: 1.8; font-size: 1rem;">
+                            <?php echo $rulesInfo->content; ?>
+
+                        </div>
+                    </div>
+                </div>
+                <?php endif; ?>
+            </div>
+        </div>
+    </section>
+    <?php endif; ?>
 
     <section class="contact-location-section" style="background: #000; padding: 5rem 0;">
         <div class="container">
