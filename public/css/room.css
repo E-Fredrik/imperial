@@ -82,8 +82,8 @@
     border-radius: 25px;
     max-width: 1200px;
     width: 95%;
-    max-height: 95vh;
-    overflow: hidden;
+    max-height: 90vh;
+    overflow-y: auto;
     transform: scale(0.8);
     transition: transform 0.3s ease;
     z-index: 10000;
@@ -95,7 +95,7 @@
 }
 
 .modal-close {
-    position: absolute;
+    position: fixed;
     top: 80px;
     left: 20px;
     padding: 12px 24px;
@@ -121,8 +121,6 @@
 .modal-body {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    max-height: 95vh;
-    overflow-y: auto;
 }
 
 /* Left Side: Images */
@@ -130,11 +128,10 @@
     background-color: #000;
     display: flex;
     flex-direction: column;
-    /* Remove fixed height on mobile */
 }
 
 .carousel {
-    height: 50%;
+    height: 50vh;
     min-height: 400px;
 }
 
@@ -154,6 +151,7 @@
 }
 
 .no-image-modal {
+    width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
@@ -164,7 +162,8 @@
 
 .room-3d-view {
     background-color: #1a1a1a;
-    height: 50%;
+    height: 50vh;
+    min-height: 400px;
     padding: 2rem;
     border-top: 1px solid #333;
 }
