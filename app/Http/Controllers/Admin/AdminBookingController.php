@@ -43,6 +43,7 @@ class AdminBookingController extends Controller
         return view('admin.bookings.create', compact('rooms','users'));
     }
 
+
     // store booking (admin-created)
     public function store(Request $request): RedirectResponse
     {
