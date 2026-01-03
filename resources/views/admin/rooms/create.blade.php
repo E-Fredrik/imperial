@@ -216,14 +216,15 @@
                     <i class="bi bi-check2-square me-1"></i>Facilities
                 </label>
                 <div class="facilities-grid">
-                    <label class="facility-label">
-                        <input type="checkbox" name="facilities[]" value="Kamar Mandi Dalam" {{ is_array(old('facilities')) && in_array('Kamar Mandi Dalam', old('facilities')) ? 'checked' : '' }}>
-                        <span>Kamar Mandi Dalam</span>
-                    </label>
-                    <label class="facility-label">
-                        <input type="checkbox" name="facilities[]" value="Water Heater" {{ is_array(old('facilities')) && in_array('Water Heater', old('facilities')) ? 'checked' : '' }}>
-                        <span>Water Heater</span>
-                    </label>
+                    @foreach($facilities as $facility)
+                        <label class="facility-label">
+                            <input type="checkbox" 
+                                   name="facilities[]" 
+                                   value="{{ $facility->id }}" 
+                                   {{ is_array(old('facilities')) && in_array($facility->id, old('facilities')) ? 'checked' : '' }}>
+                            <span>{{ $facility->name }}</span>
+                        </label>
+                    @endforeach
                 </div>
             </div>
 

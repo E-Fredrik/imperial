@@ -1,33 +1,42 @@
-<x-admin-layout>
-    <x-slot name="title">Edit Room</x-slot>
-    <x-slot name="header">Edit Room</x-slot>
-    <x-slot name="icon">bi-door-closed</x-slot>
+<?php if (isset($component)) { $__componentOriginal91fdd17964e43374ae18c674f95cdaa3 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal91fdd17964e43374ae18c674f95cdaa3 = $attributes; } ?>
+<?php $component = App\View\Components\AdminLayout::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('admin-layout'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\AdminLayout::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+     <?php $__env->slot('title', null, []); ?> Edit Room <?php $__env->endSlot(); ?>
+     <?php $__env->slot('header', null, []); ?> Edit Room <?php $__env->endSlot(); ?>
+     <?php $__env->slot('icon', null, []); ?> bi-door-closed <?php $__env->endSlot(); ?>
 
     <div class="admin-card" style="max-width: 900px; margin: 0 auto;">
         <div class="card-header">
             <h3><i class="bi bi-door-closed me-2"></i>Edit Room</h3>
-            <a href="{{ route('admin.rooms.index') }}" class="btn-admin-secondary">
+            <a href="<?php echo e(route('admin.rooms.index')); ?>" class="btn-admin-secondary">
                 <i class="bi bi-arrow-left"></i> Back to Rooms
             </a>
         </div>
 
-        @if ($errors->any())
+        <?php if($errors->any()): ?>
             <div class="alert-danger">
                 <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem;">
                     <i class="bi bi-exclamation-triangle-fill"></i>
                     <strong>Please fix the following errors:</strong>
                 </div>
                 <ul style="margin: 0; padding-left: 1.5rem;">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
+                    <?php $__currentLoopData = $errors->all(); $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $error): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <li><?php echo e($error); ?></li>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </ul>
             </div>
-        @endif
+        <?php endif; ?>
 
-        <form action="{{ route('admin.rooms.update', $room) }}" method="POST" enctype="multipart/form-data">
-            @csrf
-            @method('PUT')
+        <form action="<?php echo e(route('admin.rooms.update', $room)); ?>" method="POST" enctype="multipart/form-data">
+            <?php echo csrf_field(); ?>
+            <?php echo method_field('PUT'); ?>
 
             <!-- Room Number -->
             <div class="form-group">
@@ -38,7 +47,7 @@
                     type="text" 
                     name="room_number" 
                     id="room_number" 
-                    value="{{ old('room_number', $room->room_number) }}"
+                    value="<?php echo e(old('room_number', $room->room_number)); ?>"
                     required
                     placeholder="e.g., A, B, C, 101, 102">
             </div>
@@ -55,7 +64,7 @@
                                 type="number" 
                                 name="price" 
                                 id="price" 
-                                value="{{ old('price', $room->price) }}"
+                                value="<?php echo e(old('price', $room->price)); ?>"
                                 required
                                 placeholder="1850000">
                             <div class="number-controls">
@@ -76,7 +85,7 @@
                             type="text" 
                             name="type" 
                             id="type" 
-                            value="{{ old('type', $room->type) }}"
+                            value="<?php echo e(old('type', $room->type)); ?>"
                             required
                             placeholder="e.g., Single, Double, Suite">
                     </div>
@@ -96,7 +105,7 @@
                                 step="0.01"
                                 name="length" 
                                 id="length" 
-                                value="{{ old('length', $room->length) }}"
+                                value="<?php echo e(old('length', $room->length)); ?>"
                                 required
                                 placeholder="3">
                             <div class="number-controls">
@@ -119,7 +128,7 @@
                                 step="0.01"
                                 name="width" 
                                 id="width" 
-                                value="{{ old('width', $room->width) }}"
+                                value="<?php echo e(old('width', $room->width)); ?>"
                                 required
                                 placeholder="2">
                             <div class="number-controls">
@@ -141,7 +150,7 @@
                                 type="number" 
                                 name="floor" 
                                 id="floor" 
-                                value="{{ old('floor', $room->floor) }}"
+                                value="<?php echo e(old('floor', $room->floor)); ?>"
                                 required
                                 placeholder="1">
                             <div class="number-controls">
@@ -159,10 +168,10 @@
                     <i class="bi bi-toggle-on me-1"></i>Status
                 </label>
                 <select name="status" id="status" required>
-                    @php $s = old('status', $room->status ?? 'available'); @endphp
-                    <option value="available" {{ $s === 'available' ? 'selected' : '' }}>Available</option>
-                    <option value="booked" {{ $s === 'booked' ? 'selected' : '' }}>Booked</option>
-                    <option value="unavailable" {{ $s === 'unavailable' ? 'selected' : '' }}>Unavailable</option>
+                    <?php $s = old('status', $room->status ?? 'available'); ?>
+                    <option value="available" <?php echo e($s === 'available' ? 'selected' : ''); ?>>Available</option>
+                    <option value="booked" <?php echo e($s === 'booked' ? 'selected' : ''); ?>>Booked</option>
+                    <option value="unavailable" <?php echo e($s === 'unavailable' ? 'selected' : ''); ?>>Unavailable</option>
                 </select>
             </div>
 
@@ -175,18 +184,18 @@
                     name="description" 
                     id="description" 
                     rows="4"
-                    placeholder="Describe the room features and amenities...">{{ old('description', $room->description) }}</textarea>
+                    placeholder="Describe the room features and amenities..."><?php echo e(old('description', $room->description)); ?></textarea>
             </div>
 
             <!-- Existing Images -->
-            @if($room->rooms_images->isNotEmpty())
+            <?php if($room->rooms_images->isNotEmpty()): ?>
                 <div class="form-group">
                     <label>
                         <i class="bi bi-images me-1"></i>Existing Images
                     </label>
                     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem;">
-                        @foreach($room->rooms_images as $ri)
-                            @php
+                        <?php $__currentLoopData = $room->rooms_images; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $ri): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <?php
                                 $image = $ri->image;
                                 $path = $image->image_path ?? '';
                                 $publicCandidate = public_path($path);
@@ -195,39 +204,39 @@
                                 } else {
                                     $imgUrl = asset('storage/' . ltrim($path, '/'));
                                 }
-                            @endphp
+                            ?>
                             <div style="position: relative; background: rgba(250, 235, 215, 0.05); border: 2px solid rgba(250, 235, 215, 0.15); border-radius: 10px; padding-top: 0.75rem; padding-right: 0.75rem; padding-left: 0.75rem;">
                                 <img
-                                    id="thumb-{{ $image->id }}"
-                                    data-image-id="{{ $image->id }}"
-                                    data-original-src="{{ $imgUrl }}"
-                                    src="{{ $imgUrl }}"
+                                    id="thumb-<?php echo e($image->id); ?>"
+                                    data-image-id="<?php echo e($image->id); ?>"
+                                    data-original-src="<?php echo e($imgUrl); ?>"
+                                    src="<?php echo e($imgUrl); ?>"
                                     alt="Room image"
                                     style="width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 0.8rem;"
                                 />
                                 <div style="display: flex; flex-direction: column; gap: 0.5rem;">
-                                    <label for="replace-{{ $image->id }}" class="btn-admin-secondary" style="width: 100%; justify-content: center; font-size: 0.85rem; padding: 0.5rem;">
+                                    <label for="replace-<?php echo e($image->id); ?>" class="btn-admin-secondary" style="width: 100%; justify-content: center; font-size: 0.85rem; padding: 0.5rem;">
                                         <i class="bi bi-upload me-1"></i> Replace
                                     </label>
                                     <input
-                                        id="replace-{{ $image->id }}"
+                                        id="replace-<?php echo e($image->id); ?>"
                                         type="file"
-                                        name="replace_images[{{ $image->id }}]"
+                                        name="replace_images[<?php echo e($image->id); ?>]"
                                         accept="image/*"
                                         style="display: none;"
                                         class="replace-input"
-                                        data-image-id="{{ $image->id }}"
+                                        data-image-id="<?php echo e($image->id); ?>"
                                     />
-                                    <span id="status-{{ $image->id }}" style="font-size: 0.75rem; color: #999; text-align: center;"></span>
+                                    <span id="status-<?php echo e($image->id); ?>" style="font-size: 0.75rem; color: #999; text-align: center;"></span>
                                 </div>
                             </div>
-                        @endforeach
+                        <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                     </div>
                     <small style="display: block; margin-top: 0.5rem;">
                         <i class="bi bi-info-circle me-1"></i>Click "Replace" to choose a new image for each slot
                     </small>
                 </div>
-            @endif
+            <?php endif; ?>
 
             <!-- Add New Images -->
             <div class="form-group">
@@ -251,25 +260,25 @@
                     <i class="bi bi-check2-square me-1"></i>Facilities
                 </label>
                 <div class="facilities-grid">
-                    @php
+                    <?php
                         // Get current facility IDs from the room
                         $currentFacilityIds = $room->rooms_facilities()->pluck('facility_id')->toArray();
-                    @endphp
-                    @foreach($facilities as $facility)
+                    ?>
+                    <?php $__currentLoopData = $facilities; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $facility): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
                         <label class="facility-label">
                             <input type="checkbox" 
                                    name="facilities[]" 
-                                   value="{{ $facility->id }}" 
-                                   {{ in_array($facility->id, $currentFacilityIds) ? 'checked' : '' }}>
-                            <span>{{ $facility->name }}</span>
+                                   value="<?php echo e($facility->id); ?>" 
+                                   <?php echo e(in_array($facility->id, $currentFacilityIds) ? 'checked' : ''); ?>>
+                            <span><?php echo e($facility->name); ?></span>
                         </label>
-                    @endforeach
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                 </div>
             </div>
 
             <!-- Action Buttons -->
             <div class="form-actions">
-                <a href="{{ route('admin.rooms.index') }}" class="btn-admin-secondary">
+                <a href="<?php echo e(route('admin.rooms.index')); ?>" class="btn-admin-secondary">
                     <i class="bi bi-x-circle"></i> Cancel
                 </a>
                 <button type="submit" class="btn-admin-primary">
@@ -279,5 +288,14 @@
         </form>
     </div>
 
-    <script src="{{ asset('JS/editRoom.js') }}"></script>
-</x-admin-layout>
+    <script src="<?php echo e(asset('JS/editRoom.js')); ?>"></script>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal91fdd17964e43374ae18c674f95cdaa3)): ?>
+<?php $attributes = $__attributesOriginal91fdd17964e43374ae18c674f95cdaa3; ?>
+<?php unset($__attributesOriginal91fdd17964e43374ae18c674f95cdaa3); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal91fdd17964e43374ae18c674f95cdaa3)): ?>
+<?php $component = $__componentOriginal91fdd17964e43374ae18c674f95cdaa3; ?>
+<?php unset($__componentOriginal91fdd17964e43374ae18c674f95cdaa3); ?>
+<?php endif; ?><?php /**PATH C:\Uni\WebDev\Laravel\imperial\resources\views/admin/rooms/edit.blade.php ENDPATH**/ ?>

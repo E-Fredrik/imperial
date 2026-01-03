@@ -1,20 +1,30 @@
-<x-admin-layout>
-    <x-slot name="title">Bookings Management</x-slot>
-    <x-slot name="header">Bookings Management</x-slot>
-    <x-slot name="icon">bi-calendar-check</x-slot>
+<?php if (isset($component)) { $__componentOriginal91fdd17964e43374ae18c674f95cdaa3 = $component; } ?>
+<?php if (isset($attributes)) { $__attributesOriginal91fdd17964e43374ae18c674f95cdaa3 = $attributes; } ?>
+<?php $component = App\View\Components\AdminLayout::resolve([] + (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag ? $attributes->all() : [])); ?>
+<?php $component->withName('admin-layout'); ?>
+<?php if ($component->shouldRender()): ?>
+<?php $__env->startComponent($component->resolveView(), $component->data()); ?>
+<?php if (isset($attributes) && $attributes instanceof Illuminate\View\ComponentAttributeBag): ?>
+<?php $attributes = $attributes->except(\App\View\Components\AdminLayout::ignoredParameterNames()); ?>
+<?php endif; ?>
+<?php $component->withAttributes([]); ?>
+     <?php $__env->slot('title', null, []); ?> Bookings Management <?php $__env->endSlot(); ?>
+     <?php $__env->slot('header', null, []); ?> Bookings Management <?php $__env->endSlot(); ?>
+     <?php $__env->slot('icon', null, []); ?> bi-calendar-check <?php $__env->endSlot(); ?>
 
-    <link href="{{ asset('css/booking.css') }}" rel="stylesheet">
+    <link href="<?php echo e(asset('css/booking.css')); ?>" rel="stylesheet">
 
-    @if(session('success'))
+    <?php if(session('success')): ?>
         <div class="alert-success">
-            <i class="bi bi-check-circle"></i> {{ session('success') }}
+            <i class="bi bi-check-circle"></i> <?php echo e(session('success')); ?>
+
         </div>
-    @endif
+    <?php endif; ?>
 
     <div class="admin-card">
         <div class="card-header">
             <h3><i class="bi bi-calendar-check me-2"></i>All Bookings</h3>
-            <a href="{{ route('admin.bookings.create') }}" class="btn-admin-primary">
+            <a href="<?php echo e(route('admin.bookings.create')); ?>" class="btn-admin-primary">
                 <i class="bi bi-plus-circle"></i> Add New Booking
             </a>
         </div>
@@ -33,48 +43,50 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @forelse($bookings as $booking)
+                    <?php $__empty_1 = true; $__currentLoopData = $bookings; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $booking): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); $__empty_1 = false; ?>
                         <tr>
-                            <td>#{{ $booking->id }}</td>
+                            <td>#<?php echo e($booking->id); ?></td>
                             <td>
                                 <div>
-                                    <strong>{{ $booking->user->name }}</strong><br>
-                                    <small style="color: rgba(250, 235, 215, 0.6);">{{ $booking->user->email }}</small>
+                                    <strong><?php echo e($booking->user->name); ?></strong><br>
+                                    <small style="color: rgba(250, 235, 215, 0.6);"><?php echo e($booking->user->email); ?></small>
                                 </div>
                             </td>
                             <td>
                                 <span style="background: rgba(250, 235, 215, 0.1); padding: 0.5rem 0.75rem; border-radius: 8px; display: inline-block;">
-                                    Room {{ $booking->room->room_number }} - Floor {{ $booking->room->floor }}
+                                    Room <?php echo e($booking->room->room_number); ?> - Floor <?php echo e($booking->room->floor); ?>
+
                                 </span>
                             </td>
                             <td>
-                                @if($booking->user->id_card)
-                                    <button type="button" class="btn-admin-info btn-sm" data-bs-toggle="modal" data-bs-target="#idCardModal{{ $booking->id }}">
+                                <?php if($booking->user->id_card): ?>
+                                    <button type="button" class="btn-admin-info btn-sm" data-bs-toggle="modal" data-bs-target="#idCardModal<?php echo e($booking->id); ?>">
                                         <i class="bi bi-image"></i> View ID Card
                                     </button>
-                                @else
+                                <?php else: ?>
                                     <span style="color: rgba(250, 235, 215, 0.4);">
                                         <i class="bi bi-x-circle"></i> No ID Card
                                     </span>
-                                @endif
+                                <?php endif; ?>
                             </td>
                             <td>
                                 <div style="font-size: 0.9rem;">
-                                    @if($booking->move_in_date)
-                                        <strong>Start:</strong> {{ $booking->move_in_date->format('M d, Y') }}<br>
-                                    @else
+                                    <?php if($booking->move_in_date): ?>
+                                        <strong>Start:</strong> <?php echo e($booking->move_in_date->format('M d, Y')); ?><br>
+                                    <?php else: ?>
                                         <strong>Start:</strong> <span style="color: rgba(250, 235, 215, 0.4);">Not set</span><br>
-                                    @endif
+                                    <?php endif; ?>
                                     
-                                    @if($booking->move_out_date)
-                                        <strong>End:</strong> {{ $booking->move_out_date->format('M d, Y') }}
-                                    @else
+                                    <?php if($booking->move_out_date): ?>
+                                        <strong>End:</strong> <?php echo e($booking->move_out_date->format('M d, Y')); ?>
+
+                                    <?php else: ?>
                                         <strong>End:</strong> <span style="color: rgba(250, 235, 215, 0.4);">Not set</span>
-                                    @endif
+                                    <?php endif; ?>
                                 </div>
                             </td>
                             <td>
-                                @php
+                                <?php
                                     $statusColors = [
                                         'active' => 'success',
                                         'pending' => 'warning',
@@ -83,19 +95,20 @@
                                         'booked' => 'success'
                                     ];
                                     $color = $statusColors[$booking->status] ?? 'secondary';
-                                @endphp
-                                <span class="status-badge status-{{ $color }}">
-                                    {{ ucfirst($booking->status) }}
+                                ?>
+                                <span class="status-badge status-<?php echo e($color); ?>">
+                                    <?php echo e(ucfirst($booking->status)); ?>
+
                                 </span>
                             </td>
                             <td>
                                 <div class="action-buttons">
-                                    <a href="{{ route('admin.bookings.show', $booking) }}" class="btn-admin-info btn-sm">
+                                    <a href="<?php echo e(route('admin.bookings.show', $booking)); ?>" class="btn-admin-info btn-sm">
                                         <i class="bi bi-eye"></i> View
                                     </a>
-                                    <form action="{{ route('admin.bookings.destroy', $booking) }}" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this booking?')">
-                                        @csrf
-                                        @method('DELETE')
+                                    <form action="<?php echo e(route('admin.bookings.destroy', $booking)); ?>" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this booking?')">
+                                        <?php echo csrf_field(); ?>
+                                        <?php echo method_field('DELETE'); ?>
                                         <button type="submit" class="btn-admin-danger btn-sm">
                                             <i class="bi bi-trash"></i> Delete
                                         </button>
@@ -105,17 +118,19 @@
                         </tr>
 
                         <!-- ID Card Modal -->
-                        @if($booking->user->id_card)
-                        <div class="modal fade" id="idCardModal{{ $booking->id }}" tabindex="-1" aria-labelledby="idCardModalLabel{{ $booking->id }}" aria-hidden="true">
+                        <?php if($booking->user->id_card): ?>
+                        <div class="modal fade" id="idCardModal<?php echo e($booking->id); ?>" tabindex="-1" aria-labelledby="idCardModalLabel<?php echo e($booking->id); ?>" aria-hidden="true">
                             <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
                                 <div class="modal-content" style="background: #0a0a0a; border: 1px solid rgba(250, 235, 215, 0.2); border-radius: 16px; max-height: 90vh;">
                                     <div class="modal-header" style="border-bottom: 1px solid rgba(250, 235, 215, 0.1); padding: 1.5rem;">
                                         <div>
-                                            <h5 class="modal-title" id="idCardModalLabel{{ $booking->id }}" style="color: #FAEBD7; margin-bottom: 0.25rem;">
-                                                <i class="bi bi-card-image me-2"></i>ID Card - {{ $booking->user->name }}
+                                            <h5 class="modal-title" id="idCardModalLabel<?php echo e($booking->id); ?>" style="color: #FAEBD7; margin-bottom: 0.25rem;">
+                                                <i class="bi bi-card-image me-2"></i>ID Card - <?php echo e($booking->user->name); ?>
+
                                             </h5>
                                             <p style="margin: 0; color: rgba(250, 235, 215, 0.6); font-size: 0.875rem;">
-                                                Booking #{{ $booking->id }} | Room {{ $booking->room->room_number }}
+                                                Booking #<?php echo e($booking->id); ?> | Room <?php echo e($booking->room->room_number); ?>
+
                                             </p>
                                         </div>
                                         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -123,8 +138,8 @@
                                     <div class="modal-body" style="padding: 2rem; overflow-y: auto;">
                                         <!-- Image Display -->
                                         <div class="text-center" style="background: rgba(250, 235, 215, 0.03); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
-                                            <img src="{{ Storage::url($booking->user->id_card) }}" 
-                                                 alt="ID Card for {{ $booking->user->name }}" 
+                                            <img src="<?php echo e(Storage::url($booking->user->id_card)); ?>" 
+                                                 alt="ID Card for <?php echo e($booking->user->name); ?>" 
                                                  style="max-width: 100%; height: auto; border-radius: 12px; border: 1px solid rgba(250, 235, 215, 0.2); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); cursor: zoom-in;"
                                                  onclick="this.style.cursor = this.style.cursor === 'zoom-in' ? 'zoom-out' : 'zoom-in'; this.style.transform = this.style.transform === 'scale(1.5)' ? 'scale(1)' : 'scale(1.5)'; this.style.transition = 'transform 0.3s ease';">
                                         </div>
@@ -137,24 +152,25 @@
                                             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
                                                 <div>
                                                     <p style="margin: 0; color: rgba(250, 235, 215, 0.6); font-size: 0.875rem;">Booking ID</p>
-                                                    <p style="margin: 0; color: #FAEBD7; font-weight: 600;">#{{ $booking->id }}</p>
+                                                    <p style="margin: 0; color: #FAEBD7; font-weight: 600;">#<?php echo e($booking->id); ?></p>
                                                 </div>
                                                 <div>
                                                     <p style="margin: 0; color: rgba(250, 235, 215, 0.6); font-size: 0.875rem;">Room</p>
-                                                    <p style="margin: 0; color: #FAEBD7; font-weight: 600;">{{ $booking->room->room_number }} (Floor {{ $booking->room->floor }})</p>
+                                                    <p style="margin: 0; color: #FAEBD7; font-weight: 600;"><?php echo e($booking->room->room_number); ?> (Floor <?php echo e($booking->room->floor); ?>)</p>
                                                 </div>
                                                 <div>
                                                     <p style="margin: 0; color: rgba(250, 235, 215, 0.6); font-size: 0.875rem;">Status</p>
                                                     <p style="margin: 0;">
-                                                        <span class="status-badge status-{{ $color }}">
-                                                            {{ ucfirst($booking->status) }}
+                                                        <span class="status-badge status-<?php echo e($color); ?>">
+                                                            <?php echo e(ucfirst($booking->status)); ?>
+
                                                         </span>
                                                     </p>
                                                 </div>
                                                 <div>
                                                     <p style="margin: 0; color: rgba(250, 235, 215, 0.6); font-size: 0.875rem;">User</p>
-                                                    <p style="margin: 0; color: #FAEBD7; font-weight: 600;">{{ $booking->user->name }}</p>
-                                                    <p style="margin: 0; color: rgba(250, 235, 215, 0.6); font-size: 0.8rem;">{{ $booking->user->email }}</p>
+                                                    <p style="margin: 0; color: #FAEBD7; font-weight: 600;"><?php echo e($booking->user->name); ?></p>
+                                                    <p style="margin: 0; color: rgba(250, 235, 215, 0.6); font-size: 0.8rem;"><?php echo e($booking->user->email); ?></p>
                                                 </div>
                                             </div>
                                         </div>
@@ -167,8 +183,8 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer" style="border-top: 1px solid rgba(250, 235, 215, 0.1); padding: 1.25rem; display: flex; justify-content: space-between; gap: 0.75rem;">
-                                        <a href="{{ Storage::url($booking->user->id_card) }}" 
-                                           download="ID_Card_{{ $booking->user->name }}_Booking_{{ $booking->id }}.jpg" 
+                                        <a href="<?php echo e(Storage::url($booking->user->id_card)); ?>" 
+                                           download="ID_Card_<?php echo e($booking->user->name); ?>_Booking_<?php echo e($booking->id); ?>.jpg" 
                                            class="btn-admin-primary">
                                             <i class="bi bi-download"></i> Download ID Card
                                         </a>
@@ -179,8 +195,8 @@
                                 </div>
                             </div>
                         </div>
-                        @endif
-                    @empty
+                        <?php endif; ?>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); if ($__empty_1): ?>
                         <tr>
                             <td colspan="7" style="text-align: center; padding: 3rem;">
                                 <div class="empty-state">
@@ -189,15 +205,25 @@
                                 </div>
                             </td>
                         </tr>
-                    @endforelse
+                    <?php endif; ?>
                 </tbody>
             </table>
         </div>
 
-        @if($bookings->hasPages())
+        <?php if($bookings->hasPages()): ?>
             <div style="margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(250, 235, 215, 0.1);">
-                {{ $bookings->links() }}
+                <?php echo e($bookings->links()); ?>
+
             </div>
-        @endif
+        <?php endif; ?>
     </div>
-</x-admin-layout>
+ <?php echo $__env->renderComponent(); ?>
+<?php endif; ?>
+<?php if (isset($__attributesOriginal91fdd17964e43374ae18c674f95cdaa3)): ?>
+<?php $attributes = $__attributesOriginal91fdd17964e43374ae18c674f95cdaa3; ?>
+<?php unset($__attributesOriginal91fdd17964e43374ae18c674f95cdaa3); ?>
+<?php endif; ?>
+<?php if (isset($__componentOriginal91fdd17964e43374ae18c674f95cdaa3)): ?>
+<?php $component = $__componentOriginal91fdd17964e43374ae18c674f95cdaa3; ?>
+<?php unset($__componentOriginal91fdd17964e43374ae18c674f95cdaa3); ?>
+<?php endif; ?><?php /**PATH C:\Uni\WebDev\Laravel\imperial\resources\views/admin/bookings/index.blade.php ENDPATH**/ ?>

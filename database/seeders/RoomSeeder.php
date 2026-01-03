@@ -17,7 +17,7 @@ class RoomSeeder extends Seeder
         $floor1Rooms = [
             ['room_number' => 'A', 'floor' => 1, 'type' => 'Single', 'status' => 'available'],
             ['room_number' => 'B', 'floor' => 1, 'type' => 'Single', 'status' => 'available'],
-            ['room_number' => 'C', 'floor' => 1, 'type' => 'Single', 'status' => 'booked'],
+            ['room_number' => 'C', 'floor' => 1, 'type' => 'Single', 'status' => 'available'],
             ['room_number' => 'D', 'floor' => 1, 'type' => 'Single', 'status' => 'available'],
             ['room_number' => 'E', 'floor' => 1, 'type' => 'Single', 'status' => 'available'],
             ['room_number' => 'F', 'floor' => 1, 'type' => 'Single', 'status' => 'available'],
