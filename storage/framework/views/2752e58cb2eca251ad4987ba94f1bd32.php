@@ -12,6 +12,8 @@
      <?php $__env->slot('header', null, []); ?> Bookings Management <?php $__env->endSlot(); ?>
      <?php $__env->slot('icon', null, []); ?> bi-calendar-check <?php $__env->endSlot(); ?>
 
+    <link href="<?php echo e(asset('css/booking.css')); ?>" rel="stylesheet">
+
     <?php if(session('success')): ?>
         <div class="alert-success">
             <i class="bi bi-check-circle"></i> <?php echo e(session('success')); ?>
@@ -119,41 +121,78 @@
                         </tr>
 
                         <!-- ID Card Modal -->
-                        <?php if($booking->id_card_image): ?>
+                        <?php if($booking->user && $booking->user->id_card): ?>
                         <div class="modal fade" id="idCardModal<?php echo e($booking->id); ?>" tabindex="-1" aria-labelledby="idCardModalLabel<?php echo e($booking->id); ?>" aria-hidden="true">
-                            <div class="modal-dialog modal-lg modal-dialog-centered">
-                                <div class="modal-content" style="background: #0a0a0a; border: 1px solid rgba(250, 235, 215, 0.2); border-radius: 16px;">
-                                    <div class="modal-header" style="border-bottom: 1px solid rgba(250, 235, 215, 0.1);">
-                                        <h5 class="modal-title" id="idCardModalLabel<?php echo e($booking->id); ?>" style="color: #FAEBD7;">
-                                            <i class="bi bi-card-image me-2"></i>ID Card - <?php echo e($booking->user->name); ?>
+                            <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+                                <div class="modal-content" style="background: #0a0a0a; border: 1px solid rgba(250, 235, 215, 0.2); border-radius: 16px; max-height: 90vh;">
+                                    <div class="modal-header" style="border-bottom: 1px solid rgba(250, 235, 215, 0.1); padding: 1.5rem;">
+                                        <div>
+                                            <h5 class="modal-title" id="idCardModalLabel<?php echo e($booking->id); ?>" style="color: #FAEBD7; margin-bottom: 0.25rem;">
+                                                <i class="bi bi-card-image me-2"></i>ID Card - <?php echo e($booking->user->name); ?>
 
-                                        </h5>
-                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body" style="padding: 2rem;">
-                                        <div class="text-center">
-                                            <img src="<?php echo e(Storage::url($booking->id_card_image)); ?>" 
-                                                 alt="ID Card for <?php echo e($booking->user->name); ?>" 
-                                                 style="max-width: 100%; height: auto; border-radius: 12px; border: 1px solid rgba(250, 235, 215, 0.2);">
-                                        </div>
-                                        <div style="margin-top: 1.5rem; padding: 1rem; background: rgba(250, 235, 215, 0.05); border-radius: 12px; border: 1px solid rgba(250, 235, 215, 0.1);">
-                                            <p style="margin: 0; color: rgba(250, 235, 215, 0.8); font-size: 0.9rem;">
-                                                <i class="bi bi-info-circle me-2"></i>
-                                                <strong>Booking ID:</strong> #<?php echo e($booking->id); ?> | 
-                                                <strong>Room:</strong> <?php echo e($booking->room->room_number); ?> | 
-                                                <strong>Status:</strong> <?php echo e(ucfirst($booking->status)); ?>
+                                            </h5>
+                                            <p style="margin: 0; color: rgba(250, 235, 215, 0.6); font-size: 0.875rem;">
+                                                Booking #<?php echo e($booking->id); ?> | Room <?php echo e($booking->room->room_number); ?>
 
                                             </p>
                                         </div>
+                                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
-                                    <div class="modal-footer" style="border-top: 1px solid rgba(250, 235, 215, 0.1);">
-                                        <a href="<?php echo e(Storage::url($booking->id_card_image)); ?>" 
+                                    <div class="modal-body" style="padding: 2rem; overflow-y: auto;">
+                                        <!-- Image Display -->
+                                        <div class="text-center" style="background: rgba(250, 235, 215, 0.03); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem;">
+                                            <img src="<?php echo e(Storage::url($booking->user->id_card)); ?>" 
+                                                 alt="ID Card for <?php echo e($booking->user->name); ?>" 
+                                                 style="max-width: 100%; height: auto; border-radius: 12px; border: 1px solid rgba(250, 235, 215, 0.2); box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4); cursor: zoom-in;"
+                                                 onclick="this.style.cursor = this.style.cursor === 'zoom-in' ? 'zoom-out' : 'zoom-in'; this.style.transform = this.style.transform === 'scale(1.5)' ? 'scale(1)' : 'scale(1.5)'; this.style.transition = 'transform 0.3s ease';">
+                                        </div>
+
+                                        <!-- Booking Information -->
+                                        <div style="background: rgba(250, 235, 215, 0.05); border-radius: 12px; border: 1px solid rgba(250, 235, 215, 0.1); padding: 1.25rem;">
+                                            <h6 style="color: #FAEBD7; margin-bottom: 1rem; font-weight: 600;">
+                                                <i class="bi bi-info-circle me-2"></i>Booking Information
+                                            </h6>
+                                            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                                                <div>
+                                                    <p style="margin: 0; color: rgba(250, 235, 215, 0.6); font-size: 0.875rem;">Booking ID</p>
+                                                    <p style="margin: 0; color: #FAEBD7; font-weight: 600;">#<?php echo e($booking->id); ?></p>
+                                                </div>
+                                                <div>
+                                                    <p style="margin: 0; color: rgba(250, 235, 215, 0.6); font-size: 0.875rem;">Room</p>
+                                                    <p style="margin: 0; color: #FAEBD7; font-weight: 600;"><?php echo e($booking->room->room_number); ?> (Floor <?php echo e($booking->room->floor); ?>)</p>
+                                                </div>
+                                                <div>
+                                                    <p style="margin: 0; color: rgba(250, 235, 215, 0.6); font-size: 0.875rem;">Status</p>
+                                                    <p style="margin: 0;">
+                                                        <span class="status-badge status-<?php echo e($color); ?>">
+                                                            <?php echo e(ucfirst($booking->status)); ?>
+
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                                <div>
+                                                    <p style="margin: 0; color: rgba(250, 235, 215, 0.6); font-size: 0.875rem;">User</p>
+                                                    <p style="margin: 0; color: #FAEBD7; font-weight: 600;"><?php echo e($booking->user->name); ?></p>
+                                                    <p style="margin: 0; color: rgba(250, 235, 215, 0.6); font-size: 0.8rem;"><?php echo e($booking->user->email); ?></p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Tips -->
+                                        <div style="margin-top: 1rem; padding: 1rem; background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); border-radius: 8px;">
+                                            <p style="margin: 0; color: #60a5fa; font-size: 0.875rem;">
+                                                <i class="bi bi-lightbulb me-2"></i><strong>Tip:</strong> Click on the image to zoom in/out for better viewing
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer" style="border-top: 1px solid rgba(250, 235, 215, 0.1); padding: 1.25rem; display: flex; justify-content: space-between; gap: 0.75rem;">
+                                        <a href="<?php echo e(Storage::url($booking->user->id_card)); ?>" 
                                            download="ID_Card_<?php echo e($booking->user->name); ?>_Booking_<?php echo e($booking->id); ?>.jpg" 
                                            class="btn-admin-primary">
-                                            <i class="bi bi-download"></i> Download
+                                            <i class="bi bi-download"></i> Download ID Card
                                         </a>
                                         <button type="button" class="btn-admin-secondary" data-bs-dismiss="modal">
-                                            Close
+                                            <i class="bi bi-x-circle"></i> Close
                                         </button>
                                     </div>
                                 </div>
@@ -190,45 +229,4 @@
 <?php if (isset($__componentOriginal91fdd17964e43374ae18c674f95cdaa3)): ?>
 <?php $component = $__componentOriginal91fdd17964e43374ae18c674f95cdaa3; ?>
 <?php unset($__componentOriginal91fdd17964e43374ae18c674f95cdaa3); ?>
-<?php endif; ?>
-
-<style>
-.btn-sm {
-    padding: 0.4rem 0.75rem;
-    font-size: 0.875rem;
-    border-radius: 6px;
-}
-
-.action-buttons {
-    display: flex;
-    gap: 0.5rem;
-    flex-wrap: wrap;
-}
-
-.modal-content .modal-body img {
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-}
-
-@media (max-width: 575px) {
-    .modal-dialog {
-        margin: 1rem;
-    }
-    
-    .modal-body {
-        padding: 1rem !important;
-    }
-    
-    .action-buttons {
-        flex-direction: column;
-    }
-    
-    .action-buttons form {
-        width: 100%;
-    }
-    
-    .action-buttons .btn-sm {
-        width: 100%;
-        justify-content: center;
-    }
-}
-</style><?php /**PATH D:\Github\imperial\resources\views/admin/bookings/index.blade.php ENDPATH**/ ?>
+<?php endif; ?><?php /**PATH D:\Github\imperial\resources\views/admin/bookings/index.blade.php ENDPATH**/ ?>

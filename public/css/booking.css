@@ -39,3 +39,82 @@ input[type="file"]::file-selector-button,
 input[type="file"]::-webkit-file-upload-button {
     font-weight: 600;
 }
+
+/* Bookings Index Page Styles */
+.btn-sm {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.875rem;
+    border-radius: 6px;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+/* Modal styling improvements */
+.modal-content .modal-body img {
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease;
+}
+
+.modal-xl {
+    max-width: 1200px;
+}
+
+@media (max-width: 1200px) {
+    .modal-xl {
+        max-width: 95%;
+    }
+}
+
+@media (max-width: 575px) {
+    .modal-dialog {
+        margin: 0.5rem;
+    }
+    
+    .modal-body {
+        padding: 1rem !important;
+    }
+    
+    .modal-header {
+        padding: 1rem !important;
+    }
+    
+    .modal-footer {
+        padding: 1rem !important;
+        flex-direction: column;
+    }
+    
+    .modal-footer .btn-admin-primary,
+    .modal-footer .btn-admin-secondary {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .action-buttons form {
+        width: 100%;
+    }
+    
+    .action-buttons .btn-sm {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* Image zoom effect */
+.modal-body img[onclick] {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.modal-body img[onclick]:active {
+    transform: scale(1.5) !important;
+}
