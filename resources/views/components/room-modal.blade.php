@@ -3,14 +3,13 @@
 <div id="roomModal-{{ $room->id }}" class="room-modal" style="display: none; opacity: 0; visibility: hidden;">
     <div class="modal-backdrop" onclick="closeRoomModal({{ $room->id }})"></div>
     <div class="modal-content">
+        <!-- Back button moved outside modal-body to stay fixed -->
+        <button class="modal-close" onclick="closeRoomModal({{ $room->id }})" style="position: fixed; top: 80px; left: 20px; z-index: 10002;">
+            <i class="bi bi-arrow-left"></i> Back
+        </button>
         
         <div class="modal-body">
             <div class="modal-images">
-                <!-- Back button moved inside modal-images with adjusted positioning -->
-                <button class="modal-close" onclick="closeRoomModal({{ $room->id }})" style="position: absolute; top: 80px; left: 20px; z-index: 10002;">
-                    <i class="bi bi-arrow-left"></i> Back
-                </button>
-                
                 <div id="roomCarousel-{{ $room->id }}" class="carousel slide" data-bs-ride="false">
                     <div class="carousel-inner">
                         @php

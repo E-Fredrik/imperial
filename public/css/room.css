@@ -130,6 +130,7 @@
     background-color: #000;
     display: flex;
     flex-direction: column;
+    /* Remove fixed height on mobile */
 }
 
 .carousel {
@@ -184,7 +185,7 @@
     color: white;
     display: flex;
     flex-direction: column;
-    overflow-y: auto;
+    overflow-y: auto; /* Keep scrollable for desktop */
 }
 
 .info-header h2 {
@@ -705,6 +706,7 @@
     .modal-content {
         width: 98%;
         max-height: 98vh;
+        overflow-y: auto; /* Enable scrolling on modal */
     }
     
     .modal-close {
@@ -712,37 +714,55 @@
         left: 10px;
         padding: 10px 20px;
         font-size: 0.9rem;
+        position: sticky; /* Make close button sticky */
+        z-index: 10003;
+    }
+    
+    /* Make modal body scrollable as a single column on mobile */
+    .modal-body {
+        grid-template-columns: 1fr;
+        max-height: none; /* Remove max-height */
+        overflow-y: visible; /* Remove overflow control */
+    }
+    
+    /* Remove fixed heights from image sections */
+    .modal-images {
+        height: auto;
+        min-height: auto;
+    }
+    
+    .carousel {
+        height: 350px;
+        min-height: 350px;
+    }
+    
+    .room-3d-view {
+        height: 350px;
+        min-height: 350px;
+        padding: 1.5rem;
     }
     
     .modal-info {
         padding: 1.5rem;
+        height: auto;
+        overflow-y: visible; /* Remove overflow */
     }
     
     .info-header h2 {
         font-size: 2rem;
     }
     
-    .price-section {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    .price-badge {
-        margin-right: 0;
-        margin-bottom: 1rem;
+    .info-header p {
+        font-size: 1rem;
     }
     
     .facilities-grid {
         grid-template-columns: 1fr;
+        gap: 0.75rem;
     }
     
-    .action-buttons {
-        flex-direction: column;
-    }
-    
-    .btn-cancel,
-    .btn-book {
-        width: 100%;
+    .facility-item {
+        font-size: 0.95rem;
     }
 }
 
@@ -774,61 +794,62 @@
     .legend {
         flex-direction: column;
         gap: 0.75rem;
-        align-items: flex-start;
-        padding: 0 10px;
+        padding: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .legend-item {
+        font-size: 0.9rem;
     }
     
     .modal-close {
+        top: 8px;
+        left: 8px;
         padding: 8px 16px;
         font-size: 0.85rem;
     }
     
+    /* Further adjustments for very small screens */
+    .carousel {
+        height: 300px;
+        min-height: 300px;
+    }
+    
+    .room-3d-view {
+        height: 300px;
+        min-height: 300px;
+        padding: 1rem;
+    }
+    
     .modal-info {
-        padding: 1.25rem;
+        padding: 1rem;
     }
     
     .info-header h2 {
         font-size: 1.75rem;
     }
     
-    .info-header p {
-        font-size: 1rem;
+    .price-section {
+        flex-direction: column;
+        align-items: stretch;
     }
     
-    .price {
-        font-size: 1.75rem;
+    .price-badge {
+        margin-right: 0;
+        margin-bottom: 1rem;
     }
     
-    .monthly-label {
-        font-size: 0.8rem;
+    .facilities-grid {
+        grid-template-columns: 1fr;
     }
     
-    .availability-tag {
-        padding: 10px 20px;
-        font-size: 0.85rem;
+    .action-buttons {
+        flex-direction: column;
     }
     
-    .facilities-section h3,
-    .description-section h3,
-    .booking-section h3 {
-        font-size: 1.3rem;
-    }
-    
-    .facility-item {
-        padding: 0.6rem;
-        font-size: 0.9rem;
-    }
-    
-    .facility-item i {
-        font-size: 1.1rem;
-    }
-    
-    .floor-map-wrapper {
-        padding: 1rem;
-    }
-    
-    .room-label {
-        font-size: 24px;
+    .btn-cancel,
+    .btn-book {
+        width: 100%;
     }
 }
 
