@@ -42,9 +42,9 @@
                     <!-- Building outer border -->
                     <rect x="10" y="10" width="880" height="680" fill="none" stroke="#fff" stroke-width="4"/>
                     
-                    {{-- LEFT SIDE - PUBLIC AREAS AND ROOMS A, B, C --}}
+                    {{-- LEFT SIDE - PUBLIC AREAS AND ROOMS G, F, E --}}
                     
-                    <!-- Public Bathroom (top-left, above Room A) -->
+                    <!-- Public Bathroom (top-left, above Room G) -->
                     <rect x="10" y="10" width="130" height="100" fill="#000" stroke="#fff" stroke-width="3"/>
                     <circle cx="75" cy="50" r="18" fill="none" stroke="#fff" stroke-width="2"/>
                     <text x="75" y="85" fill="#fff" font-size="11" text-anchor="middle" font-weight="bold">PUBLIC WC</text>
@@ -65,27 +65,27 @@
                         <text x="215" y="65" fill="#fff" font-size="12" font-weight="bold" text-anchor="middle">STAIRS</text>
                     </g>
                     
-                    <!-- Room A (with bathroom inside, top-right corner) -->
-                    @foreach($floor1Rooms->where('room_number', 'A') as $room)
+                    <!-- Room G (with bathroom inside, top-right corner) -->
+                    @foreach($floor1Rooms->where('room_number', 'G') as $room)
                     <g class="clickable-room {{ $room->status }}" onclick="openRoomModal({{ $room->id }})" style="cursor: pointer;">
                         <rect x="10" y="120" width="270" height="170" class="room-fill {{ $room->status }}" stroke="#fff" stroke-width="3"/>
-                        <text x="145" y="215" fill="#000" font-size="56" font-weight="900" text-anchor="middle" class="room-label">A</text>
+                        <text x="145" y="215" fill="#000" font-size="56" font-weight="900" text-anchor="middle" class="room-label">G</text>
                         
-                        <!-- Bathroom inside Room A (top-right corner) -->
+                        <!-- Bathroom inside Room G (top-right corner) -->
                         <rect x="200" y="130" width="70" height="70" fill="#000" stroke="#fff" stroke-width="2"/>
                         <circle cx="235" cy="165" r="14" fill="none" stroke="#fff" stroke-width="2"/>
                         
-                        <!-- Bed in Room A -->
+                        <!-- Bed in Room G -->
                         <rect x="25" y="145" width="90" height="60" fill="none" stroke="#000" stroke-width="2"/>
                         <line x1="25" y1="175" x2="115" y2="175" stroke="#000" stroke-width="1"/>
                     </g>
                     @endforeach
                     
-                    <!-- Room B (bathroom half inside/half outside) -->
-                    @foreach($floor1Rooms->where('room_number', 'B') as $room)
+                    <!-- Room F (bathroom half inside/half outside) -->
+                    @foreach($floor1Rooms->where('room_number', 'F') as $room)
                     <g class="clickable-room {{ $room->status }}" onclick="openRoomModal({{ $room->id }})" style="cursor: pointer;">
                         <rect x="10" y="300" width="270" height="180" class="room-fill {{ $room->status }}" stroke="#fff" stroke-width="3"/>
-                        <text x="145" y="405" fill="#000" font-size="56" font-weight="900" text-anchor="middle" class="room-label">B</text>
+                        <text x="145" y="405" fill="#000" font-size="56" font-weight="900" text-anchor="middle" class="room-label">F</text>
                         
                         <!-- Bathroom (half inside, half appears as wall from outside) -->
                         <rect x="10" y="310" width="60" height="80" fill="#000" stroke="#fff" stroke-width="2"/>
@@ -93,13 +93,13 @@
                     </g>
                     @endforeach
                     
-                    <!-- Room C (bathroom below B's bathroom) -->
-                    @foreach($floor1Rooms->where('room_number', 'C') as $room)
+                    <!-- Room E (bathroom below F's bathroom) -->
+                    @foreach($floor1Rooms->where('room_number', 'E') as $room)
                     <g class="clickable-room {{ $room->status }}" onclick="openRoomModal({{ $room->id }})" style="cursor: pointer;">
                         <rect x="10" y="490" width="270" height="200" class="room-fill {{ $room->status }}" stroke="#fff" stroke-width="3"/>
-                        <text x="145" y="605" fill="#000" font-size="56" font-weight="900" text-anchor="middle" class="room-label">C</text>
+                        <text x="145" y="605" fill="#000" font-size="56" font-weight="900" text-anchor="middle" class="room-label">E</text>
                         
-                        <!-- Bathroom below B's bathroom -->
+                        <!-- Bathroom below F's bathroom -->
                         <rect x="10" y="500" width="60" height="90" fill="#000" stroke="#fff" stroke-width="2"/>
                         <circle cx="40" cy="545" r="14" fill="none" stroke="#fff" stroke-width="2"/>
                     </g>
@@ -120,7 +120,7 @@
                         <text x="365" y="650" fill="#fff" font-size="14" font-weight="bold" text-anchor="middle">EXIT</text>
                     </g>
                     
-                    {{-- RIGHT SIDE - PUBLIC KITCHEN AND ROOMS D, E, F, G --}}
+                    {{-- RIGHT SIDE - PUBLIC KITCHEN AND ROOMS A, B, C, D --}}
                     
                     <!-- Public Kitchen (top-right, above Room D) -->
                     <rect x="450" y="10" width="440" height="100" fill="#000" stroke="#fff" stroke-width="3"/>
@@ -143,47 +143,43 @@
                     </g>
                     @endforeach
                     
-                    <!-- Room E (on the left side) -->
-                    @foreach($floor1Rooms->where('room_number', 'E') as $room)
+                    <!-- Room C (on the left side) -->
+                    @foreach($floor1Rooms->where('room_number', 'C') as $room)
                     <g class="clickable-room {{ $room->status }}" onclick="openRoomModal({{ $room->id }})" style="cursor: pointer;">
                         <rect x="450" y="280" width="330" height="110" class="room-fill {{ $room->status }}" stroke="#fff" stroke-width="3"/>
-                        <text x="615" y="345" fill="#000" font-size="56" font-weight="900" text-anchor="middle" class="room-label">E</text>
+                        <text x="615" y="345" fill="#000" font-size="56" font-weight="900" text-anchor="middle" class="room-label">C</text>
                     </g>
                     @endforeach
                     
-                    <!-- Bathroom for Room E (RIGHT side of Room E, top bathroom) -->
+                    <!-- Bathroom for Room C (RIGHT side of Room C, top bathroom) -->
                     <rect x="790" y="280" width="100" height="50" fill="#000" stroke="#fff" stroke-width="3"/>
                     <circle cx="840" cy="305" r="14" fill="none" stroke="#fff" stroke-width="2"/>
                     <text x="840" y="325" fill="#fff" font-size="9" text-anchor="middle" font-weight="bold">WC</text>
                     
-                    <!-- Bathroom for Room F (RIGHT side of Room E, bottom bathroom, aligned with Room E) -->
+                    <!-- Bathroom for Room B (RIGHT side of Room C, bottom bathroom, aligned with Room C) -->
                     <rect x="790" y="340" width="100" height="50" fill="#000" stroke="#fff" stroke-width="3"/>
                     <circle cx="840" cy="365" r="14" fill="none" stroke="#fff" stroke-width="2"/>
                     <text x="840" y="385" fill="#fff" font-size="9" text-anchor="middle" font-weight="bold">WC</text>
                     
-                    <!-- Room F (bigger length/height, smaller width) -->
-                    @foreach($floor1Rooms->where('room_number', 'F') as $room)
+                    <!-- Room B (bigger length/height, smaller width) -->
+                    @foreach($floor1Rooms->where('room_number', 'B') as $room)
                     <g class="clickable-room {{ $room->status }}" onclick="openRoomModal({{ $room->id }})" style="cursor: pointer;">
                         <rect x="560" y="400" width="330" height="140" class="room-fill {{ $room->status }}" stroke="#fff" stroke-width="3"/>
-                        <text x="725" y="480" fill="#000" font-size="56" font-weight="900" text-anchor="middle" class="room-label">F</text>
+                        <text x="725" y="480" fill="#000" font-size="56" font-weight="900" text-anchor="middle" class="room-label">B</text>
                     </g>
                     @endforeach
                     
-                    <!-- Room G (follows F's width, with bathroom inside) -->
-                    @foreach($floor1Rooms->where('room_number', 'G') as $room)
+                    <!-- Room A (follows F's width, with bathroom inside) -->
+                    @foreach($floor1Rooms->where('room_number', 'A') as $room)
                     <g class="clickable-room {{ $room->status }}" onclick="openRoomModal({{ $room->id }})" style="cursor: pointer;">
                         <rect x="560" y="550" width="330" height="140" class="room-fill {{ $room->status }}" stroke="#fff" stroke-width="3"/>
-                        <text x="725" y="630" fill="#000" font-size="56" font-weight="900" text-anchor="middle" class="room-label">G</text>
+                        <text x="725" y="630" fill="#000" font-size="56" font-weight="900" text-anchor="middle" class="room-label">A</text>
                         
-                        <!-- Bathroom inside Room G (bottom-right corner) -->
+                        <!-- Bathroom inside Room A (bottom-right corner) -->
                         <rect x="810" y="600" width="70" height="80" fill="#000" stroke="#fff" stroke-width="2"/>
                         <circle cx="845" cy="640" r="14" fill="none" stroke="#fff" stroke-width="2"/>
                     </g>
-                    @endforeach
-                    
-                    {{-- ADDITIONAL SPACE LEFT OF F AND G --}}
-                    
-                    <!-- Additional space on the left (between E's bathrooms and F/G) -->
+                    @endforeach                    
                     <rect x="450" y="400" width="100" height="290" fill="#000" stroke="#fff" stroke-width="3"/>
                 </svg>
             </div>

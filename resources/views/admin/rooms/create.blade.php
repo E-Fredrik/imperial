@@ -176,7 +176,7 @@
                     placeholder="Describe the room features and amenities...">{{ old('description') }}</textarea>
             </div>
 
-            <!-- Images -->
+            <!-- Regular Room Images -->
             <div class="form-group">
                 <label for="images">
                     <i class="bi bi-images me-1"></i>Room Images (Optional)
@@ -188,7 +188,25 @@
                     multiple 
                     accept="image/*">
                 <small>
-                    <i class="bi bi-info-circle me-1"></i>You can select multiple images (PNG, JPG, JPEG)
+                    <i class="bi bi-info-circle me-1"></i>Upload multiple regular room images (PNG, JPG, JPEG). These will be shown in the carousel.
+                </small>
+            </div>
+
+            <!-- 360° Room Image (NEW) -->
+            <div class="form-group">
+                <label for="image_360">
+                    <i class="bi bi-globe me-1"></i>360° Panoramic Image (Optional)
+                </label>
+                <input 
+                    type="file" 
+                    name="image_360" 
+                    id="image_360" 
+                    accept="image/*">
+                <small style="display: block; margin-top: 0.5rem;">
+                    <i class="bi bi-info-circle me-1"></i>Upload a 360° equirectangular panoramic image for the immersive room view
+                </small>
+                <small style="display: block; margin-top: 0.25rem; color: rgba(250, 235, 215, 0.5);">
+                    <i class="bi bi-lightbulb me-1"></i>Tip: Use a 360° camera or panorama app to capture the full room view. Recommended format: JPEG, aspect ratio 2:1
                 </small>
             </div>
 
@@ -220,4 +238,23 @@
             </div>
         </form>
     </div>
+
+    <script>
+        // 360° Image preview functionality
+        document.getElementById('image_360').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('image-360-preview');
+                    const container = document.getElementById('image-360-preview-container');
+                    preview.src = e.target.result;
+                    container.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else if (!file) {
+                document.getElementById('image-360-preview-container').style.display = 'none';
+            }
+        });
+    </script>
 </x-admin-layout>
