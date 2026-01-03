@@ -31,7 +31,8 @@ unset($__defined_vars, $__key, $__value); ?>
 <div id="roomModal-<?php echo e($room->id); ?>" class="room-modal" style="display: none; opacity: 0; visibility: hidden;">
     <div class="modal-backdrop" onclick="closeRoomModal(<?php echo e($room->id); ?>)"></div>
     <div class="modal-content">
-        <button class="modal-close" onclick="closeRoomModal(<?php echo e($room->id); ?>)">
+        <!-- Back button moved outside modal-body to stay fixed -->
+        <button class="modal-close" onclick="closeRoomModal(<?php echo e($room->id); ?>)" style="position: fixed; top: 80px; left: 20px; z-index: 10002;">
             <i class="bi bi-arrow-left"></i> Back
         </button>
         
@@ -48,6 +49,7 @@ unset($__defined_vars, $__key, $__value); ?>
                                 <?php
                                     $imagePath = $image->image_path;
                                     $publicPath = public_path($imagePath);
+                                    
                                     if (file_exists($publicPath)) {
                                         $imageUrl = asset($imagePath);
                                     } else {
@@ -55,7 +57,7 @@ unset($__defined_vars, $__key, $__value); ?>
                                     }
                                 ?>
                                 <div class="carousel-item <?php echo e($index === 0 ? 'active' : ''); ?>">
-                                    <img src="<?php echo e($imageUrl); ?>" alt="Room <?php echo e($room->room_number); ?>" style="width: 100%; height: 400px; object-fit: cover;">
+                                    <img src="<?php echo e($imageUrl); ?>" alt="Room <?php echo e($room->room_number); ?>" style="width: 100%; height: 100%; object-fit: contain; background: #000;">
                                 </div>
                             <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
                         <?php else: ?>
@@ -197,7 +199,7 @@ unset($__defined_vars, $__key, $__value); ?>
     </div>
 </div>
 
-<?php if (! $__env->hasRenderedOnce('5726d281-957f-408e-9f76-a358b070de02')): $__env->markAsRenderedOnce('5726d281-957f-408e-9f76-a358b070de02'); ?>
+<?php if (! $__env->hasRenderedOnce('1dbde97f-514a-4d2e-b375-283b20d17f5e')): $__env->markAsRenderedOnce('1dbde97f-514a-4d2e-b375-283b20d17f5e'); ?>
 <?php $__env->startPush('scripts'); ?>
 <script>
 // Store viewer instances

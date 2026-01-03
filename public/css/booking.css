@@ -53,6 +53,71 @@ input[type="file"]::-webkit-file-upload-button {
     flex-wrap: wrap;
 }
 
+/* Status Badge Styles */
+.status-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-pending {
+    background: rgba(234, 179, 8, 0.2);
+    color: #fbbf24;
+    border: 1px solid rgba(234, 179, 8, 0.4);
+}
+
+.status-booked {
+    background: rgba(34, 197, 94, 0.2);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.status-cancelled {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.status-completed {
+    background: rgba(59, 130, 246, 0.2);
+    color: #60a5fa;
+    border: 1px solid rgba(59, 130, 246, 0.4);
+}
+
+.status-available {
+    background: rgba(34, 197, 94, 0.2);
+    color: #4ade80;
+    border: 1px solid rgba(34, 197, 94, 0.4);
+}
+
+.status-unavailable {
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+/* Empty State */
+.empty-state {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: rgba(250, 235, 215, 0.7);
+}
+
+.empty-state i {
+    font-size: 3rem;
+    opacity: 0.5;
+    color: #FAEBD7;
+}
+
+.empty-state p {
+    margin-top: 1rem;
+    font-size: 1.1rem;
+}
+
 /* Modal styling improvements */
 .modal-content .modal-body img {
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
@@ -63,13 +128,70 @@ input[type="file"]::-webkit-file-upload-button {
     max-width: 1200px;
 }
 
-@media (max-width: 1200px) {
+/* Image zoom effect */
+.modal-body img[onclick] {
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modal-body img[onclick]:active {
+    transform: scale(1.5) !important;
+}
+
+/* ========== MOBILE RESPONSIVENESS ========== */
+
+/* Tablet Screens (768px - 991px) */
+@media (min-width: 768px) and (max-width: 991px) {
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .action-buttons form,
+    .action-buttons a {
+        width: 100%;
+    }
+    
+    .btn-sm {
+        width: 100%;
+        justify-content: center;
+    }
+    
     .modal-xl {
         max-width: 95%;
     }
 }
 
-@media (max-width: 575px) {
+/* Mobile Screens (< 768px) */
+@media (max-width: 767px) {
+    /* Status badges full width on mobile */
+    .status-badge {
+        display: block;
+        text-align: center;
+        padding: 0.6rem 1rem;
+        width: 100%;
+    }
+    
+    /* Action buttons stack vertically */
+    .action-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .action-buttons form,
+    .action-buttons a {
+        width: 100%;
+    }
+    
+    .action-buttons .btn-sm {
+        width: 100%;
+        justify-content: center;
+        padding: 0.75rem 1rem;
+    }
+    
+    /* Modal adjustments */
     .modal-dialog {
         margin: 0.5rem;
     }
@@ -93,28 +215,54 @@ input[type="file"]::-webkit-file-upload-button {
         justify-content: center;
     }
     
-    .action-buttons {
-        flex-direction: column;
-    }
-    
-    .action-buttons form {
+    /* Booking card specific styles */
+    .admin-table tbody td > div {
         width: 100%;
     }
     
-    .action-buttons .btn-sm {
-        width: 100%;
-        justify-content: center;
+    .admin-table tbody td strong {
+        display: block;
+        margin-bottom: 0.25rem;
+        font-size: 1rem;
+    }
+    
+    .admin-table tbody td small {
+        display: block;
+        font-size: 0.85rem;
+        margin-top: 0.25rem;
     }
 }
 
-/* Image zoom effect */
-.modal-body img[onclick] {
-    user-select: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
+/* Small Mobile (< 576px) */
+@media (max-width: 575px) {
+    .btn-sm {
+        padding: 0.65rem 0.875rem;
+        font-size: 0.875rem;
+    }
+    
+    /* Smaller modal on very small screens */
+    .modal-body img {
+        max-height: 60vh;
+        object-fit: contain;
+    }
 }
 
-.modal-body img[onclick]:active {
-    transform: scale(1.5) !important;
+/* Extra Small Mobile (< 375px) */
+@media (max-width: 374px) {
+    .status-badge {
+        font-size: 0.8rem;
+        padding: 0.5rem 0.75rem;
+    }
+    
+    .btn-sm {
+        font-size: 0.8rem;
+        padding: 0.6rem 0.75rem;
+    }
+}
+
+/* Landscape Mobile Optimization */
+@media (max-width: 767px) and (orientation: landscape) {
+    .modal-body img {
+        max-height: 70vh;
+    }
 }

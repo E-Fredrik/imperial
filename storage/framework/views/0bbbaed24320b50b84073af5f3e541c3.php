@@ -52,7 +52,6 @@
                             <td data-label="Price"><strong>Rp <?php echo e(number_format($room->price, 0, ',', '.')); ?></strong></td>
                             <td data-label="Status">
                                 <span class="status-badge status-<?php echo e($room->status); ?>">
-
                                     <?php echo e(ucfirst($room->status)); ?>
 
                                 </span>

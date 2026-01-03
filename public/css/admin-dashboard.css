@@ -1602,468 +1602,204 @@ a.dashboard-btn:hover {
 
 /* Enhanced Mobile Table Responsiveness (320px - 767px) */
 @media (max-width: 767px) {
-    /* CRITICAL: Prevent ANY horizontal scrolling */
-    html, body {
-        overflow-x: hidden !important;
-        max-width: 100vw !important;
-    }
-
-    body, .container, .container-fluid {
-        overflow-x: hidden !important;
-        max-width: 100% !important;
-    }
-
-    /* Ensure all cards fit within viewport */
-    .admin-card {
-        margin: 0 !important;
-        padding: 1rem !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        box-sizing: border-box !important;
-    }
-
-    /* Ensure table container doesn't cause overflow */
-    .table-responsive {
-        margin: 0 !important;
-        padding: 0 !important;
-        overflow-x: hidden !important;
-        width: 100% !important;
-        max-width: 100% !important;
-    }
-
     /* Hide table headers on mobile */
-    .admin-table {
-        display: block !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        overflow: visible !important;
-        border: none !important;
-    }
-
     .admin-table thead {
-        display: none !important;
-    }
-
-    .admin-table tbody {
-        display: block !important;
-        width: 100% !important;
-        max-width: 100% !important;
+        display: none;
     }
     
-    /* Stack table rows as cards */
+    /* Make each row a card */
     .admin-table tbody tr {
-        display: block !important;
-        width: 100% !important;
-        max-width: 100% !important;
+        display: block;
         margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
         border: 2px solid rgba(250, 235, 215, 0.15);
-        border-radius: 12px;
-        padding: 1rem;
-        background: linear-gradient(135deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.2) 100%);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        box-sizing: border-box !important;
+        border-radius: 16px;
+        padding: 1.25rem;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
     }
     
-    /* Style table cells - FORCE left alignment for everything */
+    /* Make each cell a row */
     .admin-table tbody td {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        padding: 0.75rem 0 !important;
-        border-bottom: 1px solid rgba(250, 235, 215, 0.08) !important;
-        border-right: none !important;
-        border-left: none !important;
-        text-align: left !important;
-        min-height: 44px;
-        word-wrap: break-word !important;
-        overflow-wrap: break-word !important;
-        box-sizing: border-box !important;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        padding: 0.75rem 0;
+        border: none;
+        border-bottom: 1px solid rgba(250, 235, 215, 0.1);
+        gap: 1rem;
     }
     
     .admin-table tbody td:last-child {
-        border-bottom: none !important;
-        padding-bottom: 0 !important;
+        border-bottom: none;
+        padding-bottom: 0;
     }
     
-    /* Add labels before content - left aligned */
+    /* Add labels before each cell using data-label attribute */
     .admin-table tbody td::before {
         content: attr(data-label);
-        font-weight: 700;
+        font-weight: 600;
         color: #FAEBD7;
+        min-width: 90px;
+        flex-shrink: 0;
+        font-size: 0.85rem;
         text-transform: uppercase;
-        font-size: 0.75rem;
         letter-spacing: 0.5px;
-        text-align: left !important;
-        width: 100% !important;
-        margin-bottom: 0.5rem;
-        display: block !important;
     }
     
-    /* Content area styling - FORCE left alignment */
+    /* Right-align cell content */
     .admin-table tbody td > * {
-        width: 100% !important;
-        max-width: 100% !important;
-        text-align: left !important;
-        word-wrap: break-word !important;
-        overflow-wrap: break-word !important;
-        box-sizing: border-box !important;
-    }
-
-    /* Force all text content to be left-aligned */
-    .admin-table tbody td strong,
-    .admin-table tbody td span,
-    .admin-table tbody td p,
-    .admin-table tbody td div {
-        display: block !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        text-align: left !important;
-        word-wrap: break-word !important;
+        text-align: right;
+        flex: 1;
     }
     
-    /* Action buttons in mobile view - full width column */
-    .admin-table tbody td .action-buttons,
-    .admin-table tbody td .d-flex {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: stretch !important;
-        width: 100% !important;
-        max-width: 100% !important;
-        gap: 0.5rem !important;
-        margin: 0 !important;
-        padding: 0 !important;
+    /* Action buttons stack vertically */
+    .admin-table tbody td .action-buttons {
+        flex-direction: column;
+        width: 100%;
+        gap: 0.5rem;
     }
     
-    .admin-table tbody td .action-buttons a,
-    .admin-table tbody td .action-buttons button,
     .admin-table tbody td .action-buttons form,
-    .admin-table tbody td .d-flex a,
-    .admin-table tbody td .d-flex button,
-    .admin-table tbody td .d-flex form {
-        width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 !important;
-        box-sizing: border-box !important;
+    .admin-table tbody td .action-buttons a {
+        width: 100%;
     }
     
-    .admin-table tbody td .btn-admin-secondary,
-    .admin-table tbody td .btn-admin-danger,
-    .admin-table tbody td .btn-admin-info,
-    .admin-table tbody td .btn-admin-primary {
-        width: 100% !important;
-        max-width: 100% !important;
-        justify-content: center !important;
-        text-align: center !important;
-        min-height: 44px;
-        padding: 0.75rem 1rem !important;
-        white-space: normal !important;
-        word-wrap: break-word !important;
-        box-sizing: border-box !important;
-        display: flex !important;
-        align-items: center !important;
+    .admin-table tbody td .action-buttons .btn-admin-secondary,
+    .admin-table tbody td .action-buttons .btn-admin-danger,
+    .admin-table tbody td .action-buttons .btn-admin-info,
+    .admin-table tbody td .action-buttons .btn-sm {
+        width: 100%;
+        justify-content: center;
+        padding: 0.75rem 1rem;
     }
     
-    /* Status badges - left aligned */
+    /* Status badges full width on mobile */
     .admin-table tbody td .status-badge {
-        display: inline-block;
-        margin: 0 !important;
-        text-align: left !important;
-        white-space: nowrap;
-    }
-    
-    /* Image previews in mobile */
-    .admin-table tbody td .proof-image,
-    .admin-table tbody td img {
-        max-width: 100% !important;
-        width: 100% !important;
-        height: auto !important;
         display: block;
-        margin: 0.5rem 0 !important;
+        text-align: center;
+        padding: 0.5rem 1rem;
     }
     
-    /* Empty state in mobile */
-    .admin-table tbody tr .empty-state {
-        display: block !important;
-        text-align: center !important;
-        padding: 2rem 1rem;
-        width: 100% !important;
+    /* Room/booking card improvements */
+    .admin-table tbody td strong {
+        display: block;
+        margin-bottom: 0.25rem;
     }
     
-    .admin-table tbody tr td[colspan] {
-        display: block !important;
-        width: 100% !important;
+    .admin-table tbody td small {
+        display: block;
+        font-size: 0.8rem;
+        opacity: 0.8;
     }
     
-    .admin-table tbody tr td[colspan]::before {
-        display: none !important;
+    /* Ensure content wraps properly */
+    .admin-table tbody td > div {
+        width: 100%;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
     }
-
-    /* Hide label for Actions column */
-    .admin-table tbody td[data-label="Actions"]::before,
-    .admin-table tbody td:last-child::before {
-        content: '' !important;
-        display: none !important;
-    }
-
-    /* Fix any stray form elements */
-    .admin-table form {
-        width: 100% !important;
-        max-width: 100% !important;
-    }
-
-    /* Ensure inputs don't overflow */
-    .admin-table input,
-    .admin-table select,
-    .admin-table textarea {
-        max-width: 100% !important;
-        width: 100% !important;
-        box-sizing: border-box !important;
+    
+    /* Table container adjustments */
+    .table-responsive {
+        overflow-x: visible !important;
+        -webkit-overflow-scrolling: auto;
     }
 }
 
 /* Tablet Specific Adjustments (768px - 991px) */
 @media (min-width: 768px) and (max-width: 991px) {
-    /* Prevent body overflow */
-    html, body {
-        overflow-x: hidden !important;
-        max-width: 100vw !important;
-    }
-
-    body, .container, .container-fluid {
-        overflow-x: hidden !important;
-        max-width: 100% !important;
-    }
-
-    /* Ensure cards fit */
-    .admin-card {
-        margin: 0 0 2rem 0 !important;
-        padding: 1.5rem !important;
-        max-width: 100% !important;
-        box-sizing: border-box !important;
-    }
-
-    /* Make table horizontally scrollable on tablet */
-    .table-responsive {
-        overflow-x: auto !important;
-        -webkit-overflow-scrolling: touch;
-        width: 100% !important;
-        max-width: 100% !important;
-        margin: 0 !important;
-    }
-    
-    /* Set minimum width for table to enable scrolling */
-    .admin-table {
-        min-width: 700px;
-        width: 100%;
-        font-size: 0.875rem;
-        display: table !important;
-    }
-    
-    .admin-table thead {
-        display: table-header-group !important;
-    }
-
-    .admin-table tbody {
-        display: table-row-group !important;
-    }
-
-    .admin-table tbody tr {
-        display: table-row !important;
-    }
-
-    .admin-table tbody td {
-        display: table-cell !important;
-    }
-    
+    /* Slightly reduce font sizes for tablet */
     .admin-table thead th {
-        padding: 1rem 0.75rem !important;
-        font-size: 0.8rem;
-        white-space: nowrap;
+        font-size: 0.85rem;
+        padding: 0.875rem 1rem;
     }
     
     .admin-table tbody td {
-        padding: 0.85rem 0.75rem !important;
-        white-space: nowrap;
-        vertical-align: middle;
+        font-size: 0.9rem;
+        padding: 0.875rem 1rem;
     }
     
-    /* Allow text wrapping on specific columns */
-    .admin-table tbody td[data-label="Description"],
-    .admin-table tbody td:nth-child(3) {
-        white-space: normal;
-        max-width: 200px;
-        word-wrap: break-word;
-    }
-    
-    /* Optimize action buttons for tablet */
+    /* Stack action buttons on smaller tablets */
     .action-buttons {
-        display: flex !important;
-        flex-wrap: wrap;
-        gap: 0.4rem;
-        justify-content: flex-start;
+        flex-direction: column;
+        gap: 0.5rem;
     }
     
-    .btn-admin-secondary,
-    .btn-admin-danger,
-    .btn-admin-info {
-        padding: 0.5rem 0.75rem;
-        font-size: 0.85rem;
-        white-space: nowrap;
+    .action-buttons form,
+    .action-buttons a {
+        width: 100%;
     }
-
-    /* Smaller buttons on tablet */
-    .admin-table .btn-admin-primary,
-    .admin-table .btn-admin-secondary,
-    .admin-table .btn-admin-danger {
-        font-size: 0.8rem !important;
-        padding: 0.5rem 0.85rem !important;
-    }
-
-    /* Proof image sizing */
-    .proof-image {
-        max-width: 60px !important;
-        max-height: 60px !important;
+    
+    .action-buttons .btn-admin-secondary,
+    .action-buttons .btn-admin-danger,
+    .action-buttons .btn-admin-info {
+        width: 100%;
+        justify-content: center;
     }
 }
 
 /* Landscape Mobile Optimization */
 @media (max-width: 767px) and (orientation: landscape) {
+    /* Reduce padding in landscape mode */
     .admin-table tbody tr {
         padding: 1rem;
         margin-bottom: 1rem;
     }
     
     .admin-table tbody td {
-        padding: 0.65rem 0 !important;
-        font-size: 0.85rem;
+        padding: 0.5rem 0;
     }
     
     .admin-table tbody td::before {
-        font-size: 0.7rem;
+        min-width: 80px;
+        font-size: 0.8rem;
     }
 }
 
 /* Small Mobile Devices (320px - 574px) */
 @media (max-width: 574px) {
-    /* Reduce card padding to give more room */
-    .admin-card {
-        padding: 0.75rem !important;
-        margin: 0 0 1rem 0 !important;
-    }
-
+    /* Further optimize spacing */
     .admin-table tbody tr {
-        padding: 0.85rem !important;
-        margin-bottom: 1rem;
+        padding: 1rem;
+        margin-bottom: 1.25rem;
     }
     
     .admin-table tbody td {
-        padding: 0.65rem 0 !important;
-        font-size: 0.85rem;
+        padding: 0.65rem 0;
+        gap: 0.75rem;
     }
     
     .admin-table tbody td::before {
-        font-size: 0.7rem;
-        margin-bottom: 0.4rem;
+        min-width: 85px;
+        font-size: 0.8rem;
     }
     
-    /* Critical: Force buttons to fit and center properly */
-    .admin-table tbody td .btn-admin-secondary,
-    .admin-table tbody td .btn-admin-danger,
-    .admin-table tbody td .btn-admin-info,
-    .admin-table tbody td .btn-admin-primary,
-    .admin-table tbody td .action-buttons a,
-    .admin-table tbody td .action-buttons button,
-    .admin-table tbody td .action-buttons form {
-        font-size: 0.85rem !important;
-        padding: 0.65rem 0.75rem !important;
-        max-width: 100% !important;
-        width: 100% !important;
-        margin: 0 !important;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-    }
-
-    /* Ensure action buttons container is properly constrained */
-    .admin-table tbody td .action-buttons,
-    .admin-table tbody td .d-flex {
-        width: 100% !important;
-        max-width: 100% !important;
-        padding: 0 !important;
-        margin: 0 !important;
-    }
-
-    /* Reduce icon size to save space */
-    .admin-table tbody td .btn i {
-        font-size: 0.9rem !important;
-        margin-right: 0.35rem !important;
-    }
-
-    /* Make button text slightly smaller on very small screens */
-    .admin-table tbody td button,
-    .admin-table tbody td a.btn-admin-secondary,
-    .admin-table tbody td a.btn-admin-danger,
-    .admin-table tbody td a.btn-admin-info {
-        font-size: 0.8rem !important;
+    /* Smaller buttons */
+    .admin-table tbody td .action-buttons .btn-sm {
+        padding: 0.65rem 0.875rem;
+        font-size: 0.875rem;
     }
 }
 
 /* Extra Small Mobile Devices (320px - 374px) */
 @media (max-width: 374px) {
-    /* Even more aggressive space saving */
-    .admin-card {
-        padding: 0.5rem !important;
-    }
-
     .admin-table tbody tr {
-        padding: 0.75rem 0.5rem !important;
+        padding: 0.875rem;
     }
     
     .admin-table tbody td {
-        padding: 0.6rem 0 !important;
-        font-size: 0.8rem;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
     }
     
     .admin-table tbody td::before {
-        font-size: 0.65rem;
-        margin-bottom: 0.35rem;
+        margin-bottom: 0.25rem;
     }
     
-    /* Ultra-compact button styling */
-    .admin-table tbody td .btn-admin-secondary,
-    .admin-table tbody td .btn-admin-danger,
-    .admin-table tbody td .btn-admin-info,
-    .admin-table tbody td .btn-admin-primary,
-    .admin-table tbody td .action-buttons a,
-    .admin-table tbody td .action-buttons button,
-    .admin-table tbody td .action-buttons form {
-        font-size: 0.75rem !important;
-        padding: 0.6rem 0.5rem !important;
-        min-height: 40px !important;
-    }
-
-    /* Smaller icon for very small screens */
-    .admin-table tbody td .btn i {
-        font-size: 0.85rem !important;
-        margin-right: 0.25rem !important;
-    }
-
-    /* Condense text in buttons if needed */
-    .admin-table tbody td .btn-admin-info {
-        letter-spacing: -0.02em;
-    }
-
-    /* Make "View ID Card" shorter on tiny screens */
-    .admin-table tbody td button[data-bs-toggle="modal"]:after {
-        content: none;
-    }
-
-    /* Status badges smaller */
-    .status-badge {
-        font-size: 0.7rem !important;
-        padding: 0.35rem 0.6rem !important;
+    .admin-table tbody td > * {
+        text-align: left;
+        width: 100%;
     }
 }
 

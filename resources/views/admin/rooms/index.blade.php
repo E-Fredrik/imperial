@@ -42,7 +42,6 @@
                             <td data-label="Price"><strong>Rp {{ number_format($room->price, 0, ',', '.') }}</strong></td>
                             <td data-label="Status">
                                 <span class="status-badge status-{{ $room->status }}">
-
                                     {{ ucfirst($room->status) }}
                                 </span>
                             </td>
