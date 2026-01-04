@@ -135,19 +135,22 @@
                                                     Room <?php echo e($p->booking_room_number); ?>
 
                                                 </span>
-                                                <span class="detail-item">
-                                                    <i class="bi bi-calendar3"></i>
-                                                    Due: <?php echo e($p->due_date_label); ?>
 
-                                                </span>
-                                                <span class="detail-item">
-                                                    <i class="bi bi-clock"></i>
-                                                    <?php if($p->is_overdue): ?>
-                                                        <span style="color: #f87171;"><?php echo e(abs($p->days_until_due)); ?> days overdue</span>
-                                                    <?php else: ?>
-                                                        In <?php echo e($p->days_until_due); ?> days
-                                                    <?php endif; ?>
-                                                </span>
+                                                <?php if(!$p->is_first_payment): ?>
+                                                    <span class="detail-item">
+                                                        <i class="bi bi-calendar3"></i>
+                                                        Due: <?php echo e($p->due_date_label); ?>
+
+                                                    </span>
+                                                    <span class="detail-item">
+                                                        <i class="bi bi-clock"></i>
+                                                        <?php if($p->is_overdue): ?>
+                                                            <span style="color: #f87171;"><?php echo e(abs($p->days_until_due)); ?> days overdue</span>
+                                                        <?php else: ?>
+                                                            In <?php echo e($p->days_until_due); ?> days
+                                                        <?php endif; ?>
+                                                    </span>
+                                                <?php endif; ?>
                                             </div>
                                         </div>
                                     </div>

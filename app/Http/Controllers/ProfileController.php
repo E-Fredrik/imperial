@@ -48,13 +48,23 @@ class ProfileController extends Controller
             return $daysUntilDue <= 10;
         });
 
-        // --- NEW: persist late fee for overdue pending payments so DB reflects updated price ---
+        // --- UPDATED: Only apply late fee to RECURRING payments (not first payments) ---
         foreach ($pendingRaw as $payment) {
             try {
+                // Skip first payment (has expires_at set) - no late fees for first payment
+                if ($payment->expires_at) {
+                    Log::info('Skipping late fee for first payment', [
+                        'payment_id' => $payment->id,
+                        'has_expires_at' => true,
+                    ]);
+                    continue;
+                }
+
                 $paymentMonth = Carbon::createFromFormat('Y-m', $payment->payment_for_month)->startOfMonth();
                 $firstDayOfPaymentMonth = $paymentMonth->copy()->startOfMonth();
                 $today = now()->startOfDay();
 
+                // Only apply late fee if today is after the payment due date (1st of month)
                 if ($today->greaterThan($firstDayOfPaymentMonth)) {
                     $booking = $payment->booking;
                     if ($booking) {
@@ -66,7 +76,7 @@ class ProfileController extends Controller
                             $payment->late_fee = $calculatedLateFee;
                             $payment->amount = $expectedAmount;
                             $payment->save();
-                            Log::info('Applied late fee on profile view', [
+                            Log::info('Applied late fee on profile view (recurring payment only)', [
                                 'payment_id' => $payment->id,
                                 'late_fee' => $calculatedLateFee,
                                 'amount' => $expectedAmount,
@@ -81,16 +91,20 @@ class ProfileController extends Controller
                 ]);
             }
         }
-        // --- END NEW ---
+        // --- END UPDATED ---
         
         // Convert pending payments into view-friendly objects (no Carbon in blade)
         $pendingPayments = $pendingRaw->map(function($payment) {
             $paymentDate = Carbon::createFromFormat('Y-m', $payment->payment_for_month)->startOfMonth();
             $today = now()->startOfDay();
             $daysUntilDue = $today->diffInDays($paymentDate, false);
-            $isOverdue = $daysUntilDue < 0;
-            $statusText = $isOverdue ? 'Overdue' : 'Due Soon';
-            $statusBadgeClass = $isOverdue ? 'status-overdue' : 'status-due-soon';
+            
+            // NEW: For first payments (with expires_at), never show as overdue
+            $isFirstPayment = $payment->expires_at !== null;
+            $isOverdue = !$isFirstPayment && ($daysUntilDue < 0);
+            
+            $statusText = $isOverdue ? 'Overdue' : ($isFirstPayment ? 'Pending' : 'Due Soon');
+            $statusBadgeClass = $isOverdue ? 'status-overdue' : ($isFirstPayment ? 'status-pending' : 'status-due-soon');
 
             return (object)[
                 'model' => $payment,
@@ -98,6 +112,7 @@ class ProfileController extends Controller
                 'due_date_label' => $paymentDate->format('M d, Y'),
                 'days_until_due' => $daysUntilDue,
                 'is_overdue' => $isOverdue,
+                'is_first_payment' => $isFirstPayment,
                 'status_text' => $statusText,
                 'status_badge_class' => $statusBadgeClass,
                 'amount_display' => 'Rp ' . number_format($payment->amount, 0, ',', '.'),
@@ -132,10 +147,16 @@ class ProfileController extends Controller
             $dueDate = $paymentMonth->copy()->startOfMonth();
             $today = now()->startOfDay();
             $daysUntilDue = $today->diffInDays($dueDate, false);
-            $isOverdue = $daysUntilDue < 0;
+            
+            // NEW: For first payments, never show as overdue
+            $isFirstPayment = $payment->expires_at !== null;
+            $isOverdue = !$isFirstPayment && ($daysUntilDue < 0);
             $isDueSoon = $daysUntilDue >= 0 && $daysUntilDue <= 7;
 
-            if ($isOverdue) {
+            if ($isFirstPayment) {
+                $statusBadgeClass = 'status-pending';
+                $statusText = 'Pending (24h)';
+            } elseif ($isOverdue) {
                 $statusBadgeClass = 'status-overdue';
                 $statusText = 'Overdue';
             } elseif ($isDueSoon) {
@@ -152,6 +173,7 @@ class ProfileController extends Controller
                 'due_date_label' => $dueDate->format('M d, Y'),
                 'days_until_due' => $daysUntilDue,
                 'is_overdue' => $isOverdue,
+                'is_first_payment' => $isFirstPayment,
                 'status_text' => $statusText,
                 'status_badge_class' => $statusBadgeClass,
                 'amount_display' => 'Rp ' . number_format($payment->amount, 0, ',', '.'),

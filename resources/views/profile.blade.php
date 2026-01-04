@@ -131,18 +131,21 @@
                                                     <i class="bi bi-door-closed"></i>
                                                     Room {{ $p->booking_room_number }}
                                                 </span>
-                                                <span class="detail-item">
-                                                    <i class="bi bi-calendar3"></i>
-                                                    Due: {{ $p->due_date_label }}
-                                                </span>
-                                                <span class="detail-item">
-                                                    <i class="bi bi-clock"></i>
-                                                    @if($p->is_overdue)
-                                                        <span style="color: #f87171;">{{ abs($p->days_until_due) }} days overdue</span>
-                                                    @else
-                                                        In {{ $p->days_until_due }} days
-                                                    @endif
-                                                </span>
+
+                                                @if(!$p->is_first_payment)
+                                                    <span class="detail-item">
+                                                        <i class="bi bi-calendar3"></i>
+                                                        Due: {{ $p->due_date_label }}
+                                                    </span>
+                                                    <span class="detail-item">
+                                                        <i class="bi bi-clock"></i>
+                                                        @if($p->is_overdue)
+                                                            <span style="color: #f87171;">{{ abs($p->days_until_due) }} days overdue</span>
+                                                        @else
+                                                            In {{ $p->days_until_due }} days
+                                                        @endif
+                                                    </span>
+                                                @endif
                                             </div>
                                         </div>
                                     </div>
