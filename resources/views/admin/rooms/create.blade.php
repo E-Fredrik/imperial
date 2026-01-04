@@ -159,8 +159,8 @@
                 </label>
                 <select name="status" id="status" required>
                     <option value="available" {{ old('status') == 'available' ? 'selected' : '' }}>Available</option>
+                    <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Pending</option>
                     <option value="booked" {{ old('status') == 'booked' ? 'selected' : '' }}>Booked</option>
-                    <option value="unavailable" {{ old('status') == 'unavailable' ? 'selected' : '' }}>Unavailable</option>
                 </select>
             </div>
 

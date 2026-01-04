@@ -49,7 +49,7 @@ class RoomController extends Controller
             'width'         => ['nullable','numeric'],
             'type'          => ['nullable','string','max:191'],
             'floor'         => ['nullable','integer'],
-            'status'        => ['nullable','in:available,booked,unavailable'],
+            'status'        => ['nullable','in:available,pending,booked'],
             'description'   => ['nullable','string'],
             'images.*'      => ['nullable','image','max:2048'],
             'facilities'    => ['nullable','array'],
@@ -111,19 +111,17 @@ class RoomController extends Controller
     public function update(Request $request, Room $room): RedirectResponse
     {
         $data = $request->validate([
-            'room_number' => ['required','string','max:10','unique:rooms,room_number,'.$room->id],
-            'type' => ['required','string','max:100'],
-            'floor' => ['required','string','max:50'],
-            'size' => ['nullable','string','max:50'],
-            'price' => ['required','numeric','min:0'],
-            'description' => ['nullable','string'],
-            'status' => ['required','in:available,occupied,maintenance'],
-            'images.*' => ['nullable','image','max:8192'],
-            'replace_images.*' => ['nullable','image','max:8192'],
-            'replace_360_image' => ['nullable','image','max:16384'],
-            'image_360' => ['nullable','image','max:16384'],
-            'facilities' => ['nullable','array'],
-            'facilities.*' => ['exists:room_facilities,id'],
+            'room_number' => ['required','string','max:191','unique:rooms,room_number,'.$room->id],
+            'price'         => ['nullable','numeric','min:0'],
+            'length'        => ['nullable','numeric'],
+            'width'         => ['nullable','numeric'],
+            'type'          => ['nullable','string','max:191'],
+            'floor'         => ['nullable','integer'],
+            'status'        => ['nullable','in:available,pending,booked'],
+            'description'   => ['nullable','string'],
+            'images.*'      => ['nullable','image','max:2048'],
+            'facilities'    => ['nullable','array'],
+            'facilities.*'  => ['integer','exists:room_facilities,id'],
         ]);
 
         $room->update($data);
@@ -234,11 +232,17 @@ class RoomController extends Controller
             }
         }
 
-        // Sync facilities
+        // Sync facilities (rooms_facilities is a hasMany pivot model)
         if ($request->has('facilities')) {
-            $room->facilities()->sync($request->facilities);
+            // remove existing pivot rows and recreate from submitted ids
+            $room->rooms_facilities()->delete();
+            foreach ($request->input('facilities', []) as $fid) {
+                if (! is_numeric($fid)) continue;
+                $room->rooms_facilities()->create(['facility_id' => (int) $fid]);
+            }
         } else {
-            $room->facilities()->detach();
+            // no facilities selected -> remove all pivots
+            $room->rooms_facilities()->delete();
         }
 
         return redirect()->route('admin.rooms.index')->with('success', 'Room updated successfully!');

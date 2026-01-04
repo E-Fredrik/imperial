@@ -170,8 +170,8 @@
                 <select name="status" id="status" required>
                     <?php $s = old('status', $room->status ?? 'available'); ?>
                     <option value="available" <?php echo e($s === 'available' ? 'selected' : ''); ?>>Available</option>
+                    <option value="pending" <?php echo e($s === 'pending' ? 'selected' : ''); ?>>Pending</option>
                     <option value="booked" <?php echo e($s === 'booked' ? 'selected' : ''); ?>>Booked</option>
-                    <option value="unavailable" <?php echo e($s === 'unavailable' ? 'selected' : ''); ?>>Unavailable</option>
                 </select>
             </div>
 

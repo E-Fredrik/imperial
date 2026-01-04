@@ -161,8 +161,8 @@
                 <select name="status" id="status" required>
                     @php $s = old('status', $room->status ?? 'available'); @endphp
                     <option value="available" {{ $s === 'available' ? 'selected' : '' }}>Available</option>
+                    <option value="pending" {{ $s === 'pending' ? 'selected' : '' }}>Pending</option>
                     <option value="booked" {{ $s === 'booked' ? 'selected' : '' }}>Booked</option>
-                    <option value="unavailable" {{ $s === 'unavailable' ? 'selected' : '' }}>Unavailable</option>
                 </select>
             </div>
 
