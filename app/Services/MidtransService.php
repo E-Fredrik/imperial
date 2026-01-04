@@ -106,7 +106,7 @@ class MidtransService
             ];
 
             // Check if this is the first payment (no accepted payments yet)
-            $isFirstPayment = \App\Models\Payment::where('booking_id', $booking->id)
+            $isFirstPayment = Payment::where('booking_id', $booking->id)
                 ->where('status', 'accepted')
                 ->count() === 0;
 

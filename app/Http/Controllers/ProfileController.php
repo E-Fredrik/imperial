@@ -6,6 +6,7 @@ use App\Http\Requests\ProfileUpdateRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use App\Models\Payment;
@@ -47,6 +48,41 @@ class ProfileController extends Controller
             return $daysUntilDue <= 10;
         });
 
+        // --- NEW: persist late fee for overdue pending payments so DB reflects updated price ---
+        foreach ($pendingRaw as $payment) {
+            try {
+                $paymentMonth = Carbon::createFromFormat('Y-m', $payment->payment_for_month)->startOfMonth();
+                $firstDayOfPaymentMonth = $paymentMonth->copy()->startOfMonth();
+                $today = now()->startOfDay();
+
+                if ($today->greaterThan($firstDayOfPaymentMonth)) {
+                    $booking = $payment->booking;
+                    if ($booking) {
+                        $calculatedLateFee = (int) ($booking->monthly_rent * 0.1); // 10%
+                        $expectedAmount = $payment->monthly_rent + $calculatedLateFee;
+
+                        // Only update if DB doesn't already reflect the late fee / amount
+                        if ((int)$payment->late_fee !== $calculatedLateFee || (int)$payment->amount !== $expectedAmount) {
+                            $payment->late_fee = $calculatedLateFee;
+                            $payment->amount = $expectedAmount;
+                            $payment->save();
+                            Log::info('Applied late fee on profile view', [
+                                'payment_id' => $payment->id,
+                                'late_fee' => $calculatedLateFee,
+                                'amount' => $expectedAmount,
+                            ]);
+                        }
+                    }
+                }
+            } catch (\Exception $e) {
+                Log::error('Failed to apply late fee on profile view', [
+                    'payment_id' => $payment->id ?? null,
+                    'error' => $e->getMessage(),
+                ]);
+            }
+        }
+        // --- END NEW ---
+        
         // Convert pending payments into view-friendly objects (no Carbon in blade)
         $pendingPayments = $pendingRaw->map(function($payment) {
             $paymentDate = Carbon::createFromFormat('Y-m', $payment->payment_for_month)->startOfMonth();
