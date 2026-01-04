@@ -38,6 +38,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/payment/{payment}', [PaymentController::class, 'show'])->name('payment.show');
     Route::get('/payment/finish/callback', [PaymentController::class, 'finish'])->name('payment.finish');
     Route::get('/payments/upcoming', [PaymentController::class, 'upcoming'])->name('payments.upcoming');
+    Route::post('/bookings/{booking}/move-out', [App\Http\Controllers\BookingController::class, 'updateMoveOutDate'])
+        ->name('bookings.updateMoveOut');
+    Route::delete('/bookings/{booking}/move-out', [App\Http\Controllers\BookingController::class, 'cancelMoveOutDate'])
+        ->name('bookings.cancelMoveOut');
 });
 
 Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {

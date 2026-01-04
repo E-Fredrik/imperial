@@ -59,6 +59,38 @@
                                         <?php echo e($user->currentBooking->room->type ?? 'Single'); ?> • Floor <?php echo e($user->currentBooking->room->floor ?? '1'); ?>
 
                                     </p>
+
+                                    <!-- Move-out controls -->
+                                    <div style="margin-top:1rem; border-top:1px solid rgba(250,235,215,0.06); padding-top:0.75rem;">
+                                        <?php if($user->currentBooking->move_out_date): ?>
+                                            <div style="display:flex; gap:.5rem; align-items:center; justify-content:space-between;">
+                                                <div>
+                                                    <small style="color:#999;">Scheduled Move-out</small>
+                                                    <div style="color:#FAEBD7; font-weight:600;"><?php echo e(optional($user->currentBooking->move_out_date)->format('M d, Y')); ?></div>
+                                                </div>
+                                                <form action="<?php echo e(route('bookings.cancelMoveOut', $user->currentBooking)); ?>" method="POST" onsubmit="return confirm('Cancel your move-out date?');">
+                                                    <?php echo csrf_field(); ?>
+                                                    <?php echo method_field('DELETE'); ?>
+                                                    <button type="submit" class="btn" style="background:transparent; border:1px solid #f87171; color:#f87171; padding:.45rem .75rem; border-radius:6px;">Cancel</button>
+                                                </form>
+                                            </div>
+                                        <?php else: ?>
+                                            <button type="button" class="btn" onclick="toggleMoveOutForm()" style="width:100%; text-align:left; padding:.6rem .9rem; border-radius:8px; background:#000 !important; border:1px solid #111 !important; color:#FAEBD7 !important; opacity:1 !important; box-shadow: 0 2px 8px rgba(0,0,0,0.35);">
+                                                <i class="bi bi-calendar-plus me-2"></i> Set Move-out Date
+                                            </button>
+
+                                            <div id="moveOutForm" style="display:none; margin-top:0.75rem;">
+                                                <form action="<?php echo e(route('bookings.updateMoveOut', $user->currentBooking)); ?>" method="POST">
+                                                    <?php echo csrf_field(); ?>
+                                                    <div style="display:flex; gap:.5rem;">
+                                                        <input type="date" name="move_out_date" required min="<?php echo e(date('Y-m-d')); ?>" style="background:#111; color:#FAEBD7; border:1px solid #333; padding:.5rem; border-radius:6px; flex:1;">
+                                                        <button type="submit" class="btn" style="background:#FAEBD7; color:#000; padding:.5rem .9rem; border-radius:6px;">Save</button>
+                                                    </div>
+                                                    <small style="color:#999; display:block; margin-top:.5rem;">Setting a move-out date will remove any pending payments scheduled after that month.</small>
+                                                </form>
+                                            </div>
+                                        <?php endif; ?>
+                                    </div>
                                 </div>
                             <?php else: ?>
                                 <div class="text-center" style="color: #999;">
@@ -85,55 +117,35 @@
                     </div>
 
                     <div class="upcoming-payments-list">
-                        <?php $__currentLoopData = $upcomingPayments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $payment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <?php
-                                $paymentMonth = \Carbon\Carbon::createFromFormat('Y-m', $payment->payment_for_month);
-                                $dueDate = $paymentMonth->copy()->startOfMonth();
-                                $today = now()->startOfDay();
-                                $daysUntilDue = $today->diffInDays($dueDate, false);
-                                $isOverdue = $daysUntilDue < 0;
-                                $isDueSoon = $daysUntilDue >= 0 && $daysUntilDue <= 7;
-                                
-                                if ($isOverdue) {
-                                    $statusBadgeClass = 'status-overdue';
-                                    $statusText = 'Overdue';
-                                } elseif ($isDueSoon) {
-                                    $statusBadgeClass = 'status-due-soon';
-                                    $statusText = 'Due Soon';
-                                } else {
-                                    $statusBadgeClass = 'status-upcoming';
-                                    $statusText = 'Upcoming';
-                                }
-                            ?>
-
-                            <div class="upcoming-payment-item <?php echo e($isOverdue ? 'overdue' : ''); ?>">
+                        <?php $__currentLoopData = $upcomingPayments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div class="upcoming-payment-item <?php echo e($p->is_overdue ? 'overdue' : ''); ?>">
                                 <div class="row align-items-center g-3">
                                     <div class="col-md-8">
                                         <div class="upcoming-payment-info">
                                             <div class="d-flex align-items-center gap-2 mb-2">
-                                                <h4 class="upcoming-payment-month"><?php echo e($paymentMonth->format('F Y')); ?></h4>
-                                                <span class="upcoming-status-badge <?php echo e($statusBadgeClass); ?>">
-                                                    <?php echo e($statusText); ?>
+                                                <h4 class="upcoming-payment-month"><?php echo e($p->month_label); ?></h4>
+                                                <span class="upcoming-status-badge <?php echo e($p->status_badge_class); ?>">
+                                                    <?php echo e($p->status_text); ?>
 
                                                 </span>
                                             </div>
                                             <div class="upcoming-payment-details">
                                                 <span class="detail-item">
                                                     <i class="bi bi-door-closed"></i>
-                                                    Room <?php echo e(optional($payment->booking->room)->room_number ?? '-'); ?>
+                                                    Room <?php echo e($p->booking_room_number); ?>
 
                                                 </span>
                                                 <span class="detail-item">
                                                     <i class="bi bi-calendar3"></i>
-                                                    Due: <?php echo e($dueDate->format('M d, Y')); ?>
+                                                    Due: <?php echo e($p->due_date_label); ?>
 
                                                 </span>
                                                 <span class="detail-item">
                                                     <i class="bi bi-clock"></i>
-                                                    <?php if($isOverdue): ?>
-                                                        <span style="color: #f87171;"><?php echo e(abs($daysUntilDue)); ?> days overdue</span>
+                                                    <?php if($p->is_overdue): ?>
+                                                        <span style="color: #f87171;"><?php echo e(abs($p->days_until_due)); ?> days overdue</span>
                                                     <?php else: ?>
-                                                        In <?php echo e($daysUntilDue); ?> days
+                                                        In <?php echo e($p->days_until_due); ?> days
                                                     <?php endif; ?>
                                                 </span>
                                             </div>
@@ -142,15 +154,15 @@
                                     <div class="col-md-4">
                                         <div class="d-flex flex-column align-items-md-end gap-2">
                                             <div class="upcoming-payment-amount">
-                                                Rp <?php echo e(number_format($payment->amount, 0, ',', '.')); ?>
+                                                <?php echo e($p->amount_display); ?>
 
                                             </div>
-                                            <?php if($payment->late_fee > 0): ?>
+                                            <?php if($p->late_fee > 0): ?>
                                                 <small style="color: #f87171; font-size: 0.75rem;">
-                                                    +Rp <?php echo e(number_format($payment->late_fee, 0, ',', '.')); ?> late fee
+                                                    +Rp <?php echo e(number_format($p->late_fee, 0, ',', '.')); ?> late fee
                                                 </small>
                                             <?php endif; ?>
-                                            <a href="<?php echo e(route('payment.show', $payment)); ?>" class="btn-pay-upcoming">
+                                            <a href="<?php echo e(route('payment.show', $p->model)); ?>" class="btn-pay-upcoming">
                                                 <i class="bi bi-credit-card"></i> Pay Now
                                             </a>
                                         </div>
@@ -177,41 +189,35 @@
                     </div>
 
                     <div class="urgent-payments-list">
-                        <?php $__currentLoopData = $pendingPayments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $payment): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
-                            <?php
-                                $paymentDate = \Carbon\Carbon::createFromFormat('Y-m', $payment->payment_for_month)->startOfMonth();
-                                $daysUntilDue = now()->diffInDays($paymentDate, false);
-                                $isOverdue = $daysUntilDue < 0;
-                            ?>
-
-                            <div class="payment-item <?php echo e($isOverdue ? 'payment-item-overdue' : ''); ?>">
+                        <?php $__currentLoopData = $pendingPayments; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $p): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                            <div class="payment-item <?php echo e($p->is_overdue ? 'payment-item-overdue' : ''); ?>">
                                 <div class="row align-items-center g-3">
                                     <div class="col-md-8">
                                         <div class="payment-item-info">
                                             <div class="payment-item-date">
                                                 <i class="bi bi-calendar-event"></i>
-                                                <?php echo e($paymentDate->format('F Y')); ?>
+                                                <?php echo e($p->month_label); ?>
 
-                                                <?php if($isOverdue): ?>
-                                                    <span class="badge badge-danger">Overdue by <?php echo e(abs($daysUntilDue)); ?> days</span>
+                                                <?php if($p->is_overdue): ?>
+                                                    <span class="badge badge-danger">Overdue by <?php echo e(abs($p->days_until_due)); ?> days</span>
                                                 <?php else: ?>
-                                                    <span class="badge badge-warning">Due in <?php echo e($daysUntilDue); ?> days</span>
+                                                    <span class="badge badge-warning">Due in <?php echo e($p->days_until_due); ?> days</span>
                                                 <?php endif; ?>
                                             </div>
                                             <div class="payment-item-amount">
-                                                Rp <?php echo e(number_format($payment->amount, 0, ',', '.')); ?>
+                                                <?php echo e($p->amount_display); ?>
 
                                             </div>
                                             <div class="payment-item-room">
                                                 <i class="bi bi-door-closed"></i>
-                                                Room <?php echo e(optional($payment->booking->room)->room_number ?? '-'); ?>
+                                                Room <?php echo e($p->booking_room_number); ?>
 
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="d-flex justify-content-md-end">
-                                            <a href="<?php echo e(route('payment.show', $payment)); ?>" class="btn-pay-now">
+                                            <a href="<?php echo e(route('payment.show', $p->model)); ?>" class="btn-pay-now">
                                                 <i class="bi bi-credit-card"></i> Pay Now
                                             </a>
                                         </div>
@@ -309,4 +315,17 @@
         </div>
     </section>
 <?php $__env->stopSection(); ?>
+
+<?php $__env->startPush('scripts'); ?>
+<script>
+function toggleMoveOutForm() {
+    const form = document.getElementById('moveOutForm');
+    if (form.style.display === 'none') {
+        form.style.display = 'block';
+    } else {
+        form.style.display = 'none';
+    }
+}
+</script>
+<?php $__env->stopPush(); ?>
 <?php echo $__env->make('layouts.layout', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Uni\WebDev\Laravel\imperial\resources\views/profile.blade.php ENDPATH**/ ?>

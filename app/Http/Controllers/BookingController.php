@@ -2,16 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\View\View;
-use Illuminate\Http\RedirectResponse;
 use App\Models\Booking;
 use App\Models\Room;
 use App\Models\Payment;
+use App\Services\MidtransService;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class BookingController extends Controller
 {
@@ -136,5 +138,143 @@ class BookingController extends Controller
         $booking->delete();
 
         return redirect()->route('profile')->with('success', 'Booking cancelled.');
+    }
+
+    /**
+     * Update move-out date (user self-service)
+     */
+    public function updateMoveOutDate(Request $request, Booking $booking): RedirectResponse
+    {
+        $user = Auth::user();
+
+        if ($booking->user_id !== $user->id) {
+            abort(403, 'Unauthorized');
+        }
+
+        $data = $request->validate([
+            'move_out_date' => ['required', 'date', 'after_or_equal:today'],
+        ]);
+
+        $moveOutDate = Carbon::parse($data['move_out_date']);
+        $moveInDate = $booking->move_in_date;
+
+        if ($moveOutDate->lessThan($moveInDate)) {
+            return back()->withErrors(['move_out_date' => 'Move-out date must be after move-in date.'])->withInput();
+        }
+
+        // Get the move-out month (start of month)
+        $moveOutMonth = $moveOutDate->copy()->startOfMonth();
+
+        // Remove pending payments for months >= move-out month (inclusive)
+        $paymentsToRemove = Payment::where('booking_id', $booking->id)
+            ->where('status', 'pending')
+            ->get()
+            ->filter(function ($payment) use ($moveOutMonth) {
+                try {
+                    $paymentMonth = Carbon::createFromFormat('Y-m', $payment->payment_for_month)->startOfMonth();
+                } catch (\Throwable $e) {
+                    return false;
+                }
+                // Remove payments for move-out month and beyond
+                return $paymentMonth->greaterThanOrEqualTo($moveOutMonth);
+            });
+
+        $removedCount = 0;
+        foreach ($paymentsToRemove as $payment) {
+            Log::info('Removing payment due to move-out date (user)', [
+                'payment_id' => $payment->id,
+                'payment_month' => $payment->payment_for_month,
+                'move_out_month' => $moveOutMonth->format('Y-m'),
+            ]);
+            $payment->delete();
+            $removedCount++;
+        }
+
+        $booking->move_out_date = $moveOutDate;
+        $booking->save();
+
+        $message = 'Move-out date set to ' . $moveOutDate->format('M d, Y') . '.';
+        if ($removedCount > 0) {
+            $message .= " {$removedCount} future payment(s) removed.";
+        }
+
+        return back()->with('success', $message);
+    }
+
+    /**
+     * Cancel/remove move-out date — recreate next-month payment if missing
+     */
+    public function cancelMoveOutDate(Request $request, Booking $booking): RedirectResponse
+    {
+        $user = Auth::user();
+
+        if ($booking->user_id !== $user->id) {
+            abort(403, 'Unauthorized');
+        }
+
+        $oldMoveOut = $booking->move_out_date;
+        $booking->move_out_date = null;
+        $booking->save();
+
+        // Recreate next-month payment if booking is active
+        if ($booking->status === 'booked') {
+            // Find the latest accepted payment to determine what the next month should be
+            $latestAcceptedPayment = Payment::where('booking_id', $booking->id)
+                ->where('status', 'accepted')
+                ->orderBy('payment_for_month', 'desc')
+                ->first();
+
+            if ($latestAcceptedPayment) {
+                // Calculate next month based on latest accepted payment
+                $latestPaymentMonth = Carbon::createFromFormat('Y-m', $latestAcceptedPayment->payment_for_month);
+                $nextPaymentMonth = $latestPaymentMonth->copy()->addMonth();
+                $nextMonthString = $nextPaymentMonth->format('Y-m');
+
+                // Check if payment already exists for that month
+                $exists = Payment::where('booking_id', $booking->id)
+                    ->where('payment_for_month', $nextMonthString)
+                    ->exists();
+
+                if (!$exists) {
+                    // Calculate late fee if generating after the 1st of the month
+                    $today = now();
+                    $firstDayOfPaymentMonth = $nextPaymentMonth->copy()->startOfMonth();
+                    $lateFee = 0;
+
+                    if ($today->greaterThan($firstDayOfPaymentMonth)) {
+                        $lateFee = (int) ($booking->monthly_rent * 0.1); // 10% late fee
+                        Log::info('Late fee applied when recreating payment after move-out cancel', [
+                            'today' => $today->format('Y-m-d'),
+                            'payment_month_start' => $firstDayOfPaymentMonth->format('Y-m-d'),
+                            'late_fee' => $lateFee,
+                        ]);
+                    }
+
+                    $payment = Payment::create([
+                        'booking_id' => $booking->id,
+                        'amount' => $booking->monthly_rent + $lateFee,
+                        'payment_for_month' => $nextMonthString,
+                        'monthly_rent' => $booking->monthly_rent,
+                        'late_fee' => $lateFee,
+                        'status' => 'pending',
+                        'expires_at' => null, // No expiry for recurring payments
+                    ]);
+
+                    Log::info('Recreated upcoming payment after move-out cancel (user)', [
+                        'booking_id' => $booking->id,
+                        'old_move_out' => $oldMoveOut ? Carbon::parse($oldMoveOut)->format('Y-m-d') : null,
+                        'new_payment_id' => $payment->id,
+                        'payment_for_month' => $nextMonthString,
+                        'late_fee' => $lateFee,
+                    ]);
+                }
+            } else {
+                Log::info('No accepted payments found, cannot recreate next payment', [
+                    'booking_id' => $booking->id,
+                ]);
+            }
+        }
+
+        return back()->with('success', 'Move-out date cancelled. Upcoming payment recreated if necessary.');
     }
 }

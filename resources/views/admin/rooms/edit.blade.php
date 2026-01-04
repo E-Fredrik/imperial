@@ -178,16 +178,15 @@
                     placeholder="Describe the room features and amenities...">{{ old('description', $room->description) }}</textarea>
             </div>
 
-            <!-- Existing Images -->
-            @if($room->rooms_images->isNotEmpty())
+            <!-- Existing Regular Images -->
+            @if($room->images()->where('is_360', false)->count() > 0)
                 <div class="form-group">
                     <label>
-                        <i class="bi bi-images me-1"></i>Existing Images
+                        <i class="bi bi-images me-1"></i>Current Room Images
                     </label>
                     <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1rem;">
-                        @foreach($room->rooms_images as $ri)
+                        @foreach($room->images()->where('is_360', false)->get() as $image)
                             @php
-                                $image = $ri->image;
                                 $path = $image->image_path ?? '';
                                 $publicCandidate = public_path($path);
                                 if ($path !== '' && file_exists($publicCandidate)) {
@@ -196,6 +195,7 @@
                                     $imgUrl = asset('storage/' . ltrim($path, '/'));
                                 }
                             @endphp
+
                             <div style="position: relative; background: rgba(250, 235, 215, 0.05); border: 2px solid rgba(250, 235, 215, 0.15); border-radius: 10px; padding-top: 0.75rem; padding-right: 0.75rem; padding-left: 0.75rem;">
                                 <img
                                     id="thumb-{{ $image->id }}"
@@ -229,10 +229,60 @@
                 </div>
             @endif
 
-            <!-- Add New Images -->
+            <!-- Current 360° Image -->
+            @php
+                $image360 = $room->images()->where('is_360', true)->first();
+            @endphp
+
+            @if($image360)
+                <div class="form-group">
+                    <label>
+                        <i class="bi bi-globe me-1"></i>Current 360° Panoramic Image
+                    </label>
+                    <div style="background: rgba(250, 235, 215, 0.05); border: 2px solid rgba(250, 235, 215, 0.15); border-radius: 10px; padding: 1rem;">
+                        @php
+                            $path360 = $image360->image_path ?? '';
+                            $publicCandidate360 = public_path($path360);
+                            if ($path360 !== '' && file_exists($publicCandidate360)) {
+                                $imgUrl360 = asset($path360);
+                            } else {
+                                $imgUrl360 = asset('storage/' . ltrim($path360, '/'));
+                            }
+                        @endphp
+                        
+                        <div style="margin-bottom: 1rem;">
+                            <img
+                                id="thumb-360"
+                                src="{{ $imgUrl360 }}"
+                                alt="360° panoramic view"
+                                style="width: 100%; max-height: 200px; object-fit: cover; border-radius: 8px;"
+                            />
+                        </div>
+                        
+                        <div style="display: flex; flex-direction: column; gap: 0.5rem;">
+                            <label for="replace-360" class="btn-admin-secondary" style="cursor: pointer; text-align: center; padding: 0.6rem;">
+                                <i class="bi bi-arrow-repeat me-1"></i> Replace 360° Image
+                            </label>
+                            <input
+                                id="replace-360"
+                                type="file"
+                                name="replace_360_image"
+                                accept="image/*"
+                                style="display: none;"
+                            />
+                            <span id="status-360" style="font-size: 0.75rem; color: #999; text-align: center;"></span>
+                        </div>
+                    </div>
+                    <small style="display: block; margin-top: 0.5rem;">
+                        <i class="bi bi-info-circle me-1"></i>Replace the existing 360° panoramic image with a new equirectangular image
+                    </small>
+                </div>
+            @endif
+
+            <!-- Add New Regular Images -->
             <div class="form-group">
                 <label for="images">
-                    <i class="bi bi-images me-1"></i>Add New Images (Optional)
+                    <i class="bi bi-images me-1"></i>Add New Room Images (Optional)
                 </label>
                 <input 
                     type="file" 
@@ -241,9 +291,26 @@
                     multiple 
                     accept="image/*">
                 <small>
-                    <i class="bi bi-info-circle me-1"></i>Upload additional images (PNG, JPG, JPEG)
+                    <i class="bi bi-info-circle me-1"></i>Upload additional regular room images
                 </small>
             </div>
+
+            <!-- Add New 360° Image (if none exists) -->
+            @if(!$image360)
+                <div class="form-group">
+                    <label for="image_360">
+                        <i class="bi bi-globe me-1"></i>Add 360° Panoramic Image (Optional)
+                    </label>
+                    <input 
+                        type="file" 
+                        name="image_360" 
+                        id="image_360" 
+                        accept="image/*">
+                    <small>
+                        <i class="bi bi-info-circle me-1"></i>Upload a 360° equirectangular panoramic image for immersive room view
+                    </small>
+                </div>
+            @endif
 
             <!-- Facilities -->
             <div class="form-group">
@@ -279,5 +346,32 @@
         </form>
     </div>
 
-    <script src="{{ asset('JS/editRoom.js') }}"></script>
+    <script src="{{ asset('js/editRoom.js') }}"></script>
+    <script>
+        // Preview for 360° image replacement
+        document.getElementById('replace-360')?.addEventListener('change', function() {
+            const file = this.files && this.files[0];
+            if (!file) return;
+
+            const img = document.getElementById('thumb-360');
+            const status = document.getElementById('status-360');
+            
+            const url = URL.createObjectURL(file);
+            img.src = url;
+            img.onload = function() {
+                URL.revokeObjectURL(url);
+            };
+            
+            if (status) status.textContent = 'Preview (unsaved)';
+        });
+
+        // Preview for new 360° image (if adding for first time)
+        document.getElementById('image_360')?.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                // You can add preview logic here if needed
+                console.log('New 360° image selected:', file.name);
+            }
+        });
+    </script>
 </x-admin-layout>

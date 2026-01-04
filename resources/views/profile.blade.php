@@ -57,6 +57,38 @@
                                     <p class="room-badge-details">
                                         {{ $user->currentBooking->room->type ?? 'Single' }} • Floor {{ $user->currentBooking->room->floor ?? '1' }}
                                     </p>
+
+                                    <!-- Move-out controls -->
+                                    <div style="margin-top:1rem; border-top:1px solid rgba(250,235,215,0.06); padding-top:0.75rem;">
+                                        @if($user->currentBooking->move_out_date)
+                                            <div style="display:flex; gap:.5rem; align-items:center; justify-content:space-between;">
+                                                <div>
+                                                    <small style="color:#999;">Scheduled Move-out</small>
+                                                    <div style="color:#FAEBD7; font-weight:600;">{{ optional($user->currentBooking->move_out_date)->format('M d, Y') }}</div>
+                                                </div>
+                                                <form action="{{ route('bookings.cancelMoveOut', $user->currentBooking) }}" method="POST" onsubmit="return confirm('Cancel your move-out date?');">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn" style="background:transparent; border:1px solid #f87171; color:#f87171; padding:.45rem .75rem; border-radius:6px;">Cancel</button>
+                                                </form>
+                                            </div>
+                                        @else
+                                            <button type="button" class="btn" onclick="toggleMoveOutForm()" style="width:100%; text-align:left; padding:.6rem .9rem; border-radius:8px; background:#000 !important; border:1px solid #111 !important; color:#FAEBD7 !important; opacity:1 !important; box-shadow: 0 2px 8px rgba(0,0,0,0.35);">
+                                                <i class="bi bi-calendar-plus me-2"></i> Set Move-out Date
+                                            </button>
+
+                                            <div id="moveOutForm" style="display:none; margin-top:0.75rem;">
+                                                <form action="{{ route('bookings.updateMoveOut', $user->currentBooking) }}" method="POST">
+                                                    @csrf
+                                                    <div style="display:flex; gap:.5rem;">
+                                                        <input type="date" name="move_out_date" required min="{{ date('Y-m-d') }}" style="background:#111; color:#FAEBD7; border:1px solid #333; padding:.5rem; border-radius:6px; flex:1;">
+                                                        <button type="submit" class="btn" style="background:#FAEBD7; color:#000; padding:.5rem .9rem; border-radius:6px;">Save</button>
+                                                    </div>
+                                                    <small style="color:#999; display:block; margin-top:.5rem;">Setting a move-out date will remove any pending payments scheduled after that month.</small>
+                                                </form>
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
                             @else
                                 <div class="text-center" style="color: #999;">
@@ -83,52 +115,32 @@
                     </div>
 
                     <div class="upcoming-payments-list">
-                        @foreach($upcomingPayments as $payment)
-                            @php
-                                $paymentMonth = \Carbon\Carbon::createFromFormat('Y-m', $payment->payment_for_month);
-                                $dueDate = $paymentMonth->copy()->startOfMonth();
-                                $today = now()->startOfDay();
-                                $daysUntilDue = $today->diffInDays($dueDate, false);
-                                $isOverdue = $daysUntilDue < 0;
-                                $isDueSoon = $daysUntilDue >= 0 && $daysUntilDue <= 7;
-                                
-                                if ($isOverdue) {
-                                    $statusBadgeClass = 'status-overdue';
-                                    $statusText = 'Overdue';
-                                } elseif ($isDueSoon) {
-                                    $statusBadgeClass = 'status-due-soon';
-                                    $statusText = 'Due Soon';
-                                } else {
-                                    $statusBadgeClass = 'status-upcoming';
-                                    $statusText = 'Upcoming';
-                                }
-                            @endphp
-
-                            <div class="upcoming-payment-item {{ $isOverdue ? 'overdue' : '' }}">
+                        @foreach($upcomingPayments as $p)
+                            <div class="upcoming-payment-item {{ $p->is_overdue ? 'overdue' : '' }}">
                                 <div class="row align-items-center g-3">
                                     <div class="col-md-8">
                                         <div class="upcoming-payment-info">
                                             <div class="d-flex align-items-center gap-2 mb-2">
-                                                <h4 class="upcoming-payment-month">{{ $paymentMonth->format('F Y') }}</h4>
-                                                <span class="upcoming-status-badge {{ $statusBadgeClass }}">
-                                                    {{ $statusText }}
+                                                <h4 class="upcoming-payment-month">{{ $p->month_label }}</h4>
+                                                <span class="upcoming-status-badge {{ $p->status_badge_class }}">
+                                                    {{ $p->status_text }}
                                                 </span>
                                             </div>
                                             <div class="upcoming-payment-details">
                                                 <span class="detail-item">
                                                     <i class="bi bi-door-closed"></i>
-                                                    Room {{ optional($payment->booking->room)->room_number ?? '-' }}
+                                                    Room {{ $p->booking_room_number }}
                                                 </span>
                                                 <span class="detail-item">
                                                     <i class="bi bi-calendar3"></i>
-                                                    Due: {{ $dueDate->format('M d, Y') }}
+                                                    Due: {{ $p->due_date_label }}
                                                 </span>
                                                 <span class="detail-item">
                                                     <i class="bi bi-clock"></i>
-                                                    @if($isOverdue)
-                                                        <span style="color: #f87171;">{{ abs($daysUntilDue) }} days overdue</span>
+                                                    @if($p->is_overdue)
+                                                        <span style="color: #f87171;">{{ abs($p->days_until_due) }} days overdue</span>
                                                     @else
-                                                        In {{ $daysUntilDue }} days
+                                                        In {{ $p->days_until_due }} days
                                                     @endif
                                                 </span>
                                             </div>
@@ -137,14 +149,14 @@
                                     <div class="col-md-4">
                                         <div class="d-flex flex-column align-items-md-end gap-2">
                                             <div class="upcoming-payment-amount">
-                                                Rp {{ number_format($payment->amount, 0, ',', '.') }}
+                                                {{ $p->amount_display }}
                                             </div>
-                                            @if($payment->late_fee > 0)
+                                            @if($p->late_fee > 0)
                                                 <small style="color: #f87171; font-size: 0.75rem;">
-                                                    +Rp {{ number_format($payment->late_fee, 0, ',', '.') }} late fee
+                                                    +Rp {{ number_format($p->late_fee, 0, ',', '.') }} late fee
                                                 </small>
                                             @endif
-                                            <a href="{{ route('payment.show', $payment) }}" class="btn-pay-upcoming">
+                                            <a href="{{ route('payment.show', $p->model) }}" class="btn-pay-upcoming">
                                                 <i class="bi bi-credit-card"></i> Pay Now
                                             </a>
                                         </div>
@@ -170,38 +182,32 @@
                     </div>
 
                     <div class="urgent-payments-list">
-                        @foreach($pendingPayments as $payment)
-                            @php
-                                $paymentDate = \Carbon\Carbon::createFromFormat('Y-m', $payment->payment_for_month)->startOfMonth();
-                                $daysUntilDue = now()->diffInDays($paymentDate, false);
-                                $isOverdue = $daysUntilDue < 0;
-                            @endphp
-
-                            <div class="payment-item {{ $isOverdue ? 'payment-item-overdue' : '' }}">
+                        @foreach($pendingPayments as $p)
+                            <div class="payment-item {{ $p->is_overdue ? 'payment-item-overdue' : '' }}">
                                 <div class="row align-items-center g-3">
                                     <div class="col-md-8">
                                         <div class="payment-item-info">
                                             <div class="payment-item-date">
                                                 <i class="bi bi-calendar-event"></i>
-                                                {{ $paymentDate->format('F Y') }}
-                                                @if($isOverdue)
-                                                    <span class="badge badge-danger">Overdue by {{ abs($daysUntilDue) }} days</span>
+                                                {{ $p->month_label }}
+                                                @if($p->is_overdue)
+                                                    <span class="badge badge-danger">Overdue by {{ abs($p->days_until_due) }} days</span>
                                                 @else
-                                                    <span class="badge badge-warning">Due in {{ $daysUntilDue }} days</span>
+                                                    <span class="badge badge-warning">Due in {{ $p->days_until_due }} days</span>
                                                 @endif
                                             </div>
                                             <div class="payment-item-amount">
-                                                Rp {{ number_format($payment->amount, 0, ',', '.') }}
+                                                {{ $p->amount_display }}
                                             </div>
                                             <div class="payment-item-room">
                                                 <i class="bi bi-door-closed"></i>
-                                                Room {{ optional($payment->booking->room)->room_number ?? '-' }}
+                                                Room {{ $p->booking_room_number }}
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-4">
                                         <div class="d-flex justify-content-md-end">
-                                            <a href="{{ route('payment.show', $payment) }}" class="btn-pay-now">
+                                            <a href="{{ route('payment.show', $p->model) }}" class="btn-pay-now">
                                                 <i class="bi bi-credit-card"></i> Pay Now
                                             </a>
                                         </div>
@@ -294,3 +300,16 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+<script>
+function toggleMoveOutForm() {
+    const form = document.getElementById('moveOutForm');
+    if (form.style.display === 'none') {
+        form.style.display = 'block';
+    } else {
+        form.style.display = 'none';
+    }
+}
+</script>
+@endpush

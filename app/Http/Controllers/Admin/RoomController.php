@@ -11,6 +11,7 @@ use App\Models\Image;
 use App\Models\RoomsImage;
 use App\Models\RoomFacility; // added
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 class RoomController extends Controller
 {
@@ -110,28 +111,27 @@ class RoomController extends Controller
     public function update(Request $request, Room $room): RedirectResponse
     {
         $data = $request->validate([
-            'room_number'   => ['required','string','max:191','unique:rooms,room_number,'.$room->id],
-            'price'         => ['nullable','numeric','min:0'],
-            'length'        => ['nullable','numeric'],
-            'width'         => ['nullable','numeric'],
-            'type'          => ['nullable','string','max:191'],
-            'floor'         => ['nullable','integer'],
-            'status'        => ['nullable','in:available,booked,unavailable'],
-            'description'   => ['nullable','string'],
-            'images.*'      => ['nullable','image','max:2048'],
-            'replace_images.*' => ['nullable','image','max:2048'],
-            'facilities'    => ['nullable','array'],
-            'facilities.*'  => ['integer','exists:room_facilities,id'],
+            'room_number' => ['required','string','max:10','unique:rooms,room_number,'.$room->id],
+            'type' => ['required','string','max:100'],
+            'floor' => ['required','string','max:50'],
+            'size' => ['nullable','string','max:50'],
+            'price' => ['required','numeric','min:0'],
+            'description' => ['nullable','string'],
+            'status' => ['required','in:available,occupied,maintenance'],
+            'images.*' => ['nullable','image','max:8192'],
+            'replace_images.*' => ['nullable','image','max:8192'],
+            'replace_360_image' => ['nullable','image','max:16384'],
+            'image_360' => ['nullable','image','max:16384'],
+            'facilities' => ['nullable','array'],
+            'facilities.*' => ['exists:room_facilities,id'],
         ]);
 
         $room->update($data);
 
-        // attach any newly uploaded images (reuse existing files/rows when possible)
-        if ($request->hasFile('images')) {
-            foreach ($request->file('images') as $file) {
-                if (!$file->isValid()) {
-                    continue;
-                }
+        // Handle regular image replacements
+        if ($request->hasFile('replace_images')) {
+            foreach ($request->file('replace_images') as $imageId => $file) {
+                if (!$file || !$file->isValid()) continue;
 
                 $contents = file_get_contents($file->getRealPath());
                 $hash = sha1($contents);
@@ -142,57 +142,106 @@ class RoomController extends Controller
                     Storage::disk('public')->put($path, $contents);
                 }
 
-                $image = Image::firstOrCreate(['image_path' => $path]);
-
-                $room->rooms_images()->firstOrCreate(['image_id' => $image->id]);
+                $image = Image::find($imageId);
+                if ($image) {
+                    $oldPath = $image->image_path;
+                    if ($oldPath && Storage::disk('public')->exists($oldPath)) {
+                        Storage::disk('public')->delete($oldPath);
+                    }
+                    $image->update(['image_path' => $path]);
+                }
             }
         }
 
-        // handle replacements: replace_images keyed by old image id => uploaded file
-        if ($request->hasFile('replace_images')) {
-            foreach ($request->file('replace_images') as $oldImageId => $file) {
-                if (!$file || !$file->isValid()) {
-                    continue;
-                }
-
-                // store new file deterministically
+        // Handle 360° image replacement
+        if ($request->hasFile('replace_360_image')) {
+            $file = $request->file('replace_360_image');
+            if ($file && $file->isValid()) {
                 $contents = file_get_contents($file->getRealPath());
                 $hash = sha1($contents);
                 $filename = $hash . '.' . $file->getClientOriginalExtension();
-                $newPath = 'rooms/' . $filename;
+                $path = 'rooms/' . $filename;
 
-                if (!Storage::disk('public')->exists($newPath)) {
-                    Storage::disk('public')->put($newPath, $contents);
+                if (!Storage::disk('public')->exists($path)) {
+                    Storage::disk('public')->put($path, $contents);
                 }
 
-                // create or reuse image row for new file
-                $newImage = Image::firstOrCreate(['image_path' => $newPath]);
-
-                // attach new pivot row
-                $room->rooms_images()->firstOrCreate(['image_id' => $newImage->id]);
-
-                // detach old pivot link via pivot rows
-                $room->rooms_images()->where('image_id', $oldImageId)->delete();
-
-                // remove old image row + file if no other rooms reference it
-                $oldImage = Image::find($oldImageId);
-                if ($oldImage && $oldImage->rooms()->count() === 0) {
-                    if (Storage::disk('public')->exists($oldImage->image_path)) {
-                        Storage::disk('public')->delete($oldImage->image_path);
+                // Find existing 360° image and update it
+                $image360 = $room->images()->where('is_360', true)->first();
+                if ($image360) {
+                    $oldPath = $image360->image_path;
+                    if ($oldPath && Storage::disk('public')->exists($oldPath)) {
+                        Storage::disk('public')->delete($oldPath);
                     }
-                    $oldImage->delete();
+                    $image360->update(['image_path' => $path]);
+                    
+                    Log::info('Replaced 360° image for room', [
+                        'room_id' => $room->id,
+                        'image_id' => $image360->id,
+                        'new_path' => $path,
+                    ]);
                 }
             }
         }
 
-        // sync room facilities: delete existing pivot rows and recreate from selection
-        $selected = $request->input('facilities', []);
-        // remove all existing pivots for this room
-        $room->rooms_facilities()->delete();
-        foreach ($selected as $fid) {
-            $room->rooms_facilities()->create(['facility_id' => $fid]);
+        // Handle new regular images
+        if ($request->hasFile('images')) {
+            foreach ($request->file('images') as $file) {
+                if (!$file || !$file->isValid()) continue;
+
+                $contents = file_get_contents($file->getRealPath());
+                $hash = sha1($contents);
+                $filename = $hash . '.' . $file->getClientOriginalExtension();
+                $path = 'rooms/' . $filename;
+
+                if (!Storage::disk('public')->exists($path)) {
+                    Storage::disk('public')->put($path, $contents);
+                }
+
+                $image = Image::firstOrCreate(['image_path' => $path], [
+                    'is_360' => false,
+                    'is_featured' => false,
+                ]);
+
+                $room->images()->syncWithoutDetaching([$image->id]);
+            }
         }
-        return redirect()->route('admin.rooms.index')->with('success','Room updated.');
+
+        // Handle new 360° image (if adding for first time)
+        if ($request->hasFile('image_360')) {
+            $file = $request->file('image_360');
+            if ($file && $file->isValid()) {
+                $contents = file_get_contents($file->getRealPath());
+                $hash = sha1($contents);
+                $filename = $hash . '.' . $file->getClientOriginalExtension();
+                $path = 'rooms/' . $filename;
+
+                if (!Storage::disk('public')->exists($path)) {
+                    Storage::disk('public')->put($path, $contents);
+                }
+
+                $image = Image::firstOrCreate(['image_path' => $path], [
+                    'is_360' => true,
+                    'is_featured' => false,
+                ]);
+
+                $room->images()->syncWithoutDetaching([$image->id]);
+                
+                Log::info('Added new 360° image for room', [
+                    'room_id' => $room->id,
+                    'image_id' => $image->id,
+                ]);
+            }
+        }
+
+        // Sync facilities
+        if ($request->has('facilities')) {
+            $room->facilities()->sync($request->facilities);
+        } else {
+            $room->facilities()->detach();
+        }
+
+        return redirect()->route('admin.rooms.index')->with('success', 'Room updated successfully!');
     }
 
     public function destroy(Room $room): RedirectResponse
