@@ -459,7 +459,7 @@
     position: relative;
     overflow: hidden;
     /* Changed to continue gradient from facilities section */
-    background: linear-gradient(180deg, #0a0a0a 0%, #000 50%, #030303 100%) !important;
+    background: #000 !important;
     padding: 5rem 0 !important;
 }
 

@@ -203,7 +203,7 @@
     </section>
 
     
-    <section class="facilities-section" style="background: #0a0a0a; padding: 5rem 0;">
+    <section class="facilities-section">
         <div class="container">
             <h2 class="section-title text-center">Kost Facilities</h2>
             <p class="section-subtitle text-center">Enjoy our premium amenities designed for your comfort</p>
@@ -398,6 +398,24 @@
         </div>
     </section>
 
+    <?php
+        $rulesInfo = $information->firstWhere('title', 'Rules');
+    ?>
+
+    <?php if($rulesInfo): ?>
+    <section class="terms-rules-section" style="background:#000 !important; background-image:none !important; display:flex; align-items:center; justify-content:center;">
+        <div class="container text-center py-5">
+            <h2 class="section-title">Kost Rules & Terms</h2>
+            <p class="section-subtitle mb-4">Please read our rules and terms before booking</p>
+            <div
+                class = "text-white mx-auto" style="max-width:800px; text-align:left; padding: 2rem; border: 2px solid rgba(250, 235, 215, 0.15); border-radius: 16px; background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);">
+                <?php echo nl2br(e($rulesInfo->content)); ?>
+
+            </div>
+        </div>
+    </section>
+    <?php endif; ?>
+
     <section class="contact-location-section" style="background: #000; padding: 5rem 0;">
         <div class="container">
             <h2 class="section-title text-center">Visit Us</h2>
@@ -444,7 +462,7 @@
                                         <h4
                                             style="color: #FAEBD7; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">
                                             Whatsapp</h4>
-                                        <a href="tel:+62123456789"
+                                        <a href="http://wa.me/6283856705857"
                                             style="color: #FAEBD7; text-decoration: none; font-size: 1.1rem;">
                                             <?php echo e($information->firstWhere('title', 'Whatsapp')->content); ?>
 
@@ -463,7 +481,7 @@
                                         <h4
                                             style="color: #FAEBD7; font-size: 1.1rem; font-weight: 600; margin-bottom: 0.5rem;">
                                             Phone</h4>
-                                        <a href="tel:+62123456789"
+                                        <a href="tel:+6282139721494"
                                             style="color: #FAEBD7; text-decoration: none; font-size: 1.1rem;">
                                             <?php echo e($information->firstWhere('title', 'Phone')->content); ?>
 
@@ -534,9 +552,4 @@
     <?php endif; ?>
 
 <?php $__env->stopSection(); ?>
-
-<?php $__env->startPush('scripts'); ?>
-    <script src="<?php echo e(asset('js/roomModal.js')); ?>"></script>
-<?php $__env->stopPush(); ?>
-
 <?php echo $__env->make('layouts.layout', array_diff_key(get_defined_vars(), ['__data' => 1, '__path' => 1]))->render(); ?><?php /**PATH C:\Uni\WebDev\Laravel\imperial\resources\views/home.blade.php ENDPATH**/ ?>
