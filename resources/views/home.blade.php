@@ -10,15 +10,15 @@
         <div class="container position-relative">
             <div class="row align-items-center">
                 <div class="col-lg-6 col-md-12 mb-5 mb-lg-0">
-                    <h1 class="hero-title">
+                    <div class="hero-title">
                         {!! optional($information->firstWhere('title', 'Title'))->content ??
                             (optional($information->first())->content ?? 'Imperial Kost') !!}
-                    </h1>
-                    <p class="hero-description">
+                    </div>
+                    <div class="hero-description">
                         {!! optional($information->firstWhere('title', 'Description'))->content ??
                             (optional($information->first())->content ??
                                 'Discover comfort and convenience with our modern boarding house. Interactive room selection, instant booking, and premium amenities await you.') !!}
-                    </p>
+                    </div>
                     <div class="mb-4">
                         <span class="badge-tag"><i class="bi bi-star-fill me-1"></i>Premium Rooms</span>
                         <span class="badge-tag"><i class="bi bi-clock-fill me-1"></i>24/7 Available</span>
@@ -365,7 +365,7 @@
             <p class="section-subtitle mb-4">Please read our rules and terms before booking</p>
             <div
                 class = "text-white mx-auto" style="max-width:800px; text-align:left; padding: 2rem; border: 2px solid rgba(250, 235, 215, 0.15); border-radius: 16px; background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);">
-                {!! nl2br(e($rulesInfo->content)) !!}
+                {!! $rulesInfo->content !!}
             </div>
         </div>
     </section>
@@ -419,7 +419,7 @@
                                             Whatsapp</h4>
                                         <a href="http://wa.me/6283856705857"
                                             style="color: #FAEBD7; text-decoration: none; font-size: 1.1rem;">
-                                            {{$information->firstWhere('title', 'Whatsapp')->content}}
+                                            <div>{{$information->firstWhere('title', 'Whatsapp')->content}}</div>
                                         </a>
                                     </div>
                                 </div>
@@ -437,7 +437,7 @@
                                             Phone</h4>
                                         <a href="tel:+6282139721494"
                                             style="color: #FAEBD7; text-decoration: none; font-size: 1.1rem;">
-                                            {{$information->firstWhere('title', 'Phone')->content}}
+                                            <div>{{$information->firstWhere('title', 'Phone')->content}}</div>
                                         </a>
                                     </div>
                                 </div>
@@ -456,7 +456,7 @@
                                             Email</h4>
                                         <a href="mailto:info@imperialkost.com"
                                             style="color: #FAEBD7; text-decoration: none; font-size: 1.1rem;">
-                                            {{$information->firstWhere('title', 'Email')->content}}
+                                            <div>{{$information->firstWhere('title', 'Email')->content}}</div>
                                         </a>
                                     </div>
                                 </div>
