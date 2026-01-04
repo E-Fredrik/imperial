@@ -405,7 +405,7 @@
     ?>
 
     <?php if($termsInfo || $rulesInfo): ?>
-    <section class="terms-rules-section">
+    <section class="terms-rules-section" style="background: linear-gradient(180deg, #0a0a0a 0%, #000 50%, #030303 100%); padding: 5rem 0;">
         <div class="container">
             <h2 class="section-title text-center mb-2">Important Information</h2>
             <p class="section-subtitle text-center mb-5">Please read our terms and house rules carefully</p>
